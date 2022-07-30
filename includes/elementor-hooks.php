@@ -64,7 +64,16 @@ function efas_validation_process ( $record, $ajax_handler ) {
 	}
   }*/
 
-  
+    // AbuseIPDB API
+    $abuseipdb_api = get_option( 'abuseipdb_api' ) ? get_option( 'abuseipdb_api' ) : false;
+    if ($abuseipdb_api != false){
+      $abuseconfidencescore = check_abuseipdb($ip);
+    $abuseipdbscore = (int)get_option('abuseipdb_score');
+      if ($abuseconfidencescore >= $abuseipdbscore){
+        $spam = true;
+        $reason = "Abuse Confidence Score $abuseconfidencescore";
+      }
+    }
     //If country or ip is in blacklist
 
   if ( $spam ) {
