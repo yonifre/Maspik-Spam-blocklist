@@ -174,14 +174,16 @@ add_filter( 'gform_field_validation', function ( $result, $value, $form, $field 
     //start
     $spamcounter = get_option( 'spamcounter' ) ? get_option( 'spamcounter' ) : 0;
   	$field_value = strtolower($value); 
-    $tel_formats = get_option( 'tel_formats' ) ? efas_makeArray( get_option( 'tel_formats' ) ) : array();
-  	if ( efas_get_spam_api('tel_formats') ){
-      $blacklist_json = efas_get_spam_api('tel_formats') ;
-      $tel_formats = array_merge($tel_formats, $blacklist_json);
-    }
+    $tel_formats = get_option( 'tel_formats' );
     if( !$tel_formats ){
       return $result;
     }
+    $tel_formats = explode( "\n", str_replace("\r", "", $tel_formats) );
+    if ( efas_get_spam_api('tel_formats') ){
+      $blacklist_json = efas_get_spam_api('tel_formats') ;
+      $tel_formats = array_merge($tel_formats, $blacklist_json);
+    }
+
   	$error_message = cfas_get_error_text();
     $valid = true;
     if( is_array($tel_formats) ){
@@ -194,7 +196,9 @@ add_filter( 'gform_field_validation', function ( $result, $value, $form, $field 
         }
       }
       if(!$valid){
-         efas_add_to_log($type = "tel",$field_value, $_POST, "gravityforms");
+		efas_add_to_log($type = "tel","Phone number $field_value not feet the format $format ", $_POST, "gravityforms");
+        update_option( 'spamcounter', ++$spamcounter );
+        GFCommon::log_debug( __METHOD__ . '(): '.$error_message.': ' . $value );
         $result['is_valid'] = false;
         $result['message']  = $error_message;    
       }

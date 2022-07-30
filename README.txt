@@ -1,14 +1,14 @@
-=== Maspik - Spam blocklist ===
+=== Maspik - Spam blacklist ===
 Contributors: yonifre
 Donate link: paypal.me/yonifre
-Tags:  validation, spam , blocklist , forms, Elementor , Maspik ,anti, lenix , anti spam , contact form,eric,blacklist, forms,cf7,Contact form 7,phone validation, elementor forms, form validation,Eric Jones
+Tags: elementor forms, spam,Blacklist,elementor,Maspik ,anti,lenix,anti spam,contact form,eric,blacklist, forms,cf7,Contact form 7,phone validation, validation,form validation,Eric Jones
 Requires at least: 4.3
 Tested up to: 6.0
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Eliminate spam. Block specific words, IP, country, languages, in Contact forms, comments and more!
+Eliminate spam. Block specific words, IP, country, languages, and more!
 
 == Description ==
 
@@ -50,7 +50,7 @@ If a bot or spammer fills out your form with any of the above, the form will NOT
 <li>Woocommerce review</li>
 </ul>
 
-<h4>API site: <a href="https://wpmaspik.com/" target="_blank">WpMaspik.com</a></h4>
+<h4>API site: <a href="https://wpmaspik.com/">WpMaspik.com</a></h4>
 
 Note:
 The plugin allows you to manually blacklist the words you select.
@@ -89,6 +89,10 @@ I wrote this plugin in high-quality code and not in CSS/JS. (CSS/JS running in t
 
 
 == Changelog ==
+
+= 0.7.3 -  29/07/2022 =
+* Bug fix - Prevents letters from becoming lowercase in regex format on tel field
+* New Offer - Want to get a free Pro license? Write an article about Maspik on your relevant blog, and get a link from the plugin page and a professional license for free. Email me for more details (Yonifre AT gmail).
 
 = 0.7.2 -  19/07/2022 =
 *  Bug fix - Error message not displaying in some servers  
@@ -138,21 +142,21 @@ I wrote this plugin in high-quality code and not in CSS/JS. (CSS/JS running in t
 *  Bug fix - Fix Allow only specific country option
 
 = 0.5.6 -  09/04/2022 =
-*  Tweek - Add option to put an end of Email in email field, like: @test.com 
+* Improvement - Add option to put an end of Email in email field, like: @test.com 
 
 = 0.5.5 -  06/04/2022 =
 *  Thanks to @Fiona_Fars, Improve explanation content in the setting pages.
 
 
 = 0.5.4 -  24/01/2022 =
-*   Tweek - Load API php file only if mark it or already use it
-*   Tweek - Ready for Wordpress 5.9
+* Improvement - Load API php file only if mark it or already use it
+* Improvement - Ready for Wordpress 5.9
 
 = 0.5.3 -  25/11/2021 =
-*   Tweek - Limit spam log to max 100 entrees (To prevent DB overload)
+* Improvement - Limit spam log to max 100 entrees (To prevent DB overload)
 
 = 0.5.2 =
-*  - Add a minimum requires version for php (7)
+* Add a minimum requires version for php (7)
 
 = 0.5.1 =
 * Bug fix - Language api

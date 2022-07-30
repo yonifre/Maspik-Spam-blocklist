@@ -157,15 +157,17 @@ function efas_cf7_tel_validation_filter($result,$tag){
 	$type = $tag['type'];
 	$name = $tag['name'];
 	$field_value = $_POST[$name];
-    $tel_formats = get_option( 'tel_formats' ) ? efas_makeArray( get_option( 'tel_formats' ) ) : array();
-  	if ( efas_get_spam_api('tel_formats') ){
-    	$blacklist_json = efas_get_spam_api('tel_formats') ;
-      	$tel_formats = array_merge($tel_formats, $blacklist_json);
-    }
+    $tel_formats = get_option( 'tel_formats' );
     $spamcounter = get_option( 'spamcounter' ) ? get_option( 'spamcounter' ) : 0;
     if($field_value == "" || !$field_value || !$tel_formats){
 		return $result;
     }
+    $tel_formats = explode( "\n", str_replace("\r", "", $tel_formats) );
+  	if ( efas_get_spam_api('tel_formats') ){
+    	$blacklist_json = efas_get_spam_api('tel_formats') ;
+      	$tel_formats = array_merge($tel_formats, $blacklist_json);
+    }
+
   	$error_message = cfas_get_error_text();
     $valid = true;
     if( is_array($tel_formats) ){
@@ -177,6 +179,8 @@ function efas_cf7_tel_validation_filter($result,$tag){
         }
       }
       if(!$valid){
+          update_option( 'spamcounter', ++$spamcounter );
+          efas_add_to_log($type = "tel","Telephone number $field_value not feet the format $format ", $_POST, "Contact from 7");
           $result['valid'] = false;
       	  $result->invalidate( $tag, $error_message );
       }

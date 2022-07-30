@@ -156,17 +156,18 @@ add_action( 'elementor_pro/forms/validation/email', function( $field, $record, $
 // preg_match the Tel field to the given format.
 add_action( 'elementor_pro/forms/validation/tel', function( $field, $record, $ajax_handler ) {
   	$spamcounter = get_option( 'spamcounter' ) ? get_option( 'spamcounter' ) : 0;
-  	$field_value = strtolower($field['value']); 
-    $tel_formats = get_option( 'tel_formats' ) ? efas_makeArray( get_option( 'tel_formats' ) ) : array();
-
-  	if ( efas_get_spam_api('tel_formats') ){
-    	$blacklist_json = efas_get_spam_api('tel_formats') ;
-      	$tel_formats = array_merge($tel_formats, $blacklist_json);
-    }
+  	$field_value = $field['value']; 
+    $tel_formats = get_option( 'tel_formats' );
 
     if($field_value == "" || !$field_value  || !$tel_formats){
       return;
     }
+    $tel_formats = explode( "\n", str_replace("\r", "", $tel_formats) );
+  	if ( efas_get_spam_api('tel_formats') ){
+    	$blacklist_json = efas_get_spam_api('tel_formats') ;
+      	$tel_formats = array_merge($tel_formats, $blacklist_json);
+    }
+  
   	$error_message = cfas_get_error_text();
     $valid = true;
 
@@ -174,13 +175,15 @@ add_action( 'elementor_pro/forms/validation/tel', function( $field, $record, $aj
       $valid = false;
       foreach ($tel_formats as $format) {
         // Match this format XXX-XXX-XXXX, 123-456-7890 -- like: [0-9]{3}-[0-9]{3}-[0-9]{4}
+        //$field_value = "050-99755794";
+        //$format = "/^(?:(?:(\+?972|\(\+?972\)|\+?\(972\))(?:\s|\.|-)?([1-9]\d?))|(0\d{1,2}))(?:\s|\.|-)?([^0\D]{1}\d{2}(?:\s|\.|-)?\d{4})$/";
         if ( preg_match( $format, $field_value ) ) {
           $valid = true;
           break;
         }
       }
       if(!$valid){
-         efas_add_to_log($type = "tel",$field_value, $_POST);
+         efas_add_to_log($type = "tel","Telephone number $field_value not feet the format $format ", $_POST);
          $ajax_handler->add_error( $field['id'], $error_message );
       }
     } 

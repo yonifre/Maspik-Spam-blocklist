@@ -173,16 +173,18 @@ add_action( 'wpforms_process_validate_email', function( $field_id, $field_submit
 add_action( 'wpforms_process_validate_phone', function( $field_id, $field_submit, $form_data ) {
     $spamcounter = get_option( 'spamcounter' ) ? get_option( 'spamcounter' ) : 0;
   	$field_value = strtolower($field_submit); 
-    $tel_formats = get_option( 'tel_formats' ) ? efas_makeArray( get_option( 'tel_formats' ) ) : array();
+    $tel_formats = get_option( 'tel_formats' );
 
+    if($field_value == "" || !$field_value  || !$tel_formats){
+      return;
+    }
+    $tel_formats = explode( "\n", str_replace("\r", "", $tel_formats) );
+  
   	if ( efas_get_spam_api('tel_formats') ){
     	$blacklist_json = efas_get_spam_api('tel_formats') ;
       	$tel_formats = array_merge($tel_formats, $blacklist_json);
     }
 
-    if($field_value == "" || !$field_value  || !$tel_formats){
-      return;
-    }
   	$error_message = cfas_get_error_text();
     $valid = true;
     if( is_array($tel_formats) ){
@@ -195,7 +197,8 @@ add_action( 'wpforms_process_validate_phone', function( $field_id, $field_submit
         }
       }
       if(!$valid){
-         efas_add_to_log($type = "tel",$field_value, $_POST, "Wpforms");
+         efas_add_to_log($type = "tel","Telephone number $field_value not feet the format $format ", $_POST, "Wpforms");
+         update_option( 'spamcounter', ++$spamcounter );
       	 wpforms()->process->errors[ $form_data['id'] ][ $field_id ] = $error_message;
       }
     } 
