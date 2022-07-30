@@ -557,7 +557,51 @@ unset($args);
 			$args
 		);   
      
-unset($args); 
+//AbuseIPDB API
+unset($args);
+$args = array(
+  'type'      => 'input',
+  'subtype'   => 'text',
+  'id'    => 'abuseipdb_api',
+  'name'      => 'abuseipdb_api',
+  'description'      => __('AbuseIPDB API', 'contact-forms-anti-spam'),
+  'label'      => 0,
+  'attr' => false,
+  'get_options_list' => '',
+  'value_type' => 'normal',
+  'wp_data' => 'option'
+);
+add_settings_field(
+  'abuseipdb_api',
+  __('AbuseIPDB API', 'contact-forms-anti-spam'),
+  array($this, 'settings_page_render_settings_field'),
+  'settings_page_general_settings',
+  'settings_page_general_section',
+  $args
+);
+// AbuseIPDB Score Threshold
+unset($args);
+$args = array(
+  'type'      => 'input',
+  'subtype'   => 'number',
+  'id'    => 'abuseipdb_score',
+  'name'      => 'abuseipdb_score',
+  'description'      => __('0-100 Score to filter based on AbuseIPDB', 'contact-forms-anti-spam'),
+  'atter' => false,
+  'step' => '1',
+  'value_type' => 'normal',
+  'wp_data' => 'option'
+);
+add_settings_field(
+  'abuseipdb_score',
+  __('AbuseIPDB Confidence Score', 'contact-forms-anti-spam'),
+  array($this, 'settings_page_render_settings_field'),
+  'settings_page_general_settings',
+  'settings_page_general_section',
+  $args
+);
+
+    unset($args); 
 //spamcounter      
 		$args = array (
           'type'      => 'input',
@@ -924,6 +968,8 @@ unset($args);
 */
 
 // register fields
+        register_setting('settings_page_general_settings_page', 'abuseipdb_api');
+        register_setting('settings_page_general_settings_page', 'abuseipdb_score');
       	register_setting('settings_page_option_settings_page','maspik_support_Elementor_forms');
       	register_setting('settings_page_option_settings_page','maspik_support_wp_comment');
       	register_setting('settings_page_option_settings_page','maspik_support_woocommerce_review');
