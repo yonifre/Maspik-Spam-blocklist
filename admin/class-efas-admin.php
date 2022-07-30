@@ -629,6 +629,28 @@ add_settings_field(
   $args
 );
 
+// Ip field
+unset($args);
+$args = array (
+  'type'      => 'textarea',
+  'subtype'   => 'textarea',
+  'id'    => 'cidr_blacklist',
+  'name'      => 'cidr_blacklist',
+  'description'      => 'Filter entire CIDR range such as 134.209.0.0/16<br>The submitter IP will be loop through this list.',
+  'attr' => false,
+  'get_options_list' => '',
+  'value_type'=>'normal',
+  'wp_data' => 'option'
+  );
+add_settings_field(
+'cidr_blacklist',
+__("CIDR Filter", 'contact-forms-anti-spam' ),
+array( $this, 'settings_page_render_settings_field' ),
+'settings_page_general_settings',
+'settings_page_general_section',
+$args
+);
+
 //error_message
  unset($args); 
 		$args = array (
@@ -1054,6 +1076,7 @@ unset($args);
         register_setting('settings_page_general_settings_page', 'abuseipdb_score');
         register_setting('settings_page_general_settings_page', 'proxycheck_io_api');
         register_setting('settings_page_general_settings_page', 'proxycheck_io_risk');
+        register_setting('settings_page_general_settings_page', 'cidr_blacklist');
 	}
 
 	public function settings_page_display_general_account() {

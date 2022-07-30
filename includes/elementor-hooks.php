@@ -88,6 +88,16 @@ function efas_validation_process ( $record, $ajax_handler ) {
       $reason = "Proxycheck.io Risk: $proxycheck_io_riskscore";
     }
   }
+
+  // CIDR Filter
+  $cidr_blacklist = get_option( 'cidr_blacklist' ) ? efas_makeArray( get_option( 'cidr_blacklist' ) ) : array();
+  foreach ($cidr_blacklist as $cidr){
+    if (cidr_match($ip, $cidr)){
+      $spam = true;
+      $reason = "IP is in CIDR: $cidr";
+      break;
+    }
+  }
   
     //If country or ip is in blacklist
 
