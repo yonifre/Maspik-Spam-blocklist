@@ -6,6 +6,8 @@
 
 add_action( 'elementor_pro/forms/validation', 'efas_validation_process' , 10, 2 );
 function efas_validation_process ( $record, $ajax_handler ) {
+  // Define spam as false before check to skip ipabusedb/proxycheck.io filter if already concluded is spam by other filter.
+  $spam = false;
   $spamcounter = get_option( 'spamcounter' ) ? get_option( 'spamcounter' ) : 0;
   $error_message = cfas_get_error_text();
   // ip
@@ -53,7 +55,7 @@ function efas_validation_process ( $record, $ajax_handler ) {
       $spam = true;
       $reason = "Page source url is empty";
   }
-  
+
   /*
   // later
   if ( get_option( 'spampixel' ) && false ) {
@@ -64,6 +66,28 @@ function efas_validation_process ( $record, $ajax_handler ) {
 	}
   }*/
 
+
+  // AbuseIPDB Risk Check
+  $abuseipdb_api = get_option('abuseipdb_api') ? get_option('abuseipdb_api') : false;
+  if (($abuseipdb_api != false) && ($spam != true)) {
+    $abuseconfidencescore = check_abuseipdb($ip);
+    $abuseipdbscore = (int)get_option('abuseipdb_score');
+    if ($abuseconfidencescore >= $abuseipdbscore) {
+      $spam = true;
+      $reason = "AbuseIPDB Risk: $abuseconfidencescore";
+    }
+  }
+
+  // Proxycheck.io Risk Check
+  $proxycheck_io_api = get_option('proxycheck_io_api') ? get_option('proxycheck_io_api') : false;
+  if (($proxycheck_io_api != false) && ($spam != true)) {
+    $proxycheck_io_riskscore = check_proxycheckio($ip);
+    $proxycheck_io_risk = (int)get_option('proxycheck_io_risk');
+    if ($proxycheck_io_riskscore >= $proxycheck_io_risk) {
+      $spam = true;
+      $reason = "Proxycheck.io Risk: $proxycheck_io_riskscore";
+    }
+  }
   
     //If country or ip is in blacklist
 
