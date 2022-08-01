@@ -12,6 +12,7 @@
 add_action('wpforms_process_before', function( $entry, $form_data ) {
   $error_message = cfas_get_error_text();
   $spamcounter = get_option( 'spamcounter' ) ? get_option( 'spamcounter' ) : 0;
+  $spam = false;
   // ip
   $ip = efas_getRealIpAddr();
   $ip_blacklist =  get_option( 'ip_blacklist' ) ? efas_makeArray( get_option( 'ip_blacklist' ) ) : array();
@@ -61,13 +62,48 @@ add_action('wpforms_process_before', function( $entry, $form_data ) {
 */
   
     //spampixel- BETA
-  if ( get_option( 'spampixel' ) && 0 ) {
+  /*if ( get_option( 'spampixel' ) && 0 ) {
 	if (false === get_transient('spx_allow_' .$ip)) {
         update_option( 'spamcounter', ++$spamcounter );
         efas_add_to_log($type = "Spampixel","User look like robot", $_POST, "Wpforms");
 		wp_die('User look like robot, try again ');
 	}
+  }*/
+    // CIDR Filter (Thanks to @josephcy95)
+  if($spam != true){
+    foreach ($ip_blacklist as $cidr){
+      if( ip_is_cidr($cidr) ){
+        if (cidr_match($ip, $cidr)){
+          $spam = true;
+          $reason = "IP is in CIDR: $cidr";
+          break;
+        }
+      }
+    }
   }
+ 
+  // AbuseIPDB API  (Thanks to @josephcy95)
+  $abuseipdb_api = get_option('abuseipdb_api') ? get_option('abuseipdb_api') : false;
+  if (($abuseipdb_api != false) && ($spam != true)) {
+    $abuseconfidencescore = check_abuseipdb($ip);
+    $abuseipdbscore = (int)get_option('abuseipdb_score');
+    if ($abuseconfidencescore >= $abuseipdbscore) {
+      $spam = true;
+      $reason = "AbuseIPDB Risk: $abuseconfidencescore";
+    }
+  }
+
+  // Proxycheck.io Risk Check  (Thanks to @josephcy95)
+  $proxycheck_io_api = get_option('proxycheck_io_api') ? get_option('proxycheck_io_api') : false;
+  if (($proxycheck_io_api != false) && ($spam != true)) {
+    $proxycheck_io_riskscore = check_proxycheckio($ip);
+    $proxycheck_io_risk = (int)get_option('proxycheck_io_risk');
+    if ($proxycheck_io_riskscore >= $proxycheck_io_risk) {
+      $spam = true;
+      $reason = "Proxycheck.io Risk: $proxycheck_io_riskscore";
+    }
+  }
+
 
     //If country or ip is in blacklist
   if ( $spam ) {

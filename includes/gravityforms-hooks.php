@@ -23,6 +23,7 @@ add_filter( 'gform_field_validation', function ( $result, $value, $form, $field 
     $countryCode = $xml ? $xml->geoplugin_countryCode : false ;
     $country_blacklist =  get_option( 'country_blacklist' ) ? efas_makeArray(get_option( 'country_blacklist')) : array();
     $AllowedOrBlockCountries = get_option( 'AllowedOrBlockCountries' ) == "allow" ? "allow" : "block" ;            
+	$spam = false;
 
     if ( is_array( efas_get_spam_api("ip") ) ){
       $ip_blacklist_api =  efas_get_spam_api("ip")  ;
@@ -50,6 +51,43 @@ add_filter( 'gform_field_validation', function ( $result, $value, $form, $field 
       $spam = true;
       $reason = "IP $ip is blacked";
     }
+    
+    // CIDR Filter (Thanks to @josephcy95)
+    if($spam != true){
+      foreach ($ip_blacklist as $cidr){
+        if( ip_is_cidr($cidr) ){
+          if (cidr_match($ip, $cidr)){
+            $spam = true;
+            $reason = "IP is in CIDR: $cidr";
+            break;
+          }
+        }
+      }
+    }
+
+    // AbuseIPDB API  (Thanks to @josephcy95)
+    $abuseipdb_api = get_option('abuseipdb_api') ? get_option('abuseipdb_api') : false;
+    if (($abuseipdb_api != false) && ($spam != true)) {
+      $abuseconfidencescore = check_abuseipdb($ip);
+      $abuseipdbscore = (int)get_option('abuseipdb_score');
+      if ($abuseconfidencescore >= $abuseipdbscore) {
+        $spam = true;
+        $reason = "AbuseIPDB Risk: $abuseconfidencescore";
+      }
+    }
+
+    // Proxycheck.io Risk Check  (Thanks to @josephcy95)
+    $proxycheck_io_api = get_option('proxycheck_io_api') ? get_option('proxycheck_io_api') : false;
+    if (($proxycheck_io_api != false) && ($spam != true)) {
+      $proxycheck_io_riskscore = check_proxycheckio($ip);
+      $proxycheck_io_risk = (int)get_option('proxycheck_io_risk');
+      if ($proxycheck_io_riskscore >= $proxycheck_io_risk) {
+        $spam = true;
+        $reason = "Proxycheck.io Risk: $proxycheck_io_riskscore";
+      }
+    }
+
+    
       //If country or ip is in blacklist
     if ( $spam ) {
       update_option( 'spamcounter', ++$spamcounter );

@@ -38,6 +38,8 @@ MASPIK can block form spam emails from being delivered to your inbox!
 <li>Custom phone validation (Add your regex format)</li>
 <li>Spam log, which you can clear at any time</li>
 <li>Block forms devoid of source URL (Elementor forms only)</li>
+<li>Connection to Proxycheck.io API</li>
+<li>Connection to AbuseIPDB.com API</li>
 </ul>
 If a bot or spammer fills out your form with any of the above, the form will NOT be sent, and they will receive a validation error.
 
@@ -90,8 +92,16 @@ I wrote this plugin in high-quality code and not in CSS/JS. (CSS/JS running in t
 
 == Changelog ==
 
+= 0.7.4 -  01/08/2022 =
+* Offer - Want to get a free Pro license? Write an article about Maspik on your relevant blog, and get a link from the plugin page and a professional license for free. Email me for more details (Yonifre AT gmail).
+* New Feature - Connection to Proxycheck.io API (Thanks to josephcy95).
+* New Feature - Connection to AbuseIPDB.com API (Thanks to josephcy95).
+* Improvement - Add possibility to filter entire CIDR range such as 134.209.0.0/16 in IP blocklist field. (Thanks to josephcy95).
+* Improvement - Improve layout of Spam log.
+
+
 = 0.7.3 -  29/07/2022 =
-* Bug fix - Prevents letters from becoming lowercase in regex format on tel field
+* Bug fix - Prevents letters from becoming lowercase in regex format on tel field.
 * New Offer - Want to get a free Pro license? Write an article about Maspik on your relevant blog, and get a link from the plugin page and a professional license for free. Email me for more details (Yonifre AT gmail).
 
 = 0.7.2 -  19/07/2022 =

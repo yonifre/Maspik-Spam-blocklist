@@ -78,7 +78,7 @@ function efas_add_to_log($type='',$input = '',$post = null, $source = "Elementor
 		$arr  = array_slice($arr, 0, 100, true);
 		$arr = array_reverse($arr);
 	}
-    $arr[] =['Type' => $type,'value' => $input."  Data: ".$text , 'Ip' => $ip, 'Country' => $countryName, 'User agent' => $browser_name, 'Date' => $date, 'Source' => $source];
+    $arr[] =['Type' => $type,'value' => "<b>$input</b><br>  Data: <pre>$text</pre>" , 'Ip' => $ip, 'Country' => $countryName, 'User agent' => $browser_name, 'Date' => $date, 'Source' => $source];
     $json = json_encode($arr);
   update_option( 'errorlog',$json , false );
 }
@@ -86,10 +86,11 @@ function efas_add_to_log($type='',$input = '',$post = null, $source = "Elementor
 
 function cfes_is_spam_email_domain($email,$block_list) {
   $email = strstr($email, '@');
-  if(in_array($email, $block_list))
-      return true;
-  else
+  if( in_array( $email, $block_list ) ){
+      return $email;
+  }else{
       return false;
+  }
 }
 
 
@@ -115,7 +116,7 @@ function cfes_build_table($array){
     foreach( $array as $key=>$value){
         $html .= '<tr >';
         foreach($value as $key2=>$value2){
-            $html .= '<td style=" border: 1px solid #333; padding: 5px ;text-align: start;">' . htmlspecialchars($value2) . '</td>';
+            $html .= '<td style=" border: 1px solid #333; padding: 5px ;text-align: start;">' . $value2. '</td>';
         }
         $html .= '</tr>';
     }
@@ -180,7 +181,7 @@ function efas_get_spam_api($field = "text_field"){
   	if( !is_array( get_option( "spamapi" ) ) || !cfes_is_supporting() ){
   		return false;
     }
-  	return get_option( "spamapi" )[$field];
+  	return isset(get_option( "spamapi" )[$field]) ? get_option( "spamapi" )[$field] : false;
 }
 
 function efas_is_lang($langs ,$string){
@@ -638,16 +639,8 @@ function cfas_pixel_submit() {
 	wp_die();
 }
 
-
-/*add_action( 'wp_footer', function(  ) {
- echo $rr =  efas_get_spam_api() ? "yes" : "no";
-    echo print_r( efas_get_spam_api('email_field'), true);
-
-} );*/
-
-//AbuseIPDB
-function check_abuseipdb($ip)
-{
+//AbuseIPDB (Thanks to @josephcy95)
+function check_abuseipdb($ip){
 
   $apikey = get_option( 'abuseipdb_api' );
 
@@ -671,9 +664,8 @@ function check_abuseipdb($ip)
   return (int)$jsonreply["data"]["abuseConfidenceScore"];
 }
 
-//AbuseIPDB
-function check_proxycheckio($ip)
-{
+//AbuseIPDB (Thanks to @josephcy95)
+function check_proxycheckio($ip){
 
   $apikey = get_option( 'proxycheck_io_api' );
 
@@ -695,11 +687,10 @@ function check_proxycheckio($ip)
   $jsonreply = json_decode($jsonreply, TRUE);
 
   return (int)$jsonreply[$ip]["risk"];
-}
+} 
 
-//CIDR Filter
-function cidr_match($ip, $cidr)
-{
+//CIDR Filter (Thanks to @josephcy95)
+function cidr_match($ip, $cidr){
     list ($subnet, $bits) = explode('/', $cidr);
     if ($bits === null) {
         $bits = 32;
@@ -709,4 +700,14 @@ function cidr_match($ip, $cidr)
     $mask = -1 << (32 - $bits);
     $subnet &= $mask; # nb: in case the supplied subnet wasn't correctly aligned
     return ($ip & $mask) == $subnet;
+} 
+
+function ip_is_cidr($ip){
+	$pattern ="/(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(3[0-2]|[1-2][0-9]|[0-9]))/";
+	return preg_match($pattern, $ip) ? $ip : false;
 }
+
+add_action( 'wp_footer', function() {
+    if( cidr_match("118.173.188.207","118.173.188.200/29" ) ){echo "yyeyY";}else{echo "nennN";}
+
+} );

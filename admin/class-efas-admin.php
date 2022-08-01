@@ -424,7 +424,7 @@ unset($args);
           'subtype'   => 'textarea',
           'id'    => 'ip_blacklist',
           'name'      => 'ip_blacklist',
-          'description'      => 'Any IP you enter above will be blocked. One IP per line.',
+          'description'      => 'Any IP you enter above will be blocked. One IP per line.<br>You can also filter entire CIDR range such as 134.209.0.0/16<br>The submitter IP will be loop through this list.',
           'attr' => false,
           'api'=>'ip',
           'get_options_list' => '',
@@ -534,8 +534,76 @@ unset($args);
               'settings_page_general_section',
               $args
           );  */
-
-//AbuseIPDB API
+//error_message
+ unset($args); 
+		$args = array (
+          'type'      => 'input',
+          'subtype'   => 'text',
+          'id'    => 'error_message',
+          'name'      => 'error_message',
+          'description'      => __('Default: "This looks like spam. Try to rephrase, or contact us in an alternative way." <br>You can leave this as the default or rephrase it as you like. This is the error message that the spammer will receive.<br>It’s a good idea to put your phone number or alternative method of contact, just in case it’s not really a spammer.', 'contact-forms-anti-spam' ),
+          'label'      => 0,          
+          'attr' => false,
+          'get_options_list' => '',
+          'value_type'=>'normal',
+          'wp_data' => 'option'
+		);
+		add_settings_field(
+			'error_message',
+			__('Validation error message', 'contact-forms-anti-spam' ),
+			array( $this, 'settings_page_render_settings_field' ),
+			'settings_page_general_settings',
+			'settings_page_general_section',
+			$args
+		);   
+     
+unset($args); 
+//spamcounter      
+		$args = array (
+          'type'      => 'input',
+          'subtype'   => 'number',
+          'id'    => 'spamcounter',
+          'name'      => 'spamcounter',
+          'description'      => '',
+          'attr'      => "style='display:none;'",          
+          'default' => '0',
+          'get_options_list' => '',
+          'value_type'=>'normal',
+          'wp_data' => 'option'
+					);
+		add_settings_field(
+			'spamcounter',
+			'',
+			array( $this, 'settings_page_render_settings_field' ),
+			'settings_page_general_settings',
+			'settings_page_general_section',
+			$args
+		);       
+unset($args);
+      
+//error log      
+		$args = array (
+          'type'      => 'textarea',
+          'subtype'   => 'textarea',
+          'id'    => 'errorlog',
+          'name'      => 'errorlog',
+          'description'      => '',
+          'attr'      => "style='display:none;'",          
+          'default' => '0',
+          'get_options_list' => '',
+          'value_type'=>'normal',
+          'wp_data' => 'option'
+					);
+		add_settings_field(
+			'errorlog',
+			'',
+			array( $this, 'settings_page_render_settings_field' ),
+			'settings_page_general_settings',
+			'settings_page_general_section',
+			$args
+	);       
+      
+//AbuseIPDB API (Thanks to @josephcy95)
 unset($args);
 $args = array(
   'type'      => 'input',
@@ -629,98 +697,7 @@ add_settings_field(
   $args
 );
 
-// Ip field
-unset($args);
-$args = array (
-  'type'      => 'textarea',
-  'subtype'   => 'textarea',
-  'id'    => 'cidr_blacklist',
-  'name'      => 'cidr_blacklist',
-  'description'      => 'Filter entire CIDR range such as 134.209.0.0/16<br>The submitter IP will be loop through this list.',
-  'attr' => false,
-  'get_options_list' => '',
-  'value_type'=>'normal',
-  'wp_data' => 'option'
-  );
-add_settings_field(
-'cidr_blacklist',
-__("CIDR Filter", 'contact-forms-anti-spam' ),
-array( $this, 'settings_page_render_settings_field' ),
-'settings_page_general_settings',
-'settings_page_general_section',
-$args
-);
-
-//error_message
- unset($args); 
-		$args = array (
-          'type'      => 'input',
-          'subtype'   => 'text',
-          'id'    => 'error_message',
-          'name'      => 'error_message',
-          'description'      => __('Default: "This looks like spam. Try to rephrase, or contact us in an alternative way." <br>You can leave this as the default or rephrase it as you like. This is the error message that the spammer will receive.<br>It’s a good idea to put your phone number or alternative method of contact, just in case it’s not really a spammer.', 'contact-forms-anti-spam' ),
-          'label'      => 0,          
-          'attr' => false,
-          'get_options_list' => '',
-          'value_type'=>'normal',
-          'wp_data' => 'option'
-		);
-		add_settings_field(
-			'error_message',
-			__('Validation error message', 'contact-forms-anti-spam' ),
-			array( $this, 'settings_page_render_settings_field' ),
-			'settings_page_general_settings',
-			'settings_page_general_section',
-			$args
-		);   
-     
-unset($args); 
-//spamcounter      
-		$args = array (
-          'type'      => 'input',
-          'subtype'   => 'number',
-          'id'    => 'spamcounter',
-          'name'      => 'spamcounter',
-          'description'      => '',
-          'attr'      => "style='display:none;'",          
-          'default' => '0',
-          'get_options_list' => '',
-          'value_type'=>'normal',
-          'wp_data' => 'option'
-					);
-		add_settings_field(
-			'spamcounter',
-			'',
-			array( $this, 'settings_page_render_settings_field' ),
-			'settings_page_general_settings',
-			'settings_page_general_section',
-			$args
-		);       
-unset($args);
-      
-//error log      
-		$args = array (
-          'type'      => 'textarea',
-          'subtype'   => 'textarea',
-          'id'    => 'errorlog',
-          'name'      => 'errorlog',
-          'description'      => '',
-          'attr'      => "style='display:none;'",          
-          'default' => '0',
-          'get_options_list' => '',
-          'value_type'=>'normal',
-          'wp_data' => 'option'
-					);
-		add_settings_field(
-			'errorlog',
-			'',
-			array( $this, 'settings_page_render_settings_field' ),
-			'settings_page_general_settings',
-			'settings_page_general_section',
-			$args
-	);       
-/// ------------- Pro
-unset($args); 
+unset($args);       
 //Pro
 //to active API license files?
         $args = array (
@@ -1041,6 +1018,11 @@ unset($args);
 */
 
 // register fields
+        register_setting('settings_page_general_settings_page', 'abuseipdb_api');
+        register_setting('settings_page_general_settings_page', 'abuseipdb_score');
+        register_setting('settings_page_general_settings_page', 'proxycheck_io_api');
+        register_setting('settings_page_general_settings_page', 'proxycheck_io_risk');
+
       	register_setting('settings_page_option_settings_page','maspik_support_Elementor_forms');
       	register_setting('settings_page_option_settings_page','maspik_support_wp_comment');
       	register_setting('settings_page_option_settings_page','maspik_support_woocommerce_review');
@@ -1072,11 +1054,6 @@ unset($args);
       //	register_setting('settings_page_general_settings_page','spampixel');
         register_setting('settings_page_general_settings_page','error_message');
         register_setting('settings_page_general_settings_page','tel_formats');
-        register_setting('settings_page_general_settings_page', 'abuseipdb_api');
-        register_setting('settings_page_general_settings_page', 'abuseipdb_score');
-        register_setting('settings_page_general_settings_page', 'proxycheck_io_api');
-        register_setting('settings_page_general_settings_page', 'proxycheck_io_risk');
-        register_setting('settings_page_general_settings_page', 'cidr_blacklist');
 	}
 
 	public function settings_page_display_general_account() {

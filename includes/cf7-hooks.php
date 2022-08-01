@@ -8,7 +8,7 @@ function efas_wpcf7_validate_process ( $result, $tags ) {
   $spamcounter = get_option( 'spamcounter' ) ? get_option( 'spamcounter' ) : 0;
   $error_message = cfas_get_error_text();
   $reversed = array_reverse($tags);
-
+  $spam = false;
   $tag = $tags ? new WPCF7_FormTag(  $reversed[1]  ) : null;
   $name = ! empty( $tag ) ? $tag->name : null;
   $id = $tag->get_id_option();
@@ -50,7 +50,43 @@ function efas_wpcf7_validate_process ( $result, $tags ) {
     $reason = "IP $ip is blacked";
   }
 
-    //If country or ip is in blacklist
+  
+  // CIDR Filter (Thanks to @josephcy95)
+  if($spam != true){
+    foreach ($ip_blacklist as $cidr){
+      if( ip_is_cidr($cidr) ){
+        if (cidr_match($ip, $cidr)){
+          $spam = true;
+          $reason = "IP is in CIDR: $cidr";
+          break;
+        }
+      }
+    }
+  }
+ 
+  // AbuseIPDB API  (Thanks to @josephcy95)
+  $abuseipdb_api = get_option('abuseipdb_api') ? get_option('abuseipdb_api') : false;
+  if (($abuseipdb_api != false) && ($spam != true)) {
+    $abuseconfidencescore = check_abuseipdb($ip);
+    $abuseipdbscore = (int)get_option('abuseipdb_score');
+    if ($abuseconfidencescore >= $abuseipdbscore) {
+      $spam = true;
+      $reason = "AbuseIPDB Risk: $abuseconfidencescore";
+    }
+  }
+
+  // Proxycheck.io Risk Check  (Thanks to @josephcy95)
+  $proxycheck_io_api = get_option('proxycheck_io_api') ? get_option('proxycheck_io_api') : false;
+  if (($proxycheck_io_api != false) && ($spam != true)) {
+    $proxycheck_io_riskscore = check_proxycheckio($ip);
+    $proxycheck_io_risk = (int)get_option('proxycheck_io_risk');
+    if ($proxycheck_io_riskscore >= $proxycheck_io_risk) {
+      $spam = true;
+      $reason = "Proxycheck.io Risk: $proxycheck_io_riskscore";
+    }
+  }
+  
+  //If country or ip is in blacklist
   if ( $spam ) {
       update_option( 'spamcounter', ++$spamcounter );
       efas_add_to_log($type = "Country/IP",$reason, $_POST, "Contact from 7" );
@@ -85,6 +121,7 @@ function efas_cf7_text_validation_filter($result,$tag){
            efas_add_to_log($type = "text",$field_value, $_POST, "Contact from 7");
           $result['valid'] = false;
       	  $result->invalidate( $tag, $error_message );
+   		break;
         }
        }
     }

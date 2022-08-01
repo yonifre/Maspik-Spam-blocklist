@@ -150,6 +150,42 @@ function maspik_comments_checker( array $data ){
 		}
 	}
   } // end $content
+
+   // CIDR Filter (Thanks to @josephcy95)
+  if($spam != true){
+    foreach ($ip_blacklist as $cidr){
+      if( ip_is_cidr($cidr) ){
+        if (cidr_match($ip, $cidr)){
+          $spam = true;
+          $reason = "IP is in CIDR: $cidr";
+          break;
+        }
+      }
+    }
+  }
+ 
+  // AbuseIPDB API  (Thanks to @josephcy95)
+  $abuseipdb_api = get_option('abuseipdb_api') ? get_option('abuseipdb_api') : false;
+  if (($abuseipdb_api != false) && ($spam != true)) {
+    $abuseconfidencescore = check_abuseipdb($ip);
+    $abuseipdbscore = (int)get_option('abuseipdb_score');
+    if ($abuseconfidencescore >= $abuseipdbscore) {
+      $spam = true;
+      $reason = "AbuseIPDB Risk: $abuseconfidencescore";
+    }
+  }
+
+  // Proxycheck.io Risk Check  (Thanks to @josephcy95)
+  $proxycheck_io_api = get_option('proxycheck_io_api') ? get_option('proxycheck_io_api') : false;
+  if (($proxycheck_io_api != false) && ($spam != true)) {
+    $proxycheck_io_riskscore = check_proxycheckio($ip);
+    $proxycheck_io_risk = (int)get_option('proxycheck_io_risk');
+    if ($proxycheck_io_riskscore >= $proxycheck_io_risk) {
+      $spam = true;
+      $reason = "Proxycheck.io Risk: $proxycheck_io_riskscore";
+    }
+  }
+  
   
   if($spam){
     $message = __( 'ERROR: Sorry, look like a spam - maspik.' , 'contact-forms-anti-spam' );
@@ -199,10 +235,10 @@ function maspik_check_wp_registration_form( $errors ) {
   if (in_array($countryCode , $country_blacklist ) ) {
     $spam = true;
     $reason = "Country code $countryCode is blacked";
-
   }
   if($AllowedOrBlockCountries == 'allow' &&  in_array($countryCode , $country_blacklist ) ) {
     $spam = false;
+    $reason = false;
   }
   if($AllowedOrBlockCountries == 'allow' &&  !in_array($countryCode , $country_blacklist ) ) {
     $spam = true;
@@ -232,15 +268,15 @@ function maspik_check_wp_registration_form( $errors ) {
         // check if spam email-domain enter, like: @xyz.com , @gmail.com ...
         $spam = cfes_is_spam_email_domain($user_email,$text_blacklist)  ? true : $spam;
         if($spam && !$reason){
-			$reason = "Email = $user_email ";
-          }
+          $reason = "Email = $user_email ";
+        }
     }
-    if($spam && array_key_exists('woocommerce-register-nonce',$_POST) ) {
+    if($spam && array_key_exists('register',$_POST) && get_option( "maspik_support_Woocommerce_registration") != "no" ) {
       update_option( 'spamcounter', ++$spamcounter );
       efas_add_to_log($type = "Registration",$reason, $_POST,'Woocommerce registration' );
       wc_add_notice( __( 'ERROR: Look like spam.' ), 'contact-forms-anti-spam' );
       return array();
-    } else if($spam && array_key_exists('wp-submit',$_POST) ) {
+    } else if($spam && array_key_exists('wp-submit',$_POST) && get_option( "maspik_support_registration") != "no") {
       update_option( 'spamcounter', ++$spamcounter );
       efas_add_to_log($type = "Registration",$reason, $_POST ,'Wp registration');
       $errors->add( 'Maspik_error', __( 'ERROR: Look like spam.', 'contact-forms-anti-spam' ) );
@@ -249,9 +285,6 @@ function maspik_check_wp_registration_form( $errors ) {
     return $errors;
 }
 
-if( get_option( "maspik_support_registration" ) != "no" ){
-  add_filter( 'registration_errors', 'maspik_check_wp_registration_form', 10, 1 );
-}
-if( get_option( "maspik_support_Woocommerce_registration" != "no" ) ){
-  add_filter('woocommerce_new_customer_data', 'maspik_check_wp_registration_form', 10, 1 );
-}
+add_filter( 'registration_errors', 'maspik_check_wp_registration_form', 10, 1 );
+add_filter('woocommerce_new_customer_data', 'maspik_check_wp_registration_form', 10, 1 );
+//add_action('wp_footer', function(){echo "dd";});

@@ -6,10 +6,9 @@
 
 add_action( 'elementor_pro/forms/validation', 'efas_validation_process' , 10, 2 );
 function efas_validation_process ( $record, $ajax_handler ) {
-  // Define spam as false before check to skip ipabusedb/proxycheck.io filter if already concluded is spam by other filter.
-  $spam = false;
   $spamcounter = get_option( 'spamcounter' ) ? get_option( 'spamcounter' ) : 0;
   $error_message = cfas_get_error_text();
+  $spam = false;
   // ip
   $ip = efas_getRealIpAddr();
   $ip_blacklist =  get_option( 'ip_blacklist' ) ? efas_makeArray( get_option( 'ip_blacklist' ) ) : array();
@@ -55,7 +54,7 @@ function efas_validation_process ( $record, $ajax_handler ) {
       $spam = true;
       $reason = "Page source url is empty";
   }
-
+  
   /*
   // later
   if ( get_option( 'spampixel' ) && false ) {
@@ -65,9 +64,22 @@ function efas_validation_process ( $record, $ajax_handler ) {
 		wp_die('User look like robot, try again ');
 	}
   }*/
-
-
-  // AbuseIPDB Risk Check
+  
+    //If country or ip is in blacklist
+   // CIDR Filter (Thanks to @josephcy95)
+  if($spam != true){
+    foreach ($ip_blacklist as $cidr){
+      if( ip_is_cidr($cidr) ){
+        if (cidr_match($ip, $cidr)){
+          $spam = true;
+          $reason = "IP is in CIDR: $cidr";
+          break;
+        }
+      }
+    }
+  }
+ 
+  // AbuseIPDB API  (Thanks to @josephcy95)
   $abuseipdb_api = get_option('abuseipdb_api') ? get_option('abuseipdb_api') : false;
   if (($abuseipdb_api != false) && ($spam != true)) {
     $abuseconfidencescore = check_abuseipdb($ip);
@@ -78,7 +90,7 @@ function efas_validation_process ( $record, $ajax_handler ) {
     }
   }
 
-  // Proxycheck.io Risk Check
+  // Proxycheck.io Risk Check  (Thanks to @josephcy95)
   $proxycheck_io_api = get_option('proxycheck_io_api') ? get_option('proxycheck_io_api') : false;
   if (($proxycheck_io_api != false) && ($spam != true)) {
     $proxycheck_io_riskscore = check_proxycheckio($ip);
@@ -88,18 +100,6 @@ function efas_validation_process ( $record, $ajax_handler ) {
       $reason = "Proxycheck.io Risk: $proxycheck_io_riskscore";
     }
   }
-
-  // CIDR Filter
-  $cidr_blacklist = get_option( 'cidr_blacklist' ) ? efas_makeArray( get_option( 'cidr_blacklist' ) ) : array();
-  foreach ($cidr_blacklist as $cidr){
-    if (cidr_match($ip, $cidr)){
-      $spam = true;
-      $reason = "IP is in CIDR: $cidr";
-      break;
-    }
-  }
-  
-    //If country or ip is in blacklist
 
   if ( $spam ) {
     update_option( 'spamcounter', ++$spamcounter );
@@ -126,10 +126,11 @@ add_action( 'elementor_pro/forms/validation/text', function( $field, $record, $a
 	if( is_array($text_blacklist) ){
        foreach($text_blacklist as $bad_string) {
           if( efas_is_field_value_equwl_to_string($bad_string, $field_value) ) {
-            $reason = "Input = $field_value ";
+            $reason = "Input $field_value is block";
             update_option( 'spamcounter', ++$spamcounter );
               efas_add_to_log($type = "text",$reason, $_POST );
             $ajax_handler->add_error( $field['id'], $error_message );
+            break;
           }
        }
     }
@@ -158,7 +159,7 @@ add_action( 'elementor_pro/forms/validation/email', function( $field, $record, $
       return;
     }
   
-  $error_message = cfas_get_error_text();
+  	$error_message = cfas_get_error_text();
     $text_blacklist = efas_makeArray( get_option( 'emails_blacklist' ) );
 	if ( efas_get_spam_api('email_field') ){
     	$blacklist_json = efas_get_spam_api('email_field') ;
@@ -166,7 +167,7 @@ add_action( 'elementor_pro/forms/validation/email', function( $field, $record, $
     }
   	$spam = false;
     foreach ($text_blacklist as $bad_string) {         
-      if($bad_string[0] === "/" ){ // check
+      if(isset($bad_string[0]) && $bad_string[0] === "/" ){ // check
         if ( preg_match( $bad_string, $field_value ) ) {
           $spam = true;
         }
@@ -181,7 +182,7 @@ add_action( 'elementor_pro/forms/validation/email', function( $field, $record, $
 
     if( $spam) {
       update_option( 'spamcounter', ++$spamcounter );
-      efas_add_to_log($type = "email",$field_value, $_POST);
+      efas_add_to_log($type = "email","Email $field_value is block", $_POST);
       $ajax_handler->add_error( $field['id'], $error_message );
     }
 
