@@ -644,3 +644,69 @@ function cfas_pixel_submit() {
     echo print_r( efas_get_spam_api('email_field'), true);
 
 } );*/
+
+//AbuseIPDB
+function check_abuseipdb($ip)
+{
+
+  $apikey = get_option( 'abuseipdb_api' );
+
+  // By Default use RapidAPI
+  $apiEndpoint = "https://api.abuseipdb.com/api/v2/check?ipAddress=" . $ip . "&maxAgeInDays=90";
+  $headers = array(
+    'content-type' => 'application/json',
+    'accept' => 'application/json',
+    'Key' => $apikey
+  );
+
+  $args = array(
+    'headers' => $headers,
+    'timeout' => 20
+  );
+
+  $jsonreply = wp_remote_get($apiEndpoint, $args);
+  $jsonreply = wp_remote_retrieve_body($jsonreply);
+  $jsonreply = json_decode($jsonreply, TRUE);
+
+  return (int)$jsonreply["data"]["abuseConfidenceScore"];
+}
+
+//AbuseIPDB
+function check_proxycheckio($ip)
+{
+
+  $apikey = get_option( 'proxycheck_io_api' );
+
+  // By Default use RapidAPI
+  $apiEndpoint = "https://proxycheck.io/v2/" . $ip . "?key=" . $apikey . "&risk=1&vpn=1";
+  $headers = array(
+    'content-type' => 'application/json',
+    'accept' => 'application/json',
+    'Key' => $apikey
+  );
+
+  $args = array(
+    'headers' => $headers,
+    'timeout' => 20
+  );
+
+  $jsonreply = wp_remote_get($apiEndpoint, $args);
+  $jsonreply = wp_remote_retrieve_body($jsonreply);
+  $jsonreply = json_decode($jsonreply, TRUE);
+
+  return (int)$jsonreply[$ip]["risk"];
+}
+
+//CIDR Filter
+function cidr_match($ip, $cidr)
+{
+    list ($subnet, $bits) = explode('/', $cidr);
+    if ($bits === null) {
+        $bits = 32;
+    }
+    $ip = ip2long($ip);
+    $subnet = ip2long($subnet);
+    $mask = -1 << (32 - $bits);
+    $subnet &= $mask; # nb: in case the supplied subnet wasn't correctly aligned
+    return ($ip & $mask) == $subnet;
+}

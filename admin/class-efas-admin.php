@@ -534,6 +534,123 @@ unset($args);
               'settings_page_general_section',
               $args
           );  */
+
+//AbuseIPDB API
+unset($args);
+$args = array(
+  'type'      => 'input',
+  'subtype'   => 'text',
+  'id'    => 'abuseipdb_api',
+  'name'      => 'abuseipdb_api',
+  'description'      => __('AbuseIPDB.com API (Leave blank to disable)', 'contact-forms-anti-spam'),
+  'label'      => 0,
+  'attr' => false,
+  'get_options_list' => '',
+  'value_type' => 'normal',
+  'wp_data' => 'option'
+);
+add_settings_field(
+  'abuseipdb_api',
+  __('AbuseIPDB API', 'contact-forms-anti-spam'),
+  array($this, 'settings_page_render_settings_field'),
+  'settings_page_general_settings',
+  'settings_page_general_section',
+  $args
+);
+
+// AbuseIPDB Score Threshold
+unset($args);
+$args = array(
+  'type'      => 'input',
+  'subtype'   => 'number',
+  'id'    => 'abuseipdb_score',
+  'name'      => 'abuseipdb_score',
+  'description'      => __('Recommend not lower than 25 for less false positives.', 'contact-forms-anti-spam'),
+  'atter' => false,
+  'min' => '0',
+  'max' => '100',
+  'step' => '1',
+  'value_type' => 'normal',
+  'wp_data' => 'option'
+);
+add_settings_field(
+  'abuseipdb_score',
+  __('AbuseIPDB Risk Threshold', 'contact-forms-anti-spam'),
+  array($this, 'settings_page_render_settings_field'),
+  'settings_page_general_settings',
+  'settings_page_general_section',
+  $args
+);
+
+// Proxycheck.io API
+unset($args);
+$args = array(
+  'type'      => 'input',
+  'subtype'   => 'text',
+  'id'    => 'proxycheck_io_api',
+  'name'      => 'proxycheck_io_api',
+  'description'      => __('Proxycheck.io API (Leave blank to disable)', 'contact-forms-anti-spam'),
+  'label'      => 0,
+  'attr' => false,
+  'get_options_list' => '',
+  'value_type' => 'normal',
+  'wp_data' => 'option'
+);
+add_settings_field(
+  'proxycheck_io_api',
+  __('Proxycheck.io API', 'contact-forms-anti-spam'),
+  array($this, 'settings_page_render_settings_field'),
+  'settings_page_general_settings',
+  'settings_page_general_section',
+  $args
+);
+
+// Proxycheck.io Risk Score
+unset($args);
+$args = array(
+  'type'      => 'input',
+  'subtype'   => 'number',
+  'id'    => 'proxycheck_io_risk',
+  'name'      => 'proxycheck_io_risk',
+  'description'      => __('Low risk 0-33, MidHigh risk = 33-66, Dangerous = 66 Above', 'contact-forms-anti-spam'),
+  'atter' => false,
+  'min' => '0',
+  'max' => '100',
+  'step' => '1',
+  'value_type' => 'normal',
+  'wp_data' => 'option'
+);
+add_settings_field(
+  'proxycheck_io_risk',
+  __('Proxycheck.io Risk Threshold', 'contact-forms-anti-spam'),
+  array($this, 'settings_page_render_settings_field'),
+  'settings_page_general_settings',
+  'settings_page_general_section',
+  $args
+);
+
+// Ip field
+unset($args);
+$args = array (
+  'type'      => 'textarea',
+  'subtype'   => 'textarea',
+  'id'    => 'cidr_blacklist',
+  'name'      => 'cidr_blacklist',
+  'description'      => 'Filter entire CIDR range such as 134.209.0.0/16<br>The submitter IP will be loop through this list.',
+  'attr' => false,
+  'get_options_list' => '',
+  'value_type'=>'normal',
+  'wp_data' => 'option'
+  );
+add_settings_field(
+'cidr_blacklist',
+__("CIDR Filter", 'contact-forms-anti-spam' ),
+array( $this, 'settings_page_render_settings_field' ),
+'settings_page_general_settings',
+'settings_page_general_section',
+$args
+);
+
 //error_message
  unset($args); 
 		$args = array (
@@ -955,6 +1072,11 @@ unset($args);
       //	register_setting('settings_page_general_settings_page','spampixel');
         register_setting('settings_page_general_settings_page','error_message');
         register_setting('settings_page_general_settings_page','tel_formats');
+        register_setting('settings_page_general_settings_page', 'abuseipdb_api');
+        register_setting('settings_page_general_settings_page', 'abuseipdb_score');
+        register_setting('settings_page_general_settings_page', 'proxycheck_io_api');
+        register_setting('settings_page_general_settings_page', 'proxycheck_io_risk');
+        register_setting('settings_page_general_settings_page', 'cidr_blacklist');
 	}
 
 	public function settings_page_display_general_account() {
