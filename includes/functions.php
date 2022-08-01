@@ -707,7 +707,7 @@ function ip_is_cidr($ip){
 	return preg_match($pattern, $ip) ? $ip : false;
 }
 
-add_action( 'wp_footer', function() {
+/*add_action( 'wp_footer', function() {
     if( cidr_match("118.173.188.207","118.173.188.200/29" ) ){echo "yyeyY";}else{echo "nennN";}
 
-} );
+} );*/
