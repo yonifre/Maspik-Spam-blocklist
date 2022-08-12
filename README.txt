@@ -8,7 +8,7 @@ Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Eliminate spam. Block specific words, IP, country, languages, and more!
+Eliminate spam. Block specific words, IP, country, languages, Spam API and more!
 
 == Description ==
 
@@ -91,6 +91,10 @@ I wrote this plugin in high-quality code and not in CSS/JS. (CSS/JS running in t
 
 
 == Changelog ==
+
+= 0.7.5 -  12/08/2022 =
+* Offer - Want to get a free Pro license? Write an article about Maspik on your relevant blog, and get a link from the plugin page and a professional license for free. Email me for more details (Yonifre AT gmail).
+* Bug fix - Fix Block Domain Email (Ex: xyz.com) in some servers  
 
 = 0.7.4 -  01/08/2022 =
 * Offer - Want to get a free Pro license? Write an article about Maspik on your relevant blog, and get a link from the plugin page and a professional license for free. Email me for more details (Yonifre AT gmail).

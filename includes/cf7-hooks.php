@@ -130,6 +130,7 @@ function efas_cf7_text_validation_filter($result,$tag){
   	if ( efas_get_spam_api('MaxCharactersInTextField') ){
     	$MaxCharacters_API = efas_get_spam_api('MaxCharactersInTextField')[0];
     }
+    $CountCharacters = strlen($field_value);
     $MaxCharacters = get_option( 'MaxCharactersInTextField' ) ? get_option( 'MaxCharactersInTextField' ) : $MaxCharactersInTextField ;
 	if( $MaxCharacters && $CountCharacters ){
         if($MaxCharacters < $CountCharacters ) {

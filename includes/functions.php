@@ -86,11 +86,7 @@ function efas_add_to_log($type='',$input = '',$post = null, $source = "Elementor
 
 function cfes_is_spam_email_domain($email,$block_list) {
   $email = strstr($email, '@');
-  if( in_array( $email, $block_list ) ){
-      return $email;
-  }else{
-      return false;
-  }
+  return in_array( $email, $block_list ) ? $email : false;
 }
 
 
@@ -181,7 +177,7 @@ function efas_get_spam_api($field = "text_field"){
   	if( !is_array( get_option( "spamapi" ) ) || !cfes_is_supporting() ){
   		return false;
     }
-  	return isset(get_option( "spamapi" )[$field]) ? get_option( "spamapi" )[$field] : false;
+  	return isset( get_option( "spamapi" )[$field] ) ? get_option( "spamapi" )[$field] : false;
 }
 
 function efas_is_lang($langs ,$string){
@@ -664,7 +660,7 @@ function check_abuseipdb($ip){
   return (int)$jsonreply["data"]["abuseConfidenceScore"];
 }
 
-//AbuseIPDB (Thanks to @josephcy95)
+//proxycheck.io (Thanks to @josephcy95)
 function check_proxycheckio($ip){
 
   $apikey = get_option( 'proxycheck_io_api' );
@@ -708,6 +704,6 @@ function ip_is_cidr($ip){
 }
 
 /*add_action( 'wp_footer', function() {
-    if( cidr_match("118.173.188.207","118.173.188.200/29" ) ){echo "yyeyY";}else{echo "nennN";}
+    if( cidr_match("118.173.188.207","118.173.188.200/29" ) ){echo "";}else{echo "";}
 
 } );*/

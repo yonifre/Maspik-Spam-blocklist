@@ -81,21 +81,37 @@ function efas_validation_process ( $record, $ajax_handler ) {
  
   // AbuseIPDB API  (Thanks to @josephcy95)
   $abuseipdb_api = get_option('abuseipdb_api') ? get_option('abuseipdb_api') : false;
+  $pabuseipdb_score = get_option('abuseipdb_score');
+  //Check if have abuseipdb_api in the API Setting page (WpMaspik)
+  if ( efas_get_spam_api('abuseipdb_api') ){
+    $abuseipdb_api_json = null !== efas_get_spam_api('abuseipdb_api') ? efas_get_spam_api('abuseipdb_api') : false;
+    $abuseipdb_api = $abuseipdb_api ? $abuseipdb_api : $abuseipdb_api_json; // Site setting is stronger
+    $abuseipdb_score_json = null !== efas_get_spam_api('abuseipdb_score') ? efas_get_spam_api('abuseipdb_score') : '50';
+    $pabuseipdb_score = $pabuseipdb_score ? $pabuseipdb_score : $abuseipdb_score_json; // Site setting is stronger
+  }
+  
   if (($abuseipdb_api != false) && ($spam != true)) {
     $abuseconfidencescore = check_abuseipdb($ip);
-    $abuseipdbscore = (int)get_option('abuseipdb_score');
-    if ($abuseconfidencescore >= $abuseipdbscore) {
+    if ($abuseconfidencescore >= (int)$pabuseipdb_score) {
       $spam = true;
-      $reason = "AbuseIPDB Risk: $abuseconfidencescore";
+      $reason = "AbuseIPDB Risk: $abuseconfidencescore ";
     }
   }
 
   // Proxycheck.io Risk Check  (Thanks to @josephcy95)
   $proxycheck_io_api = get_option('proxycheck_io_api') ? get_option('proxycheck_io_api') : false;
+  $proxycheck_io_risk = get_option('proxycheck_io_risk');
+  //Check if have proxycheck_io_api in the API Setting page (WpMaspik)
+  if ( null !== efas_get_spam_api('proxycheck_io_api') ){
+    $proxycheck_io_api_json = null !== efas_get_spam_api('proxycheck_io_api') ? efas_get_spam_api('proxycheck_io_api') : false;
+    $proxycheck_io_risk_json = null !== efas_get_spam_api('proxycheck_io_risk') ? efas_get_spam_api('proxycheck_io_risk') : false;
+    $proxycheck_io_api = $proxycheck_io_api ? $proxycheck_io_api : $proxycheck_io_api_json; // Site setting is stronger
+    $proxycheck_io_risk = $proxycheck_io_risk ? $proxycheck_io_risk : $proxycheck_io_risk_json; // Site setting is stronger
+  }
+
   if (($proxycheck_io_api != false) && ($spam != true)) {
     $proxycheck_io_riskscore = check_proxycheckio($ip);
-    $proxycheck_io_risk = (int)get_option('proxycheck_io_risk');
-    if ($proxycheck_io_riskscore >= $proxycheck_io_risk) {
+    if ($proxycheck_io_riskscore >= (int)$proxycheck_io_risk) {
       $spam = true;
       $reason = "Proxycheck.io Risk: $proxycheck_io_riskscore";
     }
