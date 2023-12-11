@@ -12,57 +12,15 @@ function efas_wpcf7_validate_process ( $result, $tags ) {
   $tag = $tags ? new WPCF7_FormTag(  $reversed[1]  ) : null;
   $name = ! empty( $tag ) ? $tag->name : null;
   $id = $tag->get_id_option();
-
+  $reason ="";
   // ip
-  $ip = efas_getRealIpAddr();
-  $ip_blacklist =  get_option( 'ip_blacklist' ) ? efas_makeArray( get_option( 'ip_blacklist' ) ) : array();
-  // country
-  $xml = simplexml_load_file("http://www.geoplugin.net/xml.gp?ip=".$ip);
-  $countryCode = $xml ? $xml->geoplugin_countryCode : false ;
-  $country_blacklist =  get_option( 'country_blacklist' ) ? efas_makeArray(get_option( 'country_blacklist')) : array();
-  $AllowedOrBlockCountries = get_option( 'AllowedOrBlockCountries' ) == "allow" ? "allow" : "block" ;            
+  $ip =  efas_getRealIpAddr();
   
-  if ( is_array( efas_get_spam_api("ip") ) ){
-    $ip_blacklist_api =  efas_get_spam_api("ip")  ;
-    $ip_blacklist = array_merge($ip_blacklist, $ip_blacklist_api);
-  }  
-  /*if ( efas_get_spam_api("countries") ){
-    $countries_blacklist_api =  efas_get_spam_api("countries")  ;
-   // disable countries API
-	// $country_blacklist = array_merge($country_blacklist, $countries_blacklist_api);
-  }  */
+  // Country IP Check 
+  $CountryCheck = CountryCheck($ip,$spam,$reason);
+  $spam = $CountryCheck['spam'];
+  $reason = $CountryCheck['reason'];
 
-  if (in_array($countryCode , $country_blacklist ) ) {
-    $spam = true;
-    $reason = "Country code $countryCode is blacked";
-
-  }
-  if($AllowedOrBlockCountries == 'allow' &&  in_array($countryCode , $country_blacklist ) ) {
-    $spam = false;
-  }
-  if($AllowedOrBlockCountries == 'allow' &&  !in_array($countryCode , $country_blacklist ) ) {
-    $spam = true;
-    $reason = "Country $countryCode is not in the whitelist";
-  }
-
-  if ( in_array($ip , $ip_blacklist ) ) {
-    $spam = true;
-    $reason = "IP $ip is blacked";
-  }
-
-  
-  // CIDR Filter (Thanks to @josephcy95)
-  if($spam != true){
-    foreach ($ip_blacklist as $cidr){
-      if( ip_is_cidr($cidr) ){
-        if (cidr_match($ip, $cidr)){
-          $spam = true;
-          $reason = "IP is in CIDR: $cidr";
-          break;
-        }
-      }
-    }
-  }
  
   // AbuseIPDB API  (Thanks to @josephcy95)
   $abuseipdb_api = get_option('abuseipdb_api') ? get_option('abuseipdb_api') : false;
@@ -86,6 +44,15 @@ function efas_wpcf7_validate_process ( $result, $tags ) {
     }
   }
   
+  // Maspik_human_verification check
+  if (get_option('Maspik_human_verification') ) {
+    if (false === get_transient('maspik_allow_' . $ip)) {
+      $spam = true;
+      $reason = "Maspik - Customized human verification";
+    }
+  }
+
+  
   //If country or ip is in blacklist
   if ( $spam ) {
       update_option( 'spamcounter', ++$spamcounter );
@@ -103,43 +70,20 @@ function efas_cf7_text_validation_filter($result,$tag){
 	$name = $tag['name'];
   	$spamcounter = get_option( 'spamcounter' ) ? get_option( 'spamcounter' ) : 0;
   	$field_value = strtolower($_POST[$name]); 
-    if(!$field_value){
+    if ( empty( $field_value ) ) {
       return $result;
     }
-  	$error_message = cfas_get_error_text();
-    $text_blacklist = get_option( 'text_blacklist' ) ? efas_makeArray(get_option('text_blacklist') ) : array('eric jones');
-  	
-	if ( efas_get_spam_api() ){
-    	$text_blacklist_json =  efas_get_spam_api() ;
-      	$text_blacklist = array_merge($text_blacklist, $text_blacklist_json);
-    }  
-
-     if( is_array($text_blacklist) ){
-       foreach ($text_blacklist as $bad_string) {
-        if( efas_is_field_value_equwl_to_string($bad_string, $field_value) ) {
-          update_option( 'spamcounter', ++$spamcounter );
-           efas_add_to_log($type = "text",$field_value, $_POST, "Contact from 7");
-          $result['valid'] = false;
-      	  $result->invalidate( $tag, $error_message );
-   		break;
-        }
-       }
+  
+	$spam = validateTextField($field_value);
+  
+    if($spam ) {
+      $error_message = cfas_get_error_text();
+      update_option( 'spamcounter', ++$spamcounter );
+      efas_add_to_log($type = "text","$spam", $_POST, "Contact from 7");          
+      $result['valid'] = false;
+      $result->invalidate( $tag, $error_message );
     }
-
-	$MaxCharacters_API = false;
-  	if ( efas_get_spam_api('MaxCharactersInTextField') ){
-    	$MaxCharacters_API = efas_get_spam_api('MaxCharactersInTextField')[0];
-    }
-    $CountCharacters = strlen($field_value);
-    $MaxCharacters = get_option( 'MaxCharactersInTextField' ) ? get_option( 'MaxCharactersInTextField' ) : $MaxCharactersInTextField ;
-	if( $MaxCharacters && $CountCharacters ){
-        if($MaxCharacters < $CountCharacters ) {
-          update_option( 'spamcounter', ++$spamcounter );
-          efas_add_to_log($type = "text","More then $MaxCharacters characters", $_POST, "Contact from 7");          
-          $result['valid'] = false;
-      	  $result->invalidate( $tag, $error_message );
-        }
-    }
+    
 	return $result;
 }
 add_filter('wpcf7_validate_text','efas_cf7_text_validation_filter', 10, 2); // Normal field
@@ -150,38 +94,18 @@ function efas_cf7_email_validation_filter($result,$tag){
 	$type = $tag['type'];
 	$name = $tag['name'];
 	$the_value = $_POST[$name];
-	
-  	$spamcounter = get_option( 'spamcounter' ) ? get_option( 'spamcounter' ) : 0;
   	$field_value = strtolower($the_value); 
-    if(!$field_value){
-      return $result;;
+    if ( empty( $field_value ) ) {
+      return $result;
     }
-  	$error_message = cfas_get_error_text();
-    $text_blacklist =  efas_makeArray( get_option('emails_blacklist') ) ;
-
-  	if ( efas_get_spam_api('email_field') ){
-    	$blacklist_json = efas_get_spam_api('email_field') ;
-      	$text_blacklist = array_merge($text_blacklist, $blacklist_json);
-    }
-  
-    $spam = false;
-    foreach ($text_blacklist as $bad_string) {         
-      if($bad_string[0] === "/" ){ // check
-        if ( preg_match( $bad_string, $field_value ) ) {
-          $spam = true;
-        }
-      }
-      $spam = efas_is_field_value_equwl_to_string($bad_string, $field_value) ? true : $spam ;
-      if($spam){
-      	break;
-      }
-   }
-   
-   $spam = cfes_is_spam_email_domain($field_value,$text_blacklist) ? true : $spam;
+	// check Email For Spam
+	$spam = checkEmailForSpam($field_value);
 
    if( $spam ) {
+  	  $spamcounter = get_option( 'spamcounter' ) ? get_option( 'spamcounter' ) : 0;
+      $error_message = cfas_get_error_text();
       update_option( 'spamcounter', ++$spamcounter );
-      efas_add_to_log($type = "email",$field_value , $_POST, "Contact from 7");
+      efas_add_to_log($type = "email","Email $field_value is block $spam" , $_POST, "Contact from 7");
       $result['valid'] = false;
       $result->invalidate( $tag, $error_message );
    }
@@ -190,39 +114,29 @@ function efas_cf7_email_validation_filter($result,$tag){
 add_filter('wpcf7_validate_email','efas_cf7_email_validation_filter', 10, 2); // Normal field
 add_filter('wpcf7_validate_email*', 'efas_cf7_email_validation_filter', 10, 2); // Req. field
 
+
 // Add custom validation for CF7 tel fields
 function efas_cf7_tel_validation_filter($result,$tag){
 	$type = $tag['type'];
 	$name = $tag['name'];
 	$field_value = $_POST[$name];
-    $tel_formats = get_option( 'tel_formats' );
     $spamcounter = get_option( 'spamcounter' ) ? get_option( 'spamcounter' ) : 0;
-    if($field_value == "" || !$field_value || !$tel_formats){
+    if ( empty( $field_value ) ) {
 		return $result;
     }
-    $tel_formats = explode( "\n", str_replace("\r", "", $tel_formats) );
-  	if ( efas_get_spam_api('tel_formats') ){
-    	$blacklist_json = efas_get_spam_api('tel_formats') ;
-      	$tel_formats = array_merge($tel_formats, $blacklist_json);
-    }
+  
+  	$checkTelForSpam = checkTelForSpam($field_value);
+ 	$reason = $checkTelForSpam['reason'];      
+ 	$valid = $checkTelForSpam['valid'];   
 
-  	$error_message = cfas_get_error_text();
-    $valid = true;
-    if( is_array($tel_formats) ){
-      $valid = false;
-      foreach ($tel_formats as $format) {
-        if ( preg_match( $format, $field_value ) ) {
-          $valid = true;
-          break;
-        }
-      }
-      if(!$valid){
-          update_option( 'spamcounter', ++$spamcounter );
-          efas_add_to_log($type = "tel","Telephone number $field_value not feet the format $format ", $_POST, "Contact from 7");
-          $result['valid'] = false;
-      	  $result->invalidate( $tag, $error_message );
-      }
+  	if(!$valid){
+        $error_message = cfas_get_error_text();  
+        update_option( 'spamcounter', ++$spamcounter );
+        efas_add_to_log($type = "tel","Telephone number $field_value not feet the given format ", $_POST, "Contact from 7");
+        $result['valid'] = false;
+        $result->invalidate( $tag, $error_message );
     } 
+
 	return $result;
 }
 add_filter('wpcf7_validate_tel','efas_cf7_tel_validation_filter', 10, 2); // Normal field

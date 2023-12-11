@@ -4,80 +4,42 @@
  *
  */
 
-add_action( 'elementor_pro/forms/validation', 'efas_validation_process' , 10, 2 );
+    add_action( 'elementor_pro/forms/validation', 'efas_validation_process' , 10, 2 );
 function efas_validation_process ( $record, $ajax_handler ) {
   $spamcounter = get_option( 'spamcounter' ) ? get_option( 'spamcounter' ) : 0;
   $error_message = cfas_get_error_text();
   $spam = false;
+  $reason ="";
   // ip
-  $ip = efas_getRealIpAddr();
-  $ip_blacklist =  get_option( 'ip_blacklist' ) ? efas_makeArray( get_option( 'ip_blacklist' ) ) : array();
-  // country
-  $xml = simplexml_load_file("http://www.geoplugin.net/xml.gp?ip=".$ip);
-  $countryCode = $xml ? $xml->geoplugin_countryCode : false ;
-  $country_blacklist =  get_option( 'country_blacklist' ) ? efas_makeArray(get_option( 'country_blacklist')) : array();
-  $AllowedOrBlockCountries = get_option( 'AllowedOrBlockCountries' ) == "allow" ? "allow" : "block" ;            
+//  $ip = efas_getRealIpAddr();
+  $meta = $record->get_form_meta( [ 'page_url', 'page_title', 'user_agent', 'remote_ip' ] );
+  $ip =  $meta['remote_ip']['value'] ?   $meta['remote_ip']['value'] : efas_getRealIpAddr();
+
+  // Country IP Check 
+  $CountryCheck = CountryCheck($ip,$spam,$reason);
+  $spam = $CountryCheck['spam'];
+  $reason = $CountryCheck['reason'];
+
+  $NeedPageurl =  get_option( 'NeedPageurl' ) ;   
   
-  if ( is_array( efas_get_spam_api("ip") ) ){
-    $ip_blacklist_api =  efas_get_spam_api("ip")  ;
-    $ip_blacklist = array_merge($ip_blacklist, $ip_blacklist_api);
-  }  
-  /*if ( efas_get_spam_api("countries") ){
-    $countries_blacklist_api =  efas_get_spam_api("countries")  ;
-   // disable countries API
-	// $country_blacklist = array_merge($country_blacklist, $countries_blacklist_api);
-  }  */
-
-  if (in_array($countryCode , $country_blacklist ) ) {
-    $spam = true;
-    $reason = "Country code $countryCode is blacked";
-
-  }
-  if($AllowedOrBlockCountries == 'allow' &&  in_array($countryCode , $country_blacklist ) ) {
-    $spam = false;
-  }
-  if($AllowedOrBlockCountries == 'allow' &&  !in_array($countryCode , $country_blacklist ) ) {
-    $spam = true;
-    $reason = "Country $countryCode is not in the whitelist";
-  }
-
-  if ( in_array($ip , $ip_blacklist ) ) {
-    $spam = true;
-    $reason = "IP $ip is blacked";
-  }
-  $NeedPageurl =  get_option( 'NeedPageurl' );   
   if ( efas_get_spam_api('block_empty_source') ){
     $NeedPageurl = $NeedPageurl ? $NeedPageurl : efas_get_spam_api('block_empty_source')[0];
   }
+
 
   if( !array_key_exists('referrer', $_POST ) && $NeedPageurl ){
       $spam = true;
       $reason = "Page source url is empty";
   }
   
-  /*
-  // later
-  if ( get_option( 'spampixel' ) && false ) {
-	if (false === get_transient('spx_allow_' .$ip)) {
-        update_option( 'spamcounter', ++$spamcounter );
-        efas_add_to_log($type = "Spampixel","User look like robot", $_POST);
-		wp_die('User look like robot, try again ');
-	}
-  }*/
-  
-    //If country or ip is in blacklist
-   // CIDR Filter (Thanks to @josephcy95)
-  if($spam != true){
-    foreach ($ip_blacklist as $cidr){
-      if( ip_is_cidr($cidr) ){
-        if (cidr_match($ip, $cidr)){
-          $spam = true;
-          $reason = "IP is in CIDR: $cidr";
-          break;
-        }
-      }
+  // spampixel check
+  if (get_option('Maspik_human_verification') ) {
+    if (false === get_transient('maspik_allow_' . $ip)) {
+      $spam = true;
+      $reason = "Maspik - human verification  - IP: $ip";
     }
   }
+  
  
   // AbuseIPDB API  (Thanks to @josephcy95)
   $abuseipdb_api = get_option('abuseipdb_api') ? get_option('abuseipdb_api') : false;
@@ -128,116 +90,58 @@ function efas_validation_process ( $record, $ajax_handler ) {
 // Validate the Text fields.
 add_action( 'elementor_pro/forms/validation/text', function( $field, $record, $ajax_handler ) {
 	$spamcounter = get_option( 'spamcounter' ) ? get_option( 'spamcounter' ) : 0;
-  
-  	$field_value = strtolower($field['value']); 
+    $field_value = strtolower($field['value']);
     if(!$field_value){
       return;
     }
-  	$error_message = cfas_get_error_text();
-    $text_blacklist = get_option( 'text_blacklist' ) ? efas_makeArray(get_option('text_blacklist') ) : array('eric jones');
-  	if ( efas_get_spam_api() ){
-    	$text_blacklist_json =  efas_get_spam_api();
-      	$text_blacklist = array_merge($text_blacklist, $text_blacklist_json);
-    }  
-	if( is_array($text_blacklist) ){
-       foreach($text_blacklist as $bad_string) {
-          if( efas_is_field_value_equwl_to_string($bad_string, $field_value) ) {
-            $reason = "Input $field_value is block";
-            update_option( 'spamcounter', ++$spamcounter );
-              efas_add_to_log($type = "text",$reason, $_POST );
-            $ajax_handler->add_error( $field['id'], $error_message );
-            break;
-          }
-       }
-    }
+	$spam = validateTextField($field_value);
   
-  // Max Characters In Text Field in the rgiht order
-	$MaxCharacters_API = false;
-  	if ( efas_get_spam_api('MaxCharactersInTextField') ){
-    	$MaxCharacters_API = efas_get_spam_api('MaxCharactersInTextField')[0];
-    }
-    $MaxCharacters = get_option( 'MaxCharactersInTextField' ) ? get_option( 'MaxCharactersInTextField' ) : $MaxCharactersInTextField ;
-    $CountCharacters = strlen($field_value);
-	if( $MaxCharacters && $CountCharacters ){
-        if($MaxCharacters < $CountCharacters ) {
-          update_option( 'spamcounter', ++$spamcounter );
-          efas_add_to_log($type = "text","More then $MaxCharacters characters", $_POST);          
-          $ajax_handler->add_error( $field['id'], $error_message );
-        }
+    if( $spam ) {
+        $error_message = cfas_get_error_text();
+        update_option( 'spamcounter', ++$spamcounter );
+        efas_add_to_log($type = "text",$spam, $_POST);          
+        $ajax_handler->add_error( $field['id'], $error_message );
     }
 }, 10, 3 );
 
 // Validate the Email fields.
-add_action( 'elementor_pro/forms/validation/email', function( $field, $record, $ajax_handler ) {
-	$spamcounter = get_option( 'spamcounter' ) ? get_option( 'spamcounter' ) : 0;
-  	$field_value = strtolower($field['value']); 
-    if(!$field_value){
-      return;
+add_action('elementor_pro/forms/validation/email', function ($field, $record, $ajax_handler) {
+    $spamcounter = get_option('spamcounter') ? get_option('spamcounter') : 0;
+    $field_value = strtolower($field['value']);
+    if (!$field_value) {
+        return;
     }
-  
-  	$error_message = cfas_get_error_text();
-    $text_blacklist = efas_makeArray( get_option( 'emails_blacklist' ) );
-	if ( efas_get_spam_api('email_field') ){
-    	$blacklist_json = efas_get_spam_api('email_field') ;
-      	$text_blacklist = array_merge($text_blacklist, $blacklist_json);
-    }
-  	$spam = false;
-    foreach ($text_blacklist as $bad_string) {         
-      if(isset($bad_string[0]) && $bad_string[0] === "/" ){ // check
-        if ( preg_match( $bad_string, $field_value ) ) {
-          $spam = true;
-        }
-      }
-      $spam = efas_is_field_value_equwl_to_string($bad_string, $field_value) ? true : $spam ;
-      if($spam){
-      	break;
-      }
-   }
-	// check if spam email-domain enter, like: @xyz.com , @gmail.com ...
-  	$spam = cfes_is_spam_email_domain($field_value,$text_blacklist)  ? true : $spam;
+	// check Email For Spam
+	$spam = checkEmailForSpam($field_value);
 
-    if( $spam) {
-      update_option( 'spamcounter', ++$spamcounter );
-      efas_add_to_log($type = "email","Email $field_value is block", $_POST);
-      $ajax_handler->add_error( $field['id'], $error_message );
+    if ($spam) {
+       	$error_message = cfas_get_error_text();
+        update_option('spamcounter', ++$spamcounter);
+        efas_add_to_log($type = "email", "Email $field_value is block $spam", $_POST);
+        $ajax_handler->add_error($field['id'], $error_message);
     }
+}, 10, 3);
 
-}, 10, 3 );
 
 // preg_match the Tel field to the given format.
 add_action( 'elementor_pro/forms/validation/tel', function( $field, $record, $ajax_handler ) {
   	$spamcounter = get_option( 'spamcounter' ) ? get_option( 'spamcounter' ) : 0;
   	$field_value = $field['value']; 
-    $tel_formats = get_option( 'tel_formats' );
-
-    if($field_value == "" || !$field_value  || !$tel_formats){
-      return;
-    }
-    $tel_formats = explode( "\n", str_replace("\r", "", $tel_formats) );
-  	if ( efas_get_spam_api('tel_formats') ){
-    	$blacklist_json = efas_get_spam_api('tel_formats') ;
-      	$tel_formats = array_merge($tel_formats, $blacklist_json);
+    if ( empty( $field_value ) ) {
+        return false; // Not spam if the field is empty or no formats are provided.
     }
   
-  	$error_message = cfas_get_error_text();
-    $valid = true;
-
-    if( is_array($tel_formats) ){
-      $valid = false;
-      foreach ($tel_formats as $format) {
-        // Match this format XXX-XXX-XXXX, 123-456-7890 -- like: [0-9]{3}-[0-9]{3}-[0-9]{4}
-        //$field_value = "050-99755794";
-        //$format = "/^(?:(?:(\+?972|\(\+?972\)|\+?\(972\))(?:\s|\.|-)?([1-9]\d?))|(0\d{1,2}))(?:\s|\.|-)?([^0\D]{1}\d{2}(?:\s|\.|-)?\d{4})$/";
-        if ( preg_match( $format, $field_value ) ) {
-          $valid = true;
-          break;
-        }
-      }
-      if(!$valid){
-         efas_add_to_log($type = "tel","Telephone number $field_value not feet the format $format ", $_POST);
-         $ajax_handler->add_error( $field['id'], $error_message );
-      }
-    } 
+	$checkTelForSpam = checkTelForSpam($field_value);
+ 	$reason = $checkTelForSpam['reason'];      
+ 	$valid = $checkTelForSpam['valid'];   
+   
+    if(!$valid){
+      $error_message = cfas_get_error_text();
+      update_option('spamcounter', ++$spamcounter);
+      efas_add_to_log($type = "tel","Telephone number '$field_value' not feet the given format ($reason)", $_POST);
+      $ajax_handler->add_error( $field['id'], $error_message );
+    }
+    
 }, 10, 3 );
            
 // Validate the Textarea field.
@@ -248,6 +152,7 @@ add_action( 'elementor_pro/forms/validation/textarea', function( $field, $record
     if(!$field_value){
       return;
     }
+
   	$error_message = cfas_get_error_text();
     $textarea_blacklist = get_option( 'textarea_blacklist' ) ? efas_makeArray(get_option( 'textarea_blacklist' )) : array();
 
@@ -301,20 +206,9 @@ add_action( 'elementor_pro/forms/validation/textarea', function( $field, $record
 	  $num_links = preg_match_all( $reg_exUrl, $field_value );
 		if ( $num_links >= $max_links ) {
               update_option( 'spamcounter', ++$spamcounter );
-              efas_add_to_log($type = "textarea","contain more then  $max_links links", $_POST);
+              efas_add_to_log($type = "textarea","Contain at least $max_links links", $_POST);
 			  $ajax_handler->add_error( $field['id'], $error_message );
 		}
 	}
 
 }, 10, 3 );
-
-
-
-//
-//add_action( 'elementor_pro/forms/render/item', 'cfas_add_spampixel_to_elementor', 10, 3 );
-function cfas_add_spampixel_to_elementor( $item, $item_index, $widget ){
-  if ( 1 === $item_index ) {
-     cfas_add_spampixel_to_form();
-  }
-  return $item;
-}

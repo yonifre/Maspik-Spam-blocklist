@@ -202,7 +202,8 @@ class Settings_Page_Admin {
           'id'    => 'text_blacklist',
           'placeholder'      => 'Eric Jones',          
           'name'      => 'text_blacklist',
-          'description'      => __( 'Example:Eric jones<br>SEO expert<br>If the text value is EQUAL to one of the values above, MASPIK will tag it as spam and it will be blocked.', 'contact-forms-anti-spam' ),
+          'description'      => __( 'Example:Eric jones<br>SEO expert<br>If the text value is EQUAL to one of the values above, MASPIK will tag it as spam and it will be blocked.
+<br><b>Wildcard pattern</b> accepted as well, asterisk * symbol is nessery for the recognition of the wildcard.', 'contact-forms-anti-spam' ),
           'required' => 'true',
           'api'=>'text_field',
           'get_options_list' => '',
@@ -248,11 +249,11 @@ class Settings_Page_Admin {
           'subtype'   => 'textarea',
           'id'    => 'emails_blacklist',
           'name'      => 'emails_blacklist',
-          'description'      => __('Example:<br>test@gmail.com<br>ericjonesonline@outlook.com
+          'description'      => __('Example:<br>@bizml.ru<br>ericjonesonline@outlook.com<br>eric*@*.com
 <br>If the text value is EQUAL to one of the values above, MASPIK will tag it as spam and it will be blocked.
-<br>You can enter ending of email as well, like: @gmail.com will block all the email comming from @gmail.com (xyz@gmail.com) 
-<br><br>You can use the Regex format, for example: /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.ru\b/, 
-<br>This example will block all email that ends with ".ru".<br>*Note - Regex must start and end with a slash / ', 'contact-forms-anti-spam' ),
+<br><b>Email Domain</b> You can enter ending of email as well, like: @gmail.com will block all the email comming from @gmail.com (xyz@gmail.com) 
+<br>You can use the <b>Regex format</b>, for example: /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.ru\b/, 
+<br>This example will block all email that ends with ".ru".<br>*Note - Regex must start and end with a slash / <br><b>Wildcard pattern</b> accepted as well, asterisk * symbol is nessery for the recognition of the wildcard.', 'contact-forms-anti-spam' ),
           'placeholder'      => 'ericjonesonline@outlook.com',          
           'attr' => false,
           'api'=>'email_field',
@@ -335,6 +336,7 @@ unset($args);  */
           'id'    => 'contain_links',
           'name'      => 'contain_links',
           'description'      => __('Spammers tend to include links.<br>If there is no reason for anyone to send links when completing your forms, set this to 1.', 'contact-forms-anti-spam' ),
+          'api'=>'contain_links',
           'atter' => false,
           'min' => '0',
           'step' => '1', 
@@ -343,7 +345,7 @@ unset($args);  */
 					);
 		add_settings_field(
 			'contain_links',
-			__("Mark as spam if the text area contains X or more number of links.", 'contact-forms-anti-spam' ),
+			__("Considered as spam IF a text-area field containing at least X links (X or more).", 'contact-forms-anti-spam' ),
 			array( $this, 'settings_page_render_settings_field' ),
 			'settings_page_general_settings',
 			'settings_page_general_section',
@@ -358,6 +360,7 @@ unset($args);
           'name'      => 'lang_needed',
           'description'      => __('If you use this field, it will ONLY accept form submissions that contain at least one character of the chosen language.<br>Leave blank if you prefer to forbid certain languages.', 'contact-forms-anti-spam' ),
           'array' => efas_array_of_lang(),
+      	  'title' =>  __('Beware of blocking/allowing Latin languages in an individual (Like: Dutch, French ...), the chack is usually on the punctuation letters (But they are not always in use).'),
           'get_options_list' => '',
           'api'=>'lang_needed',
           'value_type'=>'normal',
@@ -402,8 +405,9 @@ unset($args);
           'id'    => 'tel_formats',
           'name'      => 'tel_formats',
           'description'      => __('If you want more than one format, use the next line.<br>For example, if you want the  XXX-XXX-XXXX format, please add:<br> /[0-9]{3}-[0-9]{3}-[0-9]{4}/<br>
-You can get more ideas here: <a target="_blank" href="https://regex101.com/library?orderBy=MOST_POINTS&search=phone%20number%20validation">https://regex101.com/library?orderBy=MOST_POINTS&search=phone%20number%20validation</a><br> ', 'contact-forms-anti-spam' ),
-          'attr' => false, 
+You can get more ideas here: <a target="_blank" href="https://regex101.com/library?orderBy=MOST_POINTS&search=phone%20number%20validation">https://regex101.com/library?orderBy=MOST_POINTS&search=phone%20number%20validation</a><br>
+<b>Wildcard pattern</b> accepted as well, asterisk * symbol is nessery for the recognition of the wildcard. ', 'contact-forms-anti-spam' ),
+          'attr' => false,  
           'get_options_list' => '',
           'value_type'=>'normal',
           'api'=>'phone_format',
@@ -445,6 +449,7 @@ unset($args);
           'type'      => 'input',
           'subtype'   => 'radio',
           'id'    => 'AllowedOrBlockCountries',
+          'api'    => 'AllowedOrBlockCountries',
           'name'      => 'AllowedOrBlockCountries',
           'description'      => __('Choose one of the options above and enter the countries in the next field.
           <br>If <b>allowed</b>, only forms from these countries will be accepted, if blocked, all countries in the following list will be blocked', 'contact-forms-anti-spam' ),
@@ -472,6 +477,7 @@ unset($args);
           'subtype'   => 'select',
           'id'    => 'country_blacklist',
           'name'      => 'country_blacklist',
+          'api'      => 'country_blacklist',
           'description'      => __('You can choose as many as you like.', 'contact-forms-anti-spam' ),
           'attr' => false,
           'array' => efas_array_of_countries(),
@@ -511,29 +517,54 @@ unset($args);
               $args
           );  
 unset($args); 
-//Ross's spam pixel idea
-/*
+//Maspik_human_verification
 		$args = array (
           'type'      => 'input',
           'subtype'   => 'checkbox',
-          'id'    => 'spampixel',
-          'name'    => 'spampixel',
-          'description'      => __('Idea from Ross Wintle - https://rosswintle.uk/2021/03/css-only-spam-prevention-allow-list-captcha/', 'contact-forms-anti-spam' ),
+          'id'    => 'Maspik_human_verification',
+          'name'    => 'Maspik_human_verification',
+          'description'      => __('Bot capture - BETA', 'contact-forms-anti-spam' ),
           'label'      => 0,          
           'attr' => false,
-          'api'=>'spampixel',
+          'api'=>'Maspik_human_verification',
           'get_options_list' => '',
           'value_type'=>'normal',
           'wp_data' => 'option'
 		);
           add_settings_field(
-              'spampixel',
-              __('Smart spam bot capture', 'contact-forms-anti-spam' ),
+              'Maspik_human_verification',
+              __('Maspik human verification', 'contact-forms-anti-spam' ),
               array( $this, 'settings_page_render_settings_field' ),
               'settings_page_general_settings',
               'settings_page_general_section',
               $args
-          );  */
+          );  
+unset($args); 
+      
+//Disable comments 
+		$args = array (
+          'type'      => 'input',
+          'subtype'   => 'checkbox',
+          'id'    => 'disable_comments',
+          'name'      => 'disable_comments',
+          'description'=> __('Disable comments on *ALL* types of posts and remove/hide any existing comments from displaying, as well as hiding the comment forms.<br>
+If you check this box comments will be disable.', 'contact-forms-anti-spam' ),
+          'label'      => 0,          
+          'attr' => false,
+          'api'=>'disable_comments',
+          'get_options_list' => '',
+          'value_type'=>'normal',
+          'wp_data' => 'option'
+		);
+          add_settings_field(
+              'disable_comments',
+              __('Completely Disable Comments in WordPress.', 'contact-forms-anti-spam' ),
+              array( $this, 'settings_page_render_settings_field' ),
+              'settings_page_general_settings',
+              'settings_page_general_section',
+              $args
+          );  
+
 //error_message
  unset($args); 
 		$args = array (
@@ -614,6 +645,7 @@ $args = array(
   'label'      => 0,
   'attr' => false,
   'get_options_list' => '',
+  'api'=>'abuseipdb_api',
   'value_type' => 'normal',
   'wp_data' => 'option'
 );
@@ -633,6 +665,7 @@ $args = array(
   'subtype'   => 'number',
   'id'    => 'abuseipdb_score',
   'name'      => 'abuseipdb_score',
+  'api'=>'abuseipdb_score',
   'description'      => __('Recommend not lower than 25 for less false positives.', 'contact-forms-anti-spam'),
   'atter' => false,
   'min' => '0',
@@ -656,6 +689,7 @@ $args = array(
   'type'      => 'input',
   'subtype'   => 'text',
   'id'    => 'proxycheck_io_api',
+  'api'=>'proxycheck_io_api',
   'name'      => 'proxycheck_io_api',
   'description'      => __('Proxycheck.io API (Leave blank to disable)', 'contact-forms-anti-spam'),
   'label'      => 0,
@@ -678,6 +712,7 @@ unset($args);
 $args = array(
   'type'      => 'input',
   'subtype'   => 'number',
+  'api'=>'proxycheck_io_risk',
   'id'    => 'proxycheck_io_risk',
   'name'      => 'proxycheck_io_risk',
   'description'      => __('Low risk 0-33, MidHigh risk = 33-66, Dangerous = 66 Above', 'contact-forms-anti-spam'),
@@ -700,12 +735,13 @@ add_settings_field(
 unset($args);       
 //Pro
 //to active API license files?
+/*
         $args = array (
             'type'      => 'input',
             'subtype'   => 'checkbox',
-            'id'    => 'to_include_api',
-            'name'      => 'to_include_api',
-            'description'      => __('Check to activate. By checking, an License library will be added.<br><b>This works only with PHP 7 or higher.</b>', 'contact-forms-anti-spam' ),
+            'id'    => 'remove_pro_option',
+            'name'      => 'remove_pro_option',
+            'description'      => __('<b>For old version of PHP ( version  = < 6 ).</b>', 'contact-forms-anti-spam' ),
             'label'      => 0,
             'attr' => false,
             'get_options_list' => '',
@@ -713,14 +749,39 @@ unset($args);
             'wp_data' => 'option'
         );
         add_settings_field(
-            'to_include_api',
-            __('Do you want to activate the API/Pro options?', 'contact-forms-anti-spam' ),
+            'remove_pro_option',
+            __('Do you want to Disactivate the API/Pro options?', 'contact-forms-anti-spam' ),
             array( $this, 'settings_page_render_settings_field' ),
             'settings_page_pro_settings_page',
             'settings_page_pro_section',
             $args
         );
         unset($args);
+*/
+
+// $popular_spam
+		$args = array (
+          'type'      => 'input',
+          'subtype'   => 'checkbox',
+          'id'    => 'popular_spam',
+          'name'      => 'popular_spam',
+          'description'      => __('Popular spam words from <a target="_blank" href="https://wpmaspik.com/public-api/">Maspik public API</a><br>If Maspik pro available.', 'contact-forms-anti-spam' ),
+          'label'      => 0,          
+          'attr' => false,
+          'get_options_list' => '',
+          'value_type'=>'normal',
+          'wp_data' => 'option'
+		);
+		add_settings_field(
+			'popular_spam',
+			__('Automatically adding spam phrases from the MASPIK API (BETA)', 'contact-forms-anti-spam' ),
+			array( $this, 'settings_page_render_settings_field' ),
+			'settings_page_pro_settings_page',
+			'settings_page_pro_section',
+			$args
+		);   
+unset($args); 
+
 //Privet API file (Post ID)
 
 		$args = array (
@@ -728,7 +789,7 @@ unset($args);
           'subtype'   => 'text', 
           'id'    => 'private_file_id',
           'name'      => 'private_file_id',
-          'description'      => __('After you create an API file, you will see an ID number on the API page.<br>If you want to use more than one, separate them with a comma.<br>For example, 64,72', 'contact-forms-anti-spam' ),
+          'description'      => __('After you create an API file, you will see an ID number on the API page.<br>For example: 62 (Only one ID)', 'contact-forms-anti-spam' ),
           'label'      => 0,          
           'attr' => false,
           'get_options_list' => '',
@@ -1033,9 +1094,10 @@ unset($args);
       	register_setting('settings_page_option_settings_page','maspik_support_gravity_forms');
       	register_setting('settings_page_option_settings_page','maspik_Store_log');
 
+      	register_setting('settings_page_pro_settings_page','popular_spam');
       	register_setting('settings_page_pro_settings_page','private_file_id');
       	register_setting('settings_page_pro_settings_page','public_file');
-      	register_setting('settings_page_pro_settings_page','to_include_api');
+      //	register_setting('settings_page_pro_settings_page','to_include_api');
 
 		register_setting('settings_page_general_settings_page','text_blacklist');
 
@@ -1051,7 +1113,8 @@ unset($args);
       	register_setting('settings_page_general_settings_page','AllowedOrBlockCountries');
       	register_setting('settings_page_general_settings_page','country_blacklist');
       	register_setting('settings_page_general_settings_page','NeedPageurl');
-      //	register_setting('settings_page_general_settings_page','spampixel');
+      	register_setting('settings_page_general_settings_page','disable_comments');
+        register_setting('settings_page_general_settings_page','Maspik_human_verification');
         register_setting('settings_page_general_settings_page','error_message');
         register_setting('settings_page_general_settings_page','tel_formats');
 	}
@@ -1076,7 +1139,10 @@ unset($args);
         $default =(isset($args['default'])) ? $args['default'] : '';
         $value = $value ? $value : $default;
         $is_depends = isset($args['depends']) && !efas_if_plugin_is_active($args['depends']) ? "disabled" : false;
-		$api = isset($args['api']) ? get_option( "spamapi" )[$args['api']] : false;
+		$api = isset($args['api']) ? efas_get_spam_api( $args['api'] ) : false;
+        if( isset($args['title']) ){
+          echo "<h4>".$args['title']."</h4>";
+        }
 		switch ($args['type']) {
 
 			case 'input':
@@ -1141,19 +1207,28 @@ unset($args);
             	case 'textarea':
                     		$placeholder = (isset($args['placeholder'])) ? $args['placeholder'] : '';
             				$has_value = ($value) ? $value : $placeholder;
-            				echo '<textarea '.$attr.' id="'.$args['id'].'" name="'.$args['name'].'" rows="5" cols="80">' . esc_attr($has_value) . ' </textarea>';
+            				echo '<textarea '.$attr.' id="'.$args['id'].'" name="'.$args['name'].'" rows="5" cols="80" style="direction: ltr;">' . esc_attr($has_value) . ' </textarea>';
 
 			default:
 					# code...
 					break;
 		}
-      if ($api){ 
-		echo "<div class='api'><small style='display: block;'>".__('Options already added automatically from the API', 'contact-forms-anti-spam' )."</small><div>";
-        foreach ($api as $line){
-          echo "<pre>$line</pre>";
-       	}
+        if ($api){ 
+          echo "<div class='api'><small style='display: block;'>".__('Options already added automatically from the API', 'contact-forms-anti-spam' )."</small><div>";
+           if (!is_array($api) ) {
+              $api =  explode( "\n", str_replace("\r", "", $api) );
+           }
+           if ( is_array($api) ){ 
+              foreach ($api as $line){
+                  echo "<pre class='array'>$line</pre>";
+              } //end foreach $api
+           }else { // else is_array $api
+             echo "<pre class='not-array'>$api</pre>";
+           }// end is_array $api
+        }// end if $api
+
 		echo "</div></div>";
-      }
+      //}// end 
 
       	echo "<small style='display: block;'>$description</small>";
 

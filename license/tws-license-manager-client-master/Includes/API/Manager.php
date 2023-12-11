@@ -1877,7 +1877,7 @@ final class Manager {
 	 *
 	 * It will run a task every day task to validate license and set it's status appropriately.
 	 */
-	public function run_scheduled_task() {
+  public function run_scheduled_task() {
 		if ( ! wp_next_scheduled( $this->schedule ) ) {
 			wp_schedule_event( time(), 'daily', $this->schedule );
 			wp_schedule_single_event( time() + 60, $this->schedule );

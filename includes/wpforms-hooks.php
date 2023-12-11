@@ -15,72 +15,20 @@ add_action('wpforms_process_before', function( $entry, $form_data ) {
   $spam = false;
   // ip
   $ip = efas_getRealIpAddr();
-  $ip_blacklist =  get_option( 'ip_blacklist' ) ? efas_makeArray( get_option( 'ip_blacklist' ) ) : array();
-  // country
-  $xml = simplexml_load_file("http://www.geoplugin.net/xml.gp?ip=".$ip);
-  $countryCode = $xml ? $xml->geoplugin_countryCode : false ;
-  $country_blacklist =  get_option( 'country_blacklist' ) ? efas_makeArray(get_option( 'country_blacklist')) : array();
-  $AllowedOrBlockCountries = get_option( 'AllowedOrBlockCountries' ) == "allow" ? "allow" : "block" ;            
-  
-  if ( is_array( efas_get_spam_api("ip") ) ){
-    $ip_blacklist_api =  efas_get_spam_api("ip")  ;
-    $ip_blacklist = array_merge($ip_blacklist, $ip_blacklist_api);
-  }  
-  /*if ( efas_get_spam_api("countries") ){
-    $countries_blacklist_api =  efas_get_spam_api("countries")  ;
-   // disable countries API
-	// $country_blacklist = array_merge($country_blacklist, $countries_blacklist_api);
-  }  */
-
-  if (in_array($countryCode , $country_blacklist ) ) {
-    $spam = true;
-    $reason = "Country code $countryCode is blacked";
-
-  }
-  if($AllowedOrBlockCountries == 'allow' &&  in_array($countryCode , $country_blacklist ) ) {
-    $spam = false;
-  }
-  if($AllowedOrBlockCountries == 'allow' &&  !in_array($countryCode , $country_blacklist ) ) {
-    $spam = true;
-    $reason = "Country $countryCode is not in the whitelist".print_r($country_blacklist,1);
-  }
-
-  if ( in_array($ip , $ip_blacklist ) ) {
-    $spam = true;
-    $reason = "IP $ip is blacked";
-  }
-/* -- check with WPFORMS
-  $NeedPageurl =  get_option( 'NeedPageurl' );   
-  if ( efas_get_spam_api('block_empty_source') ){
-    $NeedPageurl = $NeedPageurl ? $NeedPageurl : efas_get_spam_api('block_empty_source')[0];
-  }
-
-  if( !array_key_exists('referrer', $_POST ) && $NeedPageurl ){
+  $reason = "";
+  // Country IP Check 
+  $CountryCheck = CountryCheck($ip,$spam,$reason);
+  $spam = $CountryCheck['spam'];
+  $reason = $CountryCheck['reason'];
+    
+  // spampixel check
+  if ( get_option('Maspik_human_verification') ) {
+    if (false === get_transient('maspik_allow_' . $ip)) {
       $spam = true;
-      $reason = "Page source url is empty";
-  }
-*/
-  
-    //spampixel- BETA
-  /*if ( get_option( 'spampixel' ) && 0 ) {
-	if (false === get_transient('spx_allow_' .$ip)) {
-        update_option( 'spamcounter', ++$spamcounter );
-        efas_add_to_log($type = "Spampixel","User look like robot", $_POST, "Wpforms");
-		wp_die('User look like robot, try again ');
-	}
-  }*/
-    // CIDR Filter (Thanks to @josephcy95)
-  if($spam != true){
-    foreach ($ip_blacklist as $cidr){
-      if( ip_is_cidr($cidr) ){
-        if (cidr_match($ip, $cidr)){
-          $spam = true;
-          $reason = "IP is in CIDR: $cidr";
-          break;
-        }
-      }
+      $reason = "Maspik - human verification - IP: $ip";
     }
   }
+    // CIDR Filter (Thanks to @josephcy95)
  
   // AbuseIPDB API  (Thanks to @josephcy95)
   $abuseipdb_api = get_option('abuseipdb_api') ? get_option('abuseipdb_api') : false;
@@ -109,7 +57,7 @@ add_action('wpforms_process_before', function( $entry, $form_data ) {
   if ( $spam ) {
     update_option( 'spamcounter', ++$spamcounter );
     efas_add_to_log($type = "General",$reason, $_POST , "Wpforms" );
-    die('ip_country_blacklist');
+	wp_die('Your submission has been flagged as potential spam. Please contact the administrator for assistance.');
   }
   
   
@@ -122,44 +70,23 @@ add_action('wpforms_process_before', function( $entry, $form_data ) {
 add_action( 'wpforms_process_validate_text', 'cfas_validate_wpforms_text_name', 10, 3);
 add_action( 'wpforms_process_validate_name', 'cfas_validate_wpforms_text_name', 10, 3);
 function cfas_validate_wpforms_text_name( $field_id, $field_submit, $form_data ) {
+    $field_submit = is_array($field_submit) ?  implode(" ",$field_submit) : $field_submit;
   	$field_value = strtolower($field_submit) ; 
-    if(!$field_value){
+
+    if ( empty( $field_value ) ) {
       return;
     }
-    $spamcounter = get_option( 'spamcounter' ) ? get_option( 'spamcounter' ) : 0;
-  	$error_message = cfas_get_error_text();
-    $text_blacklist = get_option( 'text_blacklist' ) ? efas_makeArray(get_option('text_blacklist') ) : array('eric jones');
-  	if ( efas_get_spam_api() ){
-    	$text_blacklist_json =  efas_get_spam_api();
-      	$text_blacklist = array_merge($text_blacklist, $text_blacklist_json);
-    }  
-	if( is_array($text_blacklist) ){
-       foreach($text_blacklist as $bad_string) {
-          if( efas_is_field_value_equwl_to_string($bad_string, $field_value) ) {
-            $reason = "Input = $field_value ";
-            update_option( 'spamcounter', ++$spamcounter );
-              efas_add_to_log($type = "text",$reason, $_POST , "Wpforms" );
-              wpforms()->process->errors[ $form_data['id'] ][ $field_id ] = $error_message;
-         	 return;
-          }
-       }
+
+	$spam = validateTextField($field_value);
+
+    if($spam ) {
+      $spamcounter = get_option( 'spamcounter' ) ? get_option( 'spamcounter' ) : 0;
+      $error_message = cfas_get_error_text();
+      update_option( 'spamcounter', ++$spamcounter );
+      efas_add_to_log($type = "text/name","$spam", $_POST, "Wpforms");          
+      wpforms()->process->errors[ $form_data['id'] ][ $field_id ] = $error_message;
+      return;
     }
-  
-    // Max Characters In Text Field in the rgiht order
-	$MaxCharacters_API = false;
-  	if ( efas_get_spam_api('MaxCharactersInTextField') ){
-    	$MaxCharacters_API = efas_get_spam_api('MaxCharactersInTextField')[0];
-    }
-    $MaxCharacters = get_option( 'MaxCharactersInTextField' ) ? get_option( 'MaxCharactersInTextField' ) : $MaxCharactersInTextField ;
-    $CountCharacters = strlen($field_value);
-	if( $MaxCharacters && $CountCharacters ){
-        if($MaxCharacters < $CountCharacters ) {
-          update_option( 'spamcounter', ++$spamcounter );
-          efas_add_to_log($type = "text/name","More then $MaxCharacters characters", $_POST, "Wpforms");          
-          wpforms()->process->errors[ $form_data['id'] ][ $field_id ] = $error_message;
-          return;
-        }
-    } 
 }
 
 
@@ -167,40 +94,18 @@ function cfas_validate_wpforms_text_name( $field_id, $field_submit, $form_data )
  * Check the email field.
 */ 
 add_action( 'wpforms_process_validate_email', function( $field_id, $field_submit, $form_data ) {
-
 	$spamcounter = get_option( 'spamcounter' ) ? get_option( 'spamcounter' ) : 0;
   	$field_value = strtolower($field_submit); 
     if(!$field_value){
       return;
     }
-  
-  	$error_message = cfas_get_error_text();
-    $text_blacklist = efas_makeArray( get_option( 'emails_blacklist' ) );
-	if ( efas_get_spam_api('email_field') ){
-    	$blacklist_json = efas_get_spam_api('email_field') ;
-      	$text_blacklist = array_merge($text_blacklist, $blacklist_json);
-    }
-  	$spam = false;
-    foreach ($text_blacklist as $bad_string) {         
-      if($bad_string[0] === "/" ){ // check
-        if ( preg_match( $bad_string, $field_value ) ) {
-          $spam = true;
-        }
-      }
-      $spam = efas_is_field_value_equwl_to_string($bad_string, $field_value) ? true : $spam ;
-      if($spam){
-      	break;
-      }
-   }
-	// check if spam email-domain enter, like: @xyz.com , @gmail.com ...
-  	$spam = cfes_is_spam_email_domain($field_value,$text_blacklist)  ? true : $spam;
-
+	$spam = checkEmailForSpam($field_value);
     if( $spam) {
+      $error_message = cfas_get_error_text();
       update_option( 'spamcounter', ++$spamcounter );
-      efas_add_to_log($type = "email",$field_value, $_POST, "Wpforms");
+      efas_add_to_log($type = "email","Email $field_value is block $spam", $_POST, "Wpforms");
       wpforms()->process->errors[ $form_data['id'] ][ $field_id ] = $error_message;
     }
-
 }, 10, 3 );
 
 /*
@@ -209,35 +114,19 @@ add_action( 'wpforms_process_validate_email', function( $field_id, $field_submit
 add_action( 'wpforms_process_validate_phone', function( $field_id, $field_submit, $form_data ) {
     $spamcounter = get_option( 'spamcounter' ) ? get_option( 'spamcounter' ) : 0;
   	$field_value = strtolower($field_submit); 
-    $tel_formats = get_option( 'tel_formats' );
-
-    if($field_value == "" || !$field_value  || !$tel_formats){
-      return;
+    if ( empty( $field_value ) ) {
+        return false; // Not spam if the field is empty or no formats are provided.
     }
-    $tel_formats = explode( "\n", str_replace("\r", "", $tel_formats) );
-  
-  	if ( efas_get_spam_api('tel_formats') ){
-    	$blacklist_json = efas_get_spam_api('tel_formats') ;
-      	$tel_formats = array_merge($tel_formats, $blacklist_json);
-    }
-
-  	$error_message = cfas_get_error_text();
-    $valid = true;
-    if( is_array($tel_formats) ){
-      $valid = false;
-      foreach ($tel_formats as $format) {
-        // Match this format XXX-XXX-XXXX, 123-456-7890 -- like: [0-9]{3}-[0-9]{3}-[0-9]{4}
-        if ( preg_match( $format, $field_value ) ) {
-          $valid = true;
-          break;
-        }
-      }
-      if(!$valid){
-         efas_add_to_log($type = "tel","Telephone number $field_value not feet the format $format ", $_POST, "Wpforms");
+	$checkTelForSpam = checkTelForSpam($field_value);
+ 	$reason = $checkTelForSpam['reason'];      
+ 	$valid = $checkTelForSpam['valid'];   
+   
+    if(!$valid){
+      	 $error_message = cfas_get_error_text();
+         efas_add_to_log($type = "tel","Telephone number '$field_value' not feet the given format ", $_POST, "Wpforms");
          update_option( 'spamcounter', ++$spamcounter );
       	 wpforms()->process->errors[ $form_data['id'] ][ $field_id ] = $error_message;
       }
-    } 
 }, 10, 3 );
 
 
@@ -312,12 +201,23 @@ add_action( 'wpforms_process_validate_textarea', function( $field_id, $field_sub
 }, 10, 3 );
 
 
-
-
-//*BETA*//
-
-//This simple code integrates Ross's spam pixel idea with WP Forms
-//smartrobotcheck
-// Add field and CSS
-
-add_action('wpforms_display_submit_before', 'cfas_add_spampixel_to_form');
+add_action('wpforms_display_submit_before', 'maspik_add_field_wpforms');
+function maspik_add_field_wpforms($form_data) {
+    if (!get_option('Maspik_human_verification')) {
+        return;
+    }
+    $ajax_url = admin_url('admin-ajax.php') . '?action=cfas_pixel_submit';
+    ?>
+    <div class="maspik-captcha"></div>
+    <style>
+        .maspik-captcha {
+            width: 1px;
+            height: 1px;
+        }
+        form:focus-within .maspik-captcha {
+            background-image: url('<?php echo esc_url($ajax_url); ?>');
+            /* Add other background properties if necessary */
+        }
+    </style>
+    <?php
+}

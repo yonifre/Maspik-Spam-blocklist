@@ -1,88 +1,62 @@
-=== Maspik - Spam blacklist ===
+=== Maspik - Spam Blacklist ===
 Contributors: yonifre
 Donate link: paypal.me/yonifre
-Tags: elementor forms, spam,Blacklist,elementor,Maspik ,anti,lenix,anti spam,contact form,eric,blacklist, forms,cf7,Contact form 7,phone validation, validation,form validation,Eric Jones
+Tags: elementor forms, spam, blacklist, elementor, Maspik, anti spam, contact form, Eric Jones, forms, CF7, Contact form 7, phone validation, validation, Spam API, Lenix, Wordpress
 Requires at least: 4.3
-Tested up to: 6.0
+Tested up to: 6.4
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Eliminate spam. Block specific words, IP, country, languages, Spam API and more!
+Maspik is an anti-spam plugin that blocks spam submissions through your Elementor, CF7, and Wordpress contact forms, comments, and registration pages. With Maspik, you can blacklist specific words, IPs, countries, and languages to prevent spam emails from being delivered to your inbox.
 
-== Description ==
-
-Are you getting spam emails through your contact forms?
-MASPIK will help you stop spam coming through your Elementor + CF7 forms + Wordpress Comments & Registration (plus Gravityforms + Wpforms + Woocommerce reviews & Registration if you active pro license).
-Block/blacklist specific words, IP, country, languages, and more – MASPIK blocks the spam that ReCaptcha doesn’t block.
-
-If you look through your spam emails, you can often find the same words repeated. Sometimes they are in a foreign language, and other times they are from the same country or even IP.
-One example of common words in spam email is “Eric Jones”, “SEO Ranking”, “Automatically submit your website” , "Get free".
-
-MASPIK can block form spam emails from being delivered to your inbox!
-
+If you're receiving spam emails, take a look at the common words or phrases they contain, such as "Eric Jones," "SEO Ranking," "Automatically submit your website," or "Get free." Maspik can block these and other spam words that ReCaptcha may miss.
 
 <h4>Features:</h4>
 <ul>
-<li>Support on Elementor forms + CF7 (More in the pro version)</li>
-<li>Support built-in Wordpress Comments & Registration</li>
-<li>Blacklist words in a text field</li>
-<li>Blacklist words in the Email field (regex accepted)</li>
-<li>Blacklist words in the textarea field</li>
-<li>Blacklist a specific IP address</li>
-<li>Blacklist a specific country or countries</li>
-<li>Allow only a specific country</li>
-<li>Block text fields that have more than X characters</li>
-<li>Block spam if the textarea contains more than X links</li>
-<li>Block or allow the email if it contains (or doesn’t contain) one character from the main site language.</li>
-<li>Custom phone validation (Add your regex format)</li>
-<li>Spam log, which you can clear at any time</li>
-<li>Block forms devoid of source URL (Elementor forms only)</li>
-<li>Connection to Proxycheck.io API</li>
-<li>Connection to AbuseIPDB.com API</li>
+<li>Supports Elementor forms and CF7 (with more supported forms available in the Pro version)</li>
+<li>Blocks spam submissions in Wordpress comments and registration forms</li>
+<li>Allows you to blacklist words in a text field, email field (regex accepted), or textarea field</li>
+<li>Enables you to blacklist specific IPs or countries, or only allow submissions from a specific country</li>
+<li>Blocks text fields with more than X characters, or the textarea field if it contains more than X links</li>
+<li>Blocks or allows the email field if it contains (or doesn't contain) one character from the main site language</li>
+<li>Enables you to add custom phone validation with your regex format</li>
+<li>Includes a spam log that you can clear at any time</li>
+<li>Blocks Elementor forms devoid of source URLs</li>
+<li>Connects to Proxycheck.io API and AbuseIPDB.com API</li>
 </ul>
-If a bot or spammer fills out your form with any of the above, the form will NOT be sent, and they will receive a validation error.
+If a bot or spammer fills out your form with any of the above, the form will not be sent, and they will receive a validation error.
 
-<h4>Pro version features:</h4>
+<h4>Pro Version Features:</h4>
 <ul>
-<li>Connect your site to private Spam API </li>
-<li>Gravityforms support</li>
-<li>Wpforms support</li>
-<li>Woocommerce registration</li>
-<li>Woocommerce review</li>
+<li>Connects your site to a private spam API</li>
+<li>Connects your site to a public spam API</li>
+<li>Supports Gravityforms, Wpforms, Woocommerce registration, and Woocommerce reviews</li>
 </ul>
+<h4>API Site: <a href="https://wpmaspik.com/">WpMaspik.com</a></h4>
+Note: Be careful when selecting words to blacklist as each website has different needs. For example, if you're a digital marketing agency and blacklist the word "SEO," you may lose some valid leads.
 
-<h4>API site: <a href="https://wpmaspik.com/">WpMaspik.com</a></h4>
-
-Note:
-The plugin allows you to manually blacklist the words you select.
-Each website has different needs, so be careful with the words you choose to blacklist. For example, if you are a digital marketing agency and block the word SEO, you will likely lose some valid leads.
-
-Love each author, it will make the world better ❤
+Let's spread love! ❤️
 
 == Installation ==
 
-1. Search in wp Plugin repository through the 'Plugins' menu in WordPress for "Maspik - Spam blacklist".
-2. Install and Activate the plugin.
-3. In the WordPress dashboard menu you will find the setting page - Maspik - Spam blacklist.
-4. Add Spam words as you wish.
-
+Search for "Maspik - Spam Blacklist" in the Wordpress Plugin repository through the 'Plugins' menu in Wordpress.
+Install and activate the plugin.
+In the Wordpress dashboard menu, find the Maspik - Spam Blacklist setting page.
+Add spam words as needed.
 == Frequently Asked Questions ==
-
-= The plugin stop spam for any different kind of contact form plugins? =
-
-MASPIK support freely at Elementor and Contact Form 7.
-And in pro features, Gravityforms + Wpforms as well.
-
-We plan on supporting more forms in the future.
-
+= Does the plugin work with other contact form plugins besides Elementor and CF7? =
+Maspik supports Elementor and Contact Form 7, and it supports Gravityforms and Wpforms in the Pro version. We plan on supporting more forms in the future.
 = Where do I set this up? =
 
-In the WordPress dashboard menu, look for the MASPIK plugin and click on “settings”.
+In the WordPress dashboard menu, look for the 'Anti spam" item and click on it.
 
 = Will MASPIK slow down my site? =
 No.
-I wrote this plugin in high-quality code and not in CSS/JS. (CSS/JS running in the front end is what slows down websites.)
+I developed this plugin using high-quality server-side code and avoided using CSS/JS to ensure optimal website performance as CSS/JS running in the front-end can slow down websites.
+
+= How can I report security bugs? =
+You can report security bugs through the Patchstack Vulnerability Disclosure Program. The Patchstack team help validate, triage and handle any security vulnerabilities. [Report a security vulnerability.](https://patchstack.com/database/vdp/contact-forms-anti-spam)
 
 == Screenshots ==
 
@@ -92,12 +66,85 @@ I wrote this plugin in high-quality code and not in CSS/JS. (CSS/JS running in t
 
 == Changelog ==
 
+= 0.10.4 -  08/12/2023 =
+* Changed the way visitor IP is checked in IP/country blocking (for patchstack.com)
+
+= 0.10.3 -  27/11/2023 =
+* Performance  -  Improve code performance
+* Bug fix - Fix spam check in some situation
+
+
+= 0.10.2 -  26/11/2023 =
+* Performance  -  Improve code performance
+* Bug fix - Fix Textarea spam check, Thanks to @tauri77
+
+= 0.10.1 -  23/11/2023 =
+* Performance  -  Improve code performance
+* Tweek - Introduce Maspik human verification - New Bot capture - BETA 
+
+= 0.10.0 -  23/11/2023 =
+* Performance  -  Improve code performance
+* Bug fix - fix vulnerability problem
+* Tweek - Adding languages to the block/allow list
+
+
+= 0.9.3 -  22/11/2023 =
+* Bug fix - fix vulnerability problem, thanks to patchstack.com
+
+= 0.9.2 -  17/11/2023 =
+* Improvement - Support multisite wordpress setup 
+* Performance  -  Improve code performance.
+
+= 0.9.1 -  16/10/2023 =
+* Bug fix - Tel field incorrectly checked for spam  
+
+= 0.9.0 -  14/10/2023 =
+
+* New Feature - Wildcard pattern accepted in text-field/email-field/ Tel-field!
+* Improvement - Improve and add more in the API options (https://wpmaspik.com/).
+* Performance  -  Improve code performance.
+
+= 0.8.3 -  04/09/2023 =
+* New Feature - Automatically adding spam phrases from the MASPIK API (PRO)(BETA)	
+* Bug fix - Ip detect wrong in some servers  
+* Improvement - Improve and add more in the API options (https://wpmaspik.com/).
+
+
+= 0.8.2 -  29/07/2023 =
+* Improvement - Add Russian translation thanks to Andrey
+
+= 0.8.1 -  10/07/2023 =
+* Bug fix - Fix ip detect wrong in some cases  
+
+
+= 0.8 -  12/05/2023 =
+* New Feature - Add option to Completely Disable Comments in WordPress.
+* Performance  -  Improve code performance.
+* Improvement - Improve and add more in the API options (https://wpmaspik.com/).
+
+= 0.7.11 -  11/05/2023 =
+* Performance  -  Improve code performance
+* Improvement - Improve API options 
+
+= 0.7.10 -  07/04/2023 =
+* Adaptation to WP version 6.2
+
+= 0.7.9 -  25/02/2023 =
+* Bug fix (Please update ASAP!)
+
+= 0.7.8 -  07/10/2022 =
+* Adaptation to WP version 6.1
+
+= 0.7.7 -  07/10/2022 =
+* Bug fix - Fix Presserror problem    
+
+= 0.7.6 -  29/09/2022 =
+* Bug fix - Fix Name field check is is Array in Wpforms & GravityForms  
+
 = 0.7.5 -  12/08/2022 =
-* Offer - Want to get a free Pro license? Write an article about Maspik on your relevant blog, and get a link from the plugin page and a professional license for free. Email me for more details (Yonifre AT gmail).
 * Bug fix - Fix Block Domain Email (Ex: xyz.com) in some servers  
 
 = 0.7.4 -  01/08/2022 =
-* Offer - Want to get a free Pro license? Write an article about Maspik on your relevant blog, and get a link from the plugin page and a professional license for free. Email me for more details (Yonifre AT gmail).
 * New Feature - Connection to Proxycheck.io API (Thanks to josephcy95).
 * New Feature - Connection to AbuseIPDB.com API (Thanks to josephcy95).
 * Improvement - Add possibility to filter entire CIDR range such as 134.209.0.0/16 in IP blocklist field. (Thanks to josephcy95).

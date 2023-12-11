@@ -3,8 +3,8 @@
  * @wordpress-plugin
  * Plugin Name:       Maspik - Spam blacklist
  * Plugin URI:        https://wpmaspik.com/
- * Description:       Eliminate spam. Block specific words, IP, country, languages, from contact-froms and more...
- * Version:           0.7.5
+ * Description:       Anti spam. Block specific words, IP, country, languages, from contact-froms and more...
+ * Version:           0.10.4
  * Author:            yonifre
  * Author URI:        https://wpmaspik.com/apis/
  * License:           GPL-2.0+
@@ -21,7 +21,7 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * Currently plugin version.
  */
-define( 'SETTINGS_PAGE_VERSION', '0.7.5' );
+define( 'SETTINGS_PAGE_VERSION', '0.10.4' );
 
 /**
  * The code that runs during plugin activation.
@@ -51,9 +51,15 @@ function deactivate_contact_forms_anti_spam() {
  * admin-specific hooks, and public-facing site hooks.
  */
 require plugin_dir_path( __FILE__ ) . 'includes/class-efas.php';
-if( get_option( 'to_include_api' ) || get_option( 'private_file_id' ) ){
-	require plugin_dir_path( __FILE__ ) . 'license/license.php';
+
+
+if (version_compare(PHP_VERSION, '7.0.0', '>=') && apply_filters( 'maspik_active_license_library', true )) {
+  require plugin_dir_path(__FILE__) . 'license/license.php';
 }
+
+
+
+
 /**
  * Begins execution of the plugin.
  *
@@ -84,38 +90,3 @@ function efas_plugin_row_meta( $links, $file ) {
 	
 	return $links;
 }
-
-
-function efas_update_message($plugin_data, $r) {
-  if ($plugin_data['update']) {
-    echo "<b style='padding-top: 10px; display: inline-block;'>You may need to activate the plugin again after the update, as the plugin name changed</b>";
-    return;
-    $readme = wp_remote_fopen('https://plugins.svn.wordpress.org/contact-forms-anti-spam/trunk/README.txt');
-    if (! $readme)
-      return;
-	$v = SETTINGS_PAGE_VERSION;
-	$pattern = "/==\s*Changelog\s*==(.*)\s*=\s*$v\s*=\s*(upgrade_notice:)/";
-    if (
-      false === preg_match($pattern, $readme, $matches)
-      
-    )
-      return;
-    $changelog = (array) preg_split('/[\r\n]+/', trim($matches[1]));
-    if (empty($changelog))
-      return;
-
-    $output = '<div style="margin: 8px 0 0 26px;">';
-    $output .= '<ul style="margin-left: 14px; line-height: 1.5; list-style: disc outside none;">';
-
-    $item_pattern = '/^\s*\*\s*/';
-    foreach ($changelog as $line)
-      if (preg_match($item_pattern, $line))
-        $output .= '<li>'.preg_replace('/`([^`]*)`/', '<code>$1</code>', htmlspecialchars(preg_replace($item_pattern, '', trim($line)))).'</li>';
-
-    $output .= '</ul>';
-    $output .= '</div>';
-
-    echo $output;
-  }
-} // function update_message
-//add_action('in_plugin_update_message-'.basename(dirname(__FILE__)).'/'.basename(__FILE__), 'efas_update_message', 10, 2);

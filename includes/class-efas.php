@@ -104,15 +104,15 @@ class contact_forms_anti_spam {
       // functions
       	require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/wp-general.php';
       
-      if( get_option( "maspik_support_Elementor_forms" ) != "no" ){
+      if( get_option( "maspik_support_Elementor_forms" ) != "no"  ){
 	// if elementor pro active
-        if( in_array('elementor-pro/elementor-pro.php', apply_filters('active_plugins', get_option('active_plugins'))) ){ 
+        if ( maspik_is_plugin_active( 'elementor-pro/elementor-pro.php' ) ) {
           require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/elementor-hooks.php';
         }
       }
     // if cf7 active
       if( get_option( "maspik_support_cf7" ) != "no" ){
-        if( in_array('contact-form-7/wp-contact-form-7.php', apply_filters('active_plugins', get_option('active_plugins'))) ){ 
+        if ( maspik_is_plugin_active( 'contact-form-7/wp-contact-form-7.php' ) ) {
           require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/cf7-hooks.php';
         }
       }
@@ -120,16 +120,26 @@ class contact_forms_anti_spam {
 
 	  //wpforms
       if( get_option( "maspik_support_Wpforms" ) != "no" ){
-        if( in_array('wpforms-lite/wpforms.php', apply_filters('active_plugins', get_option('active_plugins'))) || in_array('wpforms/wpforms.php', apply_filters('active_plugins', get_option('active_plugins'))) && cfes_is_supporting() ){ 
+        if ( maspik_is_plugin_active( 'wpforms-lite/wpforms.php' ) || maspik_is_plugin_active( 'wpforms/wpforms.php' ) && cfes_is_supporting() ) {
           require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/wpforms-hooks.php';
         }
       }
 
-	  //gravityforms
+	  // Gravity Forms
       if( get_option( "maspik_support_gravity_forms" ) != "no" ){
-        if( in_array('gravityforms/gravityforms.php', apply_filters('active_plugins', get_option('active_plugins')))  && cfes_is_supporting() ){ 
+        if ( maspik_is_plugin_active( 'gravityforms/gravityforms.php' ) && cfes_is_supporting() ) {
           require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/gravityforms-hooks.php';
         }
+      }
+
+      // Disable Comments
+      if( get_option( "disable_comments" ) ) { 
+          require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/disable-comments.php';
+      }
+      
+      // If agree to shere Non sensitive information 
+      if( get_option( "shere_data" ) && 0 ) { 
+          require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/statistics-data.php';
       }
 
       

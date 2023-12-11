@@ -25,6 +25,10 @@ $errorlog = get_option( 'errorlog' ) ? get_option( 'errorlog' )  : "Empty";
           <li><?php _e('You may insert multiple values per field, placing one string per line.', 'contact-forms-anti-spam' ) ;?></li>
         </ul>
 			<?php
+		  if (!cfes_is_supporting() ) { ?>
+			<a target="_blank" href="https://wpmaspik.com/?ref=inpluginad"><img src="https://wpmaspik.com/wp-content/uploads/maspikpng1.png" style="max-width: 60%;"></a>
+        	<?php }
+
           if($spamcounter > 0){?>
           	<br><p><?php _e('You have blocked', 'contact-forms-anti-spam' ); ?> <?php echo $spamcounter; ?> <?php _e('spam so far!', 'contact-forms-anti-spam' ); ?> =)</p>
           <?php } 
@@ -42,7 +46,7 @@ $errorlog = get_option( 'errorlog' ) ? get_option( 'errorlog' )  : "Empty";
         do_settings_sections( 'settings_page_general_settings' );
         ?>
         <!--<div style="display: none;" id="bonus-sec">-->
-        </div> <!-- open in the php Class -->
+        <!-- </div> open in the php Class -->
       <?php
 
       submit_button(); ?>  
@@ -51,15 +55,6 @@ $errorlog = get_option( 'errorlog' ) ? get_option( 'errorlog' )  : "Empty";
 <?php echo get_maspik_footer(); ?>
 
 <script>
-      function show_hide_bonus_sec() {
-        var checkBox = document.getElementById("sprade_love");
-        var text = document.getElementById("bonus-sec");
-        if (checkBox.checked == true){
-          text.style.display = "block";
-        } else {
-          text.style.display = "none";
-        }
-      }
       jQuery(document).ready(function() {
         jQuery('.select2').select2({
           multiple: true,
@@ -93,9 +88,6 @@ $errorlog = get_option( 'errorlog' ) ? get_option( 'errorlog' )  : "Empty";
 textarea#emails_blacklist {
     direction: ltr;
     text-align: left;
-}
-#wpfooter {
-  position: static;
 }
 .supportforms li {
 	padding: 4px 10px;
