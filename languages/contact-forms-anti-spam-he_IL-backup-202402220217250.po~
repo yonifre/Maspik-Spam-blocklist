@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Maspik - Spam blacklist\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-28 11:45+0000\n"
-"PO-Revision-Date: 2024-02-22 02:17+0000\n"
+"PO-Revision-Date: 2024-02-22 02:14+0000\n"
 "Last-Translator: \n"
 "Language-Team: Hebrew\n"
 "Language: he_IL\n"
@@ -141,7 +141,7 @@ msgstr "בטל באופן מוחלט את מנגנון התגובות בוורד
 msgid ""
 "Considered as spam IF a text-area field containing at least X links (X or "
 "more)."
-msgstr "חסום אם פניה מכילה X לינקים או יותר"
+msgstr ""
 
 #: admin/class-maspik-admin.php:491
 #, fuzzy
@@ -408,7 +408,7 @@ msgstr ""
 #: admin/partials/maspik-import-export.php:43
 #: admin/partials/maspik-import-export.php:48
 msgid "Import Settings"
-msgstr "ייבוא הגדרות"
+msgstr ""
 
 #: admin/partials/maspik-import-export.php:14
 msgid ""

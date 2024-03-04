@@ -1,4 +1,8 @@
 <?php
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+    die;
+}
 /**
  * Provide a admin area view for the plugin
  */
@@ -19,17 +23,17 @@ if(isset($_POST['clear_log'])){
      },
   ]}';
     update_option( 'errorlog',$emptylog );
-    wp_redirect( add_query_arg( array( 'cleared_log' => true ), admin_url('admin.php?page=contact-forms-anti-spam-log.php') ) );
+    wp_redirect( add_query_arg( array( 'cleared_log' => true ), admin_url('admin.php?page=maspik-log.php') ) );
     exit;
   } else {
     wp_die( 'Invalid request' );
   }
 }
 
-if( isset($_POST['clear_counter'] ) && 0 ){
+if( isset($_POST['clear_counter'] ) && 0 ){ // Disable clear counter for now on
   if ( wp_verify_nonce( $_POST['cfes_clear_counter_nonce'], 'cfes_clear_counter_action' ) ) {
     update_option( 'spamcounter',0 );
-    wp_redirect( add_query_arg( array( 'cleared_counter' => true ), admin_url('admin.php?page=contact-forms-anti-spam-log.php') ) );
+    wp_redirect( add_query_arg( array( 'cleared_counter' => true ), admin_url('admin.php?page=maspik-log.php') ) );
     exit;
   } else {
     wp_die( 'Invalid request' );
@@ -66,3 +70,8 @@ if( isset($_POST['clear_counter'] ) && 0 ){
   ?>
   </div>
 <?php echo get_maspik_footer(); ?>
+    <style>
+    .log-warp tbody {
+        max-width: 100%;
+    }
+    </style>

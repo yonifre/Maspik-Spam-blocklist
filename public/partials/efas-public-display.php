@@ -1,4 +1,5 @@
 <?php
+if (!defined('ABSPATH')) exit; 
 
 /**
  * Provide a public-facing view for the plugin

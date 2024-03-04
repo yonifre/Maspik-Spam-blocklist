@@ -1,4 +1,9 @@
 <?php
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+    die;
+}
+//define( 'TWS_LICENSE_MANAGER_CLIENT_DEBUG', true );
 
 use TheWebSolver\License_Manager\API\Manager;
 
@@ -31,17 +36,20 @@ function test_client_manager() {
 	 ->hash_with( '6f246e0205bc3babb8c55464a74735e8adc79446a0199cba1879fe5c73b25f3a' )
 	 ->set_key_or_id( 'hundred95F284F74XF4HXGE18D27XZD' ) // uncomment this to get the given license key data.
 	 //->set_key_or_id( '55' ) // uncomment this to get the first generator data.
-	->connect_with( esc_url( 'https://wpmaspik.com' ), array( 'verify_ssl' => 2 ) ) // replace server url.
+	//->connect_with( esc_url( 'https://wpmaspik.com' ), array( 'verify_ssl' => 2 ) ) // replace server url.
+	->connect_with( esc_url( 'http://wpmaspik-com-devx.s605.upress.link' ), array( 'verify_ssl' => 0 ,'version'           => 'v1' ,'namespace'         => 'dlm') ) // replace server url.
 	->disable_form();
 
 	if ( $manager->client->has_error() ) {
 		$response = $manager->client->get_error();
 	} else {
 		$response = $manager->make_request_with( 'licenses' );
-		 $response = $manager->make_request_with( 'generators' ); // uncomment this to request generators (comment above code if this is uncommented).
+		 //$response = $manager->make_request_with( 'generators' ); // uncomment this to request generators (comment above code if this is uncommented).
 	}
+  	echo '<pre>'; print_r( $response ); echo '</pre>';
+
 }
-add_action( 'admin_notices', 'test_client_manager' );
+//add_action( 'admin_notices', 'test_client_manager' );
 
 
 
@@ -57,6 +65,7 @@ class Client_Plugin {
 	 *
 	 * @var string
 	 */
+	//const SERVER_URL = 'https://wpmaspik.com';
 	const SERVER_URL = 'https://wpmaspik.com';
 
 
@@ -66,7 +75,8 @@ class Client_Plugin {
 	 *
 	 * @var string
 	 */
-	const PARENT_SLUG = 'contact-forms-anti-spam';
+	const M_FILE_SLUG = 'contact-forms-anti-spam';
+	const PARENT_SLUG = 'maspik';
 
 	/**
 	 * Used as the plugin prefix.
@@ -120,7 +130,7 @@ class Client_Plugin {
 
 		if ( is_admin() ) {
 			// Initialize the license manager client handler.
-			$this->manager = new Manager( self::PARENT_SLUG, false, self::PARENT_SLUG );
+			$this->manager = new Manager( self::M_FILE_SLUG, false, self::PARENT_SLUG );
 			//$this->manager = new Manager( 'contact-forms-anti-spam', 'contact-forms-anti-spam.php' );
 
 		add_action( 'after_setup_theme', array( $this, 'start' ), 5 );
@@ -150,11 +160,14 @@ class Client_Plugin {
 			esc_url( self::SERVER_URL ),
 			array(
 				'timeout'           => 15,
+				//'namespace'         => 'dlm',
 				'namespace'         => 'lmfwc',
 				'version'           => 'v2',
+				//'version'           => 'v1',
 
 				// set 0 if no HTTPS verification needed (not recommended).
 				'verify_ssl'        => 2,
+				//'verify_ssl'        => 0,
 
 				// Only works if passed as query in BasicAuth authentication (if site has SSL).
 				// If set to false, $_SERVER['PHP_AUTH_USER'] & $_SERVER['PHP_AUTH_PW']
@@ -163,7 +176,7 @@ class Client_Plugin {
 				'query_string_auth' => true,
 			)
 		)
-		->disable_form( true );
+		->disable_form( true ); 
 	}
 
 } // class end.

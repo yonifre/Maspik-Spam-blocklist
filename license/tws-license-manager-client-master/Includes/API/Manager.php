@@ -1,22 +1,4 @@
 <?php // phpcs:ignore WordPress.NamingConventions
-/**
- * The Web Solver Licence Manager Client Manager.
- *
- * @package TheWebSolver\License_Manager\Client
- *
- * -----------------------------------
- * DEVELOPED-MAINTAINED-SUPPPORTED BY
- * -----------------------------------
- * ███║     ███╗   ████████████████
- * ███║     ███║   ═════════██████╗
- * ███║     ███║        ╔══█████═╝
- *  ████████████║      ╚═█████
- * ███║═════███║      █████╗
- * ███║     ███║    █████═╝
- * ███║     ███║   ████████████████╗
- * ╚═╝      ╚═╝    ═══════════════╝
- */
-
 namespace TheWebSolver\License_Manager\API;
 
 use TheWebSolver\License_Manager\Component\Http_Client;
@@ -28,7 +10,7 @@ final class Manager {
 	/**
 	 * The Web Solver License Manager Client Manager version.
 	 */
-	const VERSION = '2.0.001';
+	const VERSION = '2.0.002';
 
 	/**
 	 * Consumer Key.
@@ -548,6 +530,12 @@ final class Manager {
 		if ( ! isset( $_POST['validate_license'] ) || $this->hash !== $_POST['validate_license'] ) {
 			return;
 		}
+      // yoni - Verify the nonce
+        if ( ! isset( $_POST['activate_nonce'] ) || ! wp_verify_nonce( $_POST['activate_nonce'], 'activate_plugin_nonce' ) ) {
+            return;
+        }
+
+
 		// phpcs:enable
 
 		// API Namespace is a must. It's an error if not given. Stop processing further.
@@ -969,8 +957,8 @@ final class Manager {
 		if ( isset( $this->response->data->status ) ) {
 			$type   = 'success';
 			$status = strtoupper( $this->response->data->status );
-			$key    = $this->response->data->license_key;
-			$max    = $this->response->data->total_count;
+			$key    = !empty($this->response->data->license_key) ? $this->response->data->license_key : false;
+			$max    = !empty($this->response->data->total_count) ? $this->response->data->total_count : false;
 
 			// Presistent message.
 			/* Translators: %1$s - License Key, %2$s - Current license status. */
@@ -1388,7 +1376,7 @@ final class Manager {
 						<?php esc_html_e( 'The license has expired. Renew your license in few minutes!', 'tws-license-manager-client' ); ?>
 					</p>
 					<p>
-						<a href="<?php echo esc_url_raw( $url ); ?>">
+						<a href="<?php echo esc_url( $url ); ?>">
 							<?php esc_html_e( 'Renew Now', 'tws-license-manager-client' ); ?>
 						</a>
 					</p>
@@ -1504,7 +1492,11 @@ final class Manager {
 						<fieldset class="hz_license_links">
 							<?php /*
                             yoni
-<a class="dashboard" href="<?php echo esc_url_raw( add_query_arg( array( 'referrer' => $this->page_slug ), admin_url() ) ); ?>">← <?php esc_html_e( 'Dashboard', 'tws-license-manager-client' ); ?></a> */;?>
+<a class="dashboard" href="<?php echo esc_url_raw( add_query_arg( array( 'referrer' => $this->page_slug ), admin_url() ) ); ?>">← <?php esc_html_e( 'Dashboard', 'tws-license-manager-client' ); ?></a> */;
+                           // yoni add $activate_link var
+							$activate_link = esc_url( add_query_arg( array( 'page' => $this->page_slug, 'activate_nonce' => wp_create_nonce( 'activate_plugin_nonce' ) ), admin_url( 'admin.php' ) ) );
+
+                          ?>
 							<?php
 							if ( ! $to_activate ) :
 								if ( 'inactive' === $status ) {
@@ -1515,13 +1507,17 @@ final class Manager {
 									$text  = __( 'Cancel', 'tws-license-manager-client' );
 								}
 								?>
-								<a class="<?php echo esc_attr( $class ); ?>" href="<?php echo esc_url( admin_url( 'admin.php?page=' . $this->page_slug ) ); ?>"><?php echo esc_html( $text ); ?></a>
+								<a class="<?php echo esc_attr( $class ); ?>" href="<?php echo $activate_link; ?>"><?php echo esc_html( $text ); ?></a>
 							<?php endif; ?>
 							<?php if ( $deactivate ) : ?>
-								<a class="deactivate" href="<?php echo esc_url_raw( add_query_arg( $query ) ); ?>" class="button button-large button-next hz_btn__skip hz_btn__nav"><?php esc_html_e( 'Deactivate', 'tws-license-manager-client' ); ?></a>
+								<a class="deactivate" href="<?php echo /* yoni chenge here from esc_url_raw to esc_url */esc_url( add_query_arg( $query ) ); ?>" class="button button-large button-next hz_btn__skip hz_btn__nav"><?php esc_html_e( 'Deactivate', 'tws-license-manager-client' ); ?></a>
 							<?php endif; ?>
 						</fieldset>
 						<fieldset class="hz_license_button"<?php echo esc_attr( $disabled ); ?>>
+                              <?php
+                                // Add nonce field for Activate button // yoni
+                                wp_nonce_field('activate_plugin_nonce', 'activate_nonce');
+                          		?>
 							<input type="submit" class="hz_btn__prim<?php echo esc_attr( $btn_class ); ?>" value="<?php echo esc_html( $button ); ?>" />
 						</fieldset>
 					</div>

@@ -1,0 +1,447 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Maspik - Spam blacklist\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-04-05 03:38+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: \n"
+"Language: \n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Loco-Version: 2.5.3; wp-5.6.4\n"
+"X-Domain: contact-forms-anti-spam"
+
+#: admin/class-efas-admin.php:592
+msgid ""
+"After you create an API file, you will see an ID number on the API page.<br>"
+"If you want to use more than one, separate them with a comma.<br>For example,"
+" 64,72"
+msgstr ""
+
+#: admin/class-efas-admin.php:462
+msgid ""
+"Allow/block the following countries to allow/block (based on your selection "
+"above):"
+msgstr ""
+
+#: admin/partials/contact-forms-anti-spam-pro.php:21
+msgid "API Website link"
+msgstr ""
+
+#: includes/functions.php:184
+msgid "Arabic"
+msgstr ""
+
+#: includes/functions.php:185
+msgid "Armenian"
+msgstr ""
+
+#: includes/functions.php:186
+msgid "Bengali"
+msgstr ""
+
+#: admin/class-efas-admin.php:486
+msgid ""
+"Block inquiries devoid of source URL. <small>(Elementor forms only)</small>"
+msgstr ""
+
+#: includes/functions.php:187
+msgid "Braille"
+msgstr ""
+
+#: contact-forms-anti-spam.php:78
+msgid "Buy me a Coffee"
+msgstr ""
+
+#: admin/class-efas-admin.php:569
+msgid ""
+"Check to activate. By checking, an API library will be added.<br><b>This "
+"works only with PHP 7 or higher.</b>"
+msgstr ""
+
+#: admin/class-efas-admin.php:427
+msgid ""
+"Choose one of the options above and enter the countries in the next field.\n"
+"          <br>If <b>allowed</b>, only forms from these countries will be "
+"accepted, if blocked, all countries in the following list will be blocked"
+msgstr ""
+
+#: admin/partials/contact-forms-anti-spam-admin-display.php:19
+msgid ""
+"Choose phrases/strings/words to blacklist from your forms and key them into "
+"the input (types) fields below."
+msgstr ""
+
+#: admin/class-efas-admin.php:440
+msgid "Countries allowed/blocked:"
+msgstr ""
+
+#: admin/class-efas-admin.php:499
+msgid ""
+"Default: \"This looks like spam. Try to rephrase, or contact us in an "
+"alternative way.\" <br>You can leave this as the default or rephrase it as "
+"you like. This is the error message that the spammer will receive.<br>It’s a "
+"good idea to put your phone number or alternative method of contact, just in "
+"case it’s not really a spammer."
+msgstr ""
+
+#: admin/class-efas-admin.php:578
+msgid "Do you want to activate the API option?"
+msgstr ""
+
+#: admin/partials/contact-forms-anti-spam-pro.php:17
+msgid ""
+"Either create an API file (in the API website) of definitions or use a file "
+"created by other users by inserting their ID here. Insert multiple "
+"definition files by separating each ID with a comma."
+msgstr ""
+
+#. Description of the plugin
+msgid ""
+"Eliminate spam on Elementor + CF7 Forms. Block specific words, IP, country, "
+"languages, and more!"
+msgstr ""
+
+#: admin/class-efas-admin.php:243
+msgid "Email field"
+msgstr ""
+
+#: license/license.php:21
+msgid "Enter a valid license key."
+msgstr ""
+
+#: license/license.php:23
+msgid "Enter same/valid purchase order ID."
+msgstr ""
+
+#: license/license.php:22
+msgid "Enter valid/same email address used at the time of purchase."
+msgstr ""
+
+#: includes/functions.php:188
+msgid "Ethiopic"
+msgstr ""
+
+#: admin/partials/contact-forms-anti-spam-pro.php:38
+msgid ""
+"Every week, the API file downloads new data from the API server.<br>If you "
+"would like to manually refresh now, just click the Reset API File button."
+msgstr ""
+
+#: admin/class-efas-admin.php:230
+msgid ""
+"Example:<br>test@gmail.com<br>ericjonesonline@outlook.com\n"
+"<br>If the text value is EQUAL to one of the values above, MASPIK will tag "
+"it as spam and it will be blocked.\n"
+"<br>You can use the Regex format, for example: /\\b[A-Z0-9._%+-]+@[A-Z0-9.-]"
+"+\\.ru\\b/, \n"
+"<br>This example will block all email that ends with \".ru\".<br>*Note - "
+"Regex must start and end with a slash / "
+msgstr ""
+
+#: admin/class-efas-admin.php:184
+msgid ""
+"Example:Eric jones<br>SEO expert<br>If the text value is EQUAL to one of the "
+"values above, MASPIK will tag it as spam and it will be blocked."
+msgstr ""
+
+#: admin/partials/contact-forms-anti-spam-log.php:40
+msgid "Form Spams blocked by MASPIK so far!"
+msgstr ""
+
+#: includes/functions.php:189
+msgid "Georgian"
+msgstr ""
+
+#: includes/functions.php:190
+msgid "Greek"
+msgstr ""
+
+#: includes/functions.php:191
+msgid "Han"
+msgstr ""
+
+#: includes/functions.php:194
+msgid "Hebrew"
+msgstr ""
+
+#: includes/functions.php:193
+msgid "Hiragana"
+msgstr ""
+
+#. URI of the plugin
+msgid "https://shop.siteix.co.il/"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://shop.siteix.co.il/apis/"
+msgstr ""
+
+#: admin/class-efas-admin.php:207
+msgid ""
+"If the text field contains more characters that this value, it will be "
+"considered spam and it will be blocked.<br>Recommended character limit: 30."
+msgstr ""
+
+#: admin/class-efas-admin.php:337
+msgid ""
+"If you use this field, it will ONLY accept form submissions that contain at "
+"least one character of the chosen language.<br>Leave blank if you prefer to "
+"forbid certain languages."
+msgstr ""
+
+#: admin/class-efas-admin.php:382
+msgid ""
+"If you want more than one format, use the next line.<br>For example, if you "
+"want the  XXX-XXX-XXXX format, please add:<br> /[0-9]{3}-[0-9]{3}-[0-9]{4}"
+"/<br>\n"
+"You can get more ideas here: <a target=\"_blank\" href=\"https://regex101."
+"com/library?orderBy=MOST_POINTS&search=phone%20number%20validation\">https:"
+"//regex101.com/library?"
+"orderBy=MOST_POINTS&search=phone%20number%20validation</a><br> "
+msgstr ""
+
+#: admin/partials/contact-forms-anti-spam-admin-display.php:23
+msgid ""
+"Insert your choice of blacklisted characters/ settings, as appropriate for "
+"each field."
+msgstr ""
+
+#: admin/partials/contact-forms-anti-spam-admin-display.php:21
+msgid "Instructions"
+msgstr ""
+
+#: admin/class-efas-admin.php:414
+msgid "IP"
+msgstr ""
+
+#: includes/functions.php:192
+msgid "Katakana"
+msgstr ""
+
+#: admin/class-efas-admin.php:368
+msgid "Languages forbidden"
+msgstr ""
+
+#: admin/class-efas-admin.php:346
+msgid "Languages required"
+msgstr ""
+
+#: includes/functions.php:196
+msgid "Latin"
+msgstr ""
+
+#: admin/partials/contact-forms-anti-spam-pro.php:12
+msgid "Let's stop spam TOGETHER!"
+msgstr ""
+
+#: admin/class-efas-admin.php:216
+msgid "Limit text field to X characters."
+msgstr ""
+
+#: admin/class-efas-admin.php:324
+msgid "Mark as spam if the text area contains X or more number of links."
+msgstr ""
+
+#. Name of the plugin
+msgid "Maspik - Spam blacklist"
+msgstr ""
+
+#: admin/partials/contact-forms-anti-spam-admin-display.php:13
+msgid "Maspik- Spam Blacklist"
+msgstr ""
+
+#: includes/functions.php:197
+msgid "Mongolian"
+msgstr ""
+
+#: admin/partials/contact-forms-anti-spam-admin-display.php:17
+msgid "Nobody likes receiving spam, so we developed MASPIK."
+msgstr ""
+
+#: admin/class-efas-admin.php:392
+msgid "Only allow phone numbers in this format:"
+msgstr ""
+
+#: admin/class-efas-admin.php:747
+msgid "Options already added automatically from the API"
+msgstr ""
+
+#: admin/partials/contact-forms-anti-spam-pro.php:39
+msgid "Refresh API file"
+msgstr ""
+
+#: admin/partials/contact-forms-anti-spam-log.php:36
+msgid "Reset Counter"
+msgstr ""
+
+#: admin/partials/contact-forms-anti-spam-log.php:35
+msgid "Reset Log"
+msgstr ""
+
+#: includes/functions.php:199
+msgid "Russian"
+msgstr ""
+
+#: admin/partials/contact-forms-anti-spam-admin-display.php:58
+msgid "Select"
+msgstr ""
+
+#: admin/class-efas-admin.php:359
+msgid ""
+"Select the languages you wish to block from filling out your forms.<br>Even "
+"one character in the text field from any of these languages will be caught "
+"by MASPIK, tagged as spam, and blocked."
+msgstr ""
+
+#: contact-forms-anti-spam.php:79
+msgid "Setting page"
+msgstr ""
+
+#: admin/class-efas-admin.php:476
+msgid ""
+"Some of the bots that fill out forms will send a form missing a source URL. "
+"If you check this box, any empty source URL forms will be considered to be "
+"spam."
+msgstr ""
+
+#: admin/partials/contact-forms-anti-spam-log.php:29
+msgid "Spam log"
+msgstr ""
+
+#: admin/partials/contact-forms-anti-spam-admin-display.php:29
+msgid "spam so far!"
+msgstr ""
+
+#: admin/class-efas-admin.php:315
+msgid ""
+"Spammers tend to include links.<br>If there is no reason for anyone to send "
+"links when completing your forms, set this to 1."
+msgstr ""
+
+#: includes/functions.php:195
+msgid "Syriac"
+msgstr ""
+
+#: admin/class-efas-admin.php:273
+msgid "Text area field"
+msgstr ""
+
+#: admin/class-efas-admin.php:193
+msgid "Text field"
+msgstr ""
+
+#: includes/functions.php:198
+msgid "Thai"
+msgstr ""
+
+#: admin/class-efas-admin.php:601
+msgid "The ID of the API you create"
+msgstr ""
+
+#: admin/partials/contact-forms-anti-spam-admin-display.php:24
+msgid "The system is not sensitive to uppercase vs. lowercase letters."
+msgstr ""
+
+#: admin/partials/contact-forms-anti-spam-admin-display.php:20
+msgid ""
+"The words that you insert into each input field will be automatically "
+"blocked and will trigger a validation error message that the spammer "
+"receives."
+msgstr ""
+
+#: admin/partials/contact-forms-anti-spam-admin-display.php:18
+msgid ""
+"There are several ways in which you can customize this app to block contact-"
+"from spam."
+msgstr ""
+
+#: admin/class-efas-admin.php:125
+msgid ""
+"There was an error adding this setting. Please try again.  If this persists, "
+"shoot us an email."
+msgstr ""
+
+#: includes/functions.php:511
+msgid ""
+"This looks like spam. Try to rephrase, or contact us in an alternative way."
+msgstr ""
+
+#: admin/partials/contact-forms-anti-spam-pro.php:18
+msgid ""
+"To use an API with MASPIK, you will need to purchase a license key from the "
+"API website and insert it in the license page found in this plugin.<br>"
+"Without inserting a valid license key, the API option will not work."
+msgstr ""
+
+#: admin/class-efas-admin.php:259
+msgid ""
+"Try to use full sentences that you typically find in spam emails, rather "
+"than single words\n"
+"          <br>If the text area field CONTAINS one of the values above, "
+"MASPIK will tag it as spam and it will not be accepted.\n"
+"          <br>You can also use the following shortcodes:<br>"
+msgstr ""
+
+#: includes/functions.php:200
+msgid "Unknown language"
+msgstr ""
+
+#: includes/functions.php:419
+msgid ""
+"Use this plugin with caution and only if you understand the risk, "
+"blacklisting some words can lead to the termination of valid leads."
+msgstr ""
+
+#: admin/class-efas-admin.php:508
+msgid "Validation error message"
+msgstr ""
+
+#: admin/partials/contact-forms-anti-spam-log.php:33
+msgid ""
+"Whenever a bot/person tries to spam your contact forms and MASPIK blocks the "
+"spam, you will see a new line below showing the details.<br>The log "
+"containing these details resides on your database  and you can reset it at "
+"any time.<br>Resetting the log doesn’t change anything – it just removes the "
+"history."
+msgstr ""
+
+#. Author of the plugin
+msgid "yonifre"
+msgstr ""
+
+#: admin/partials/contact-forms-anti-spam-pro.php:16
+msgid "You can also connect your website to a spam API (optional)."
+msgstr ""
+
+#: admin/class-efas-admin.php:453
+msgid "You can choose as many as you like."
+msgstr ""
+
+#: admin/partials/contact-forms-anti-spam-pro.php:31
+msgid ""
+"You do NOT need the API feature to use MASPIK – this is an Extra feature."
+msgstr ""
+
+#: admin/partials/contact-forms-anti-spam-admin-display.php:29
+msgid "You have blocked"
+msgstr ""
+
+#: admin/partials/contact-forms-anti-spam-admin-display.php:25
+msgid "You may insert multiple values per field, placing one string per line."
+msgstr ""
+
+#: admin/partials/contact-forms-anti-spam-pro.php:25
+msgid "your licence is Active, you can use API option"
+msgstr ""
+
+#: admin/partials/contact-forms-anti-spam-pro.php:27
+msgid ""
+"Your license is NOT active, so you can’t use the API option, Please activate "
+"your license first."
+msgstr ""

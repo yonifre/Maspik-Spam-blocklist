@@ -1,0 +1,35 @@
+/**
+ * All of the CSS for your admin-specific functionality should be
+ * included in this file.
+ */
+tbody {
+    display: block !important;
+    max-width: 600px;
+    background: #fff;
+    padding: 30px;
+    border-radius: 20px !important;
+}
+
+table.form-table {
+    display: block !important;
+}
+
+.form-table tr {
+    display: block !important;
+}
+
+.form-table th {
+    display: block !important;
+    padding-bottom: 0px;
+}
+
+.form-table textarea {
+    width: 100%;
+}
+
+.form-table td {
+    padding: 5px 0px 20px 0px;
+}
+tr.hide {
+    display: none !important;
+}

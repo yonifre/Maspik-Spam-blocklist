@@ -1,5 +1,8 @@
 <?php
-
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+    die;
+}
 /**
  * Register all actions and filters for the plugin
  *
@@ -21,7 +24,7 @@
  * @subpackage Settings_Page/includes
  * @author     Ben Shadle <benshadle@gmail.com>
  */
-class Elementor_forms_anti_spam_Loader {
+class Maspik_Spam_Blacklist_Loader {
 
 	/**
 	 * The array of actions registered with WordPress.

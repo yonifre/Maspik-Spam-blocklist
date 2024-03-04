@@ -1,12 +1,12 @@
 <?php
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+    die;
+}
+
 /**
  * Provide a admin area view for the plugin
  */
-if( isset($_GET['refresh_api_file']) && !empty($_GET['refresh_api_file'])  && cfes_is_supporting() ) {
-  cfas_refresh_api();
- // echo "<script>window.location.replace('/wp-admin/admin.php?page=contact-forms-anti-spam-pro.php');</script>";
-}
-
 ?>
 <div class="wrap">
       <div id="icon-themes" class="icon32"></div>  
