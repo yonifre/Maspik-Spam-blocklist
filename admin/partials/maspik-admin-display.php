@@ -301,6 +301,7 @@ span.note {
     font-size: 13px;
     line-height: 8px;
     border-radius: 5px;
+    margin-inline-start: 10px;
     }
 .api div {
     text-align: left;
@@ -438,7 +439,7 @@ div#copy-message {
 }
 .custom-validation-box {
     display: none;
-    width: calc(100% - 30px);
+    margin-bottom: 10px;
 }
 .custom-validation-box.open {
     display: block;

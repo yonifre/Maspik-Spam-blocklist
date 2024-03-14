@@ -44,10 +44,12 @@ function handle_contact_form() {
     $reason = false;
     // Country IP Check 
     $CountryCheck = CountryCheck($ip,$spam,$reason);
-    $spam = isset($validateTextField['spam']) ? $validateTextField['spam'] : 0;
+    $spam = isset($CountryCheck['spam']) ? $CountryCheck['spam'] : 0;
     $Country_reason = $CountryCheck['reason'] ? "<b>SPAM - ".$CountryCheck['reason']."</b><br>" : "";  
     if($name){
-         $name_spam = validateTextField($name) ? "SPAM - ".validateTextField($name) : "";
+        $validateTextField = validateTextField($name);
+        $name_spam = isset($validateTextField['spam']) ? $validateTextField['spam'] : 0;
+        $name_spam = $name_spam ? "SPAM - ".$name_spam : "";
     }
     if($email){
          $email_spam = checkEmailForSpam($email);
@@ -60,7 +62,9 @@ function handle_contact_form() {
          $tel_spam = $tel_spam_valid ? "" : "SPAM - Phone number $tel not feet the given format ($tel_spam_reason)";
     }
     if($content){
-         $textarea_spam = checkTextareaForSpam($content) ? "SPAM - ".checkTextareaForSpam($content) : "";       
+        $checkTextareaForSpam = checkTextareaForSpam($content);
+        $textarea_spam = isset($checkTextareaForSpam['spam'])? $checkTextareaForSpam['spam'] : 0;
+        $textarea_spam = $textarea_spam ? "SPAM - ".$textarea_spam : "";       
     }
     $message = 'Spam check was finish - No spam found.';
     if( $name_spam || $email_spam || $tel_spam || $textarea_spam ){

@@ -1,0 +1,5 @@
+vendor
+vendor/*
+tests/credentials.php
+.phpunit.result.cache
+

@@ -569,7 +569,7 @@ function efas_if_plugin_is_affective($plugin){
 
 function efas_if_plugin_is_active($plugin){
 	if($plugin == 'elementor-pro'){
-      return  maspik_is_plugin_active( 'elementor-pro/elementor-pro.php' );
+      return class_exists( '\ElementorPro\Plugin' );
     }else if($plugin == 'contact-form-7'){
       return maspik_is_plugin_active( 'contact-form-7/wp-contact-form-7.php' );
     }else if($plugin == 'woocommerce'){
@@ -649,8 +649,19 @@ add_action( 'contact_forms_anti_spam_add_weekly', 'cfas_refresh_api' );
 
 
 function cfes_is_supporting() {
-  return get_option( "maspik_is_supporting" ) ? 1 : 0 ;
-} 
+
+	if ( function_exists( 'maspik_license_checker' ) ) {
+		try {
+			if ( maspik_license_checker()->license()->isLicenseValid() ) {
+				return 1;
+			}
+		} catch ( \Exception $e ) {
+			error_log( 'Error happened: ' . $e->getMessage() );
+		}
+	}
+
+	return 0;
+}
 add_action('after_setup_theme', 'cfes_is_supporting');
 
 
@@ -845,23 +856,25 @@ function CountryCheck($ip, &$spam, &$reason) {
         $country_blacklist = $countries_blacklist_api;
     }
 
-    // Check country blacklist
+    // Check country blacklist only if is pro user
+    if( cfes_is_supporting() ){ 
     $xml_data = @file_get_contents("http://www.geoplugin.net/xml.gp?ip=" . $ip);
-    if ($xml_data) {
-        $xml = simplexml_load_string($xml_data);
-        $countryCode = $xml && $xml->geoplugin_countryCode ? (string) $xml->geoplugin_countryCode : false;
+        if ($xml_data) {
+            $xml = simplexml_load_string($xml_data);
+            $countryCode = $xml && $xml->geoplugin_countryCode ? (string) $xml->geoplugin_countryCode : false;
 
-        if ($countryCode && in_array($countryCode, $country_blacklist) && $AllowedOrBlockCountries === 'block' ) {
-            $spam = true;
-            $message = "country_blacklist";
-            $reason = "Country code $countryCode is blacklisted ($AllowedOrBlockCountries)";
-            return array('spam' => $spam, 'reason' => $reason, 'message' => $message);
-        }
-        if ($AllowedOrBlockCountries === 'allow' && !in_array($countryCode, $country_blacklist) ) {
-            $spam = true;
-            $message = "country_blacklist";
-            $reason = "Country $countryCode is not in the whitelist ($AllowedOrBlockCountries)";
-            return array('spam' => $spam, 'reason' => $reason, 'message' => $message);
+            if ($countryCode && in_array($countryCode, $country_blacklist) && $AllowedOrBlockCountries === 'block' ) {
+                $spam = true;
+                $message = "country_blacklist";
+                $reason = "Country code $countryCode is blacklisted ($AllowedOrBlockCountries)";
+                return array('spam' => $spam, 'reason' => $reason, 'message' => $message);
+            }
+            if ($AllowedOrBlockCountries === 'allow' && !in_array($countryCode, $country_blacklist) ) {
+                $spam = true;
+                $message = "country_blacklist";
+                $reason = "Country $countryCode is not in the whitelist ($AllowedOrBlockCountries)";
+                return array('spam' => $spam, 'reason' => $reason, 'message' => $message);
+            }
         }
     }
 
@@ -1098,18 +1111,20 @@ function checkTextareaForSpam($field_value) {
         }
     }
 
-    // Check for required language
-    $lang_needed = get_option('lang_needed') ? get_option('lang_needed') : array();
-    if ($lang_needed && !efas_is_lang($lang_needed, $field_value) ) {
-        return array('spam' => "Needed language is missing", 'message' => "lang_needed");
+    // only if pro user
+    if( cfes_is_supporting() ){ 
+        // Check for required language
+        $lang_needed = get_option('lang_needed') ? get_option('lang_needed') : array();
+        if ($lang_needed && !efas_is_lang($lang_needed, $field_value) ) {
+            return array('spam' => "Needed language is missing", 'message' => "lang_needed");
+        }
+        // Check for forbidden language
+        $lang_forbidden = get_option('lang_forbidden') ? get_option('lang_forbidden') : array();
+        if ($lang_forbidden && efas_is_lang($lang_forbidden, $field_value) ) {
+            return array('spam' => "Forbidden language exists", 'message' => "lang_forbidden");
+        }
     }
-
-    // Check for forbidden language
-    $lang_forbidden = get_option('lang_forbidden') ? get_option('lang_forbidden') : array();
-    if ($lang_forbidden && efas_is_lang($lang_forbidden, $field_value) ) {
-        return array('spam' => "Forbidden language exists", 'message' => "lang_forbidden");
-    }
-
+    
     // Check for maximum number of links
     $max_links = get_option('contain_links');
     if ($max_links) {

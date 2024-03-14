@@ -4,7 +4,7 @@
  * Plugin Name:       Maspik - Spam blacklist
  * Plugin URI:        https://wpmaspik.com/
  * Description:       Anti spam. Block specific words, IP, country, languages, from contact-froms and more...
- * Version:           0.13.0
+ * Version:           1.0.0
  * Author:            yonifre
  * Author URI:        https://wpmaspik.com/blog/
  * License:           GPL-2.0+
@@ -19,7 +19,7 @@ if (!defined('ABSPATH')) exit;
 /**
  * Currently plugin version.
  */
-define( 'MASPIK_VERSION', '0.13.0' );
+define( 'MASPIK_VERSION', '1.0.0' );
 
 /**
  * The code that runs during plugin activation.

@@ -4,7 +4,7 @@ Donate link: paypal.me/yonifre
 Tags: spam , Blacklist, Validation, CAPTCHA, Anti spam, 
 Requires at least: 4.3
 Tested up to: 6.4
-Stable tag: 0.13.0
+Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -22,7 +22,6 @@ Maspik allows you to specify words, email addresses, phone formats, IP addresses
 Say goodbye to annoying spam - with Maspik you'll make unwanted messages a rarity and spam a thing of the past!
 
 <h3>Main Features:</h3>
-
 <ul>
 <li>Blacklisting by field type:</li>
 <li>- Text fields (often used as Name/Subject)</li>
@@ -37,23 +36,10 @@ Say goodbye to annoying spam - with Maspik you'll make unwanted messages a rarit
 <li>Block Elementor form submissions without source URLs</li>
 <li>Integration with Proxycheck.io API</li>
 <li>Integration with AbuseIPDB.com API</li>
-<li>Blocking based on the presence or absence of characters from specific languages (e.g. block submissions if Russian/Chinese/Arabic/English...  are found in the content).</li>
-<li>Blocking or allowing submissions from specific countries only (e.g. block submissions if the country of origin is USA/China/Russia...).</li>
 
-</ul>
-
-<h3>Pro Version Features:</h3>
-
-The Pro version of the Maspik plugin offers advanced functionality:
-<ul>
-<li>Integration with the Maspik Spam API</li>
-<li>Create your own SPAM API on the WpMaspik web site and use it in all of your web sites. </li>
-<li>Support for Gravity Forms, WPForms, WooCommerce registration and WooCommerce reviews.</li>
-<li>Import/Export Settings.</li>
 </ul>
 
 <h3>Supported forms:</h3>
-
 Maspik integrates seamlessly with a wide range of popular contact forms, ensuring compatibility across different site settings:
 
 <ul>
@@ -71,10 +57,22 @@ Maspik integrates seamlessly with a wide range of popular contact forms, ensurin
 <li>Woocommerce review (Maspik Pro license required)</li>
 </ul>
 
+<h3>Pro Version Features:</h3>
+The Pro version of the Maspik plugin offers advanced functionality:
+<ul>
+<li>Integration with the Maspik Spam API</li>
+<li>Create your own SPAM API on the WpMaspik web site and use it in all of your web sites. </li>
+<li>Support for Gravity Forms, WPForms, WooCommerce registration and WooCommerce reviews.</li>
+<li>Import/Export Settings.</li>
+<li>Blocking based on the presence or absence of characters from specific languages (e.g. block submissions if Russian/Chinese/Arabic/English...  are found in the content).</li>
+<li>Blocking or allowing submissions from specific countries only (e.g. block submissions if the country of origin is USA/China/Russia...).</li>
+
+</ul>
+
 
 <h4>Maspik Pro license And API Site: <a href="https://wpmaspik.com/?readme-file">WpMaspik.com</a></h4>
-Note: Be careful when selecting words to blacklist as each website has different needs. For example, if you're a digital marketing agency and blacklist the word "SEO," you may lose some valid leads.
 
+Note: Be careful when selecting words to blacklist as each website has different needs. For example, if you're a digital marketing agency and blacklist the word "SEO," you may lose some valid leads.
 
 == Installation ==
 
@@ -123,14 +121,20 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 == Changelog ==
 
+
+= 1.0.0 -  12/03/2024 =
+* Enhancement - New License Manager (Please delete your current license and re-activate it if it does not work)
+* Enhancement - Block based on country/language becomes a PRO feature. see <a target="_blank" href="https://wpmaspik.com/announcement-changes-to-maspik-plugin/?1.0-inplugin-readme">article</a> for detail
+* Improvement - Improve code performance
+* New Feature - Options to create custom validation error for more options
+* Bug fix - Fix in Playground form  
+
 = 0.13.0 -  01/03/2024 =
-* New Feature - Import/Export Settings (Pro features)
 * Improvement - code performance improvement throughout the plugin code
 * Improvement - Minor UI/UX improvements to the settings page
 * New Feature - Options to create custom validation error for few options
 * Bug fix - Fix Brick forms compatibility  
-* Bug fix - Fix Phone field in Playground forms
-* New version 1.0.0 coming soon, see <a target="_blank" href="https://wpmaspik.com/announcement-changes-to-maspik-plugin/?Announcement-inplugin-readme">article</a> for details
+* Bug fix - Fix Phone field in Playground form
 
 
 = 0.12.4 -  24/02/2024 =

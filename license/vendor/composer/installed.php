@@ -1,0 +1,52 @@
+<?php return array(
+    'root' => array(
+        'name' => '__root__',
+        'pretty_version' => 'dev-master',
+        'version' => 'dev-master',
+        'reference' => 'c291bf2d17a75e4df1286e7d15c27232d1d69650',
+        'type' => 'library',
+        'install_path' => __DIR__ . '/../../',
+        'aliases' => array(),
+        'dev' => true,
+    ),
+    'versions' => array(
+        '__root__' => array(
+            'pretty_version' => 'dev-master',
+            'version' => 'dev-master',
+            'reference' => 'c291bf2d17a75e4df1286e7d15c27232d1d69650',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../../',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'ideologix/dlm-php' => array(
+            'pretty_version' => '1.0.0',
+            'version' => '1.0.0.0',
+            'reference' => '564acefc4bf45f59a0f24b12888a0589f3bbbaa0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../ideologix/dlm-php',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'ideologix/dlm-wp-simple-checker' => array(
+            'pretty_version' => 'dev-master',
+            'version' => 'dev-master',
+            'reference' => '87e9381c44859d06377a60c337ba8c9c5ed35442',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../ideologix/dlm-wp-simple-checker',
+            'aliases' => array(
+                0 => '9999999-dev',
+            ),
+            'dev_requirement' => false,
+        ),
+        'rmccue/requests' => array(
+            'pretty_version' => 'v2.0.10',
+            'version' => '2.0.10.0',
+            'reference' => 'bcf1ac7fe8c0b2b18c1df6d24694cfc96b44b391',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../rmccue/requests',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+    ),
+);

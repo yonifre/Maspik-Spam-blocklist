@@ -29,6 +29,7 @@ class Maspik_Admin {
             'contain_links',
             'tel_formats',
             'lang_forbidden',
+            'textarea_blacklist',
             'country_blacklist'
         );
 
@@ -428,8 +429,8 @@ unset($args);
           'type'      => 'input',
           'subtype'   => 'select',
           'id'    => 'lang_needed',
-          'class' => 'lang_needed Xpro',         
-         // 'pro' => '1',         
+          'class' => 'lang_needed pro',         
+          'pro' => '1',         
          'name'      => 'lang_needed',
           'description'      => __('If you use this field, it will ONLY accept form submissions that contain at least one character of the chosen language.<br>Leave blank if you prefer to forbid certain languages.', 'contact-forms-anti-spam' ),
           'array' => efas_array_of_lang_needed(),
@@ -453,8 +454,8 @@ unset($args);
           'type'      => 'input',
           'subtype'   => 'select',
           'id'    => 'lang_forbidden',
-          'class' => 'lang_forbidden Xpro',         
-          //'pro' => '1',         
+          'class' => 'lang_forbidden pro',         
+          'pro' => '1',         
           'title' =>  __('Note that when blocking Latin languages in an individual (such as: Dutch, French), the chack is in the punctuation letters (But they are not always in use). Its to prevent false positive'),
           'name'      => 'lang_forbidden',
           'description'      => __('Select the languages you wish to block from filling out your forms.<br>Even one character in the text field from any of these languages will be caught by MASPIK, tagged as spam, and blocked.', 'contact-forms-anti-spam' ),
@@ -478,9 +479,9 @@ unset($args);
           'type'      => 'input',
           'subtype'   => 'radio',
           'id'    => 'AllowedOrBlockCountries',
-          //'pro' => '1',         
+          'pro' => '1',         
           'api'    => 'AllowedOrBlockCountries',
-          'class' => 'AllowedOrBlockCountries Xpro', 
+          'class' => 'AllowedOrBlockCountries pro', 
           'name'      => 'AllowedOrBlockCountries',
           'description'      => __('Choose one of the options above and enter the countries in the next field.
           <br>If <b>allowed</b>, only forms from these countries will be accepted, if blocked, all countries in the following list will be blocked', 'contact-forms-anti-spam' ),
@@ -508,13 +509,13 @@ unset($args);
           'subtype'   => 'select',
           'id'    => 'country_blacklist',
           'name'      => 'country_blacklist',
-          //'pro' => '1',         
+          'pro' => '1',         
           'api'      => 'country_blacklist',
           'description'      => __('You can choose as many as you like.', 'contact-forms-anti-spam' ),
           'attr' => false,
           'array' => efas_array_of_countries(),
           'get_options_list' => '', 
-          'class' => 'country_blacklist Xpro', 
+          'class' => 'country_blacklist pro', 
           'value_type'=>'normal',
           'wp_data' => 'option'
 					);
@@ -1320,13 +1321,13 @@ unset($args);
             'country_blacklist',
             'NeedPageurl',
             'error_message',
-            'custom_error_message',
-            'custom_error_message_MaxCharactersInTextField',
-            'custom_error_message_lang_needed',
-            'custom_error_message_lang_forbidden',
-            'custom_error_message_tel_formats',
-            'custom_error_message_country_blacklist',
-            'custom_error_message_contain_links',
+            //'custom_error_message',
+            //'custom_error_message_MaxCharactersInTextField',
+            //'custom_error_message_lang_needed',
+            //'custom_error_message_lang_forbidden',
+            //'custom_error_message_tel_formats',
+            //'custom_error_message_country_blacklist',
+            //'custom_error_message_contain_links',
             'tel_formats'
         );
 
@@ -1355,6 +1356,12 @@ unset($args);
             'public_file'
         );
 
+        $pro_settings_array = array (
+            'popular_spam',
+            'private_file_id',
+            'public_file'
+        );
+
         foreach ($general_settings_array as $setting) {
             register_setting('settings_page_general_settings_page', $setting, array( 'sanitize_callback' => array( $this, 'maspik_settings_sanitize_callback' ) ) );
         }
@@ -1365,6 +1372,10 @@ unset($args);
 
         foreach ($pro_settings_array as $setting) {
             register_setting('settings_page_pro_settings_page', $setting, array( 'sanitize_callback' => array( $this, 'maspik_settings_sanitize_callback' ) ) );
+        }
+
+        foreach ($this->custom_error_message_by_fields as $setting) {
+            register_setting('settings_page_general_settings_page', "custom_error_message_$setting", array( 'sanitize_callback' => array( $this, 'maspik_settings_sanitize_callback' ) ) );
         }
 	}
 
@@ -1400,7 +1411,7 @@ unset($args);
         if( isset($args['title']) ){
             echo "<h4>".$args['title']."</h4>" ;
         }
-        $have_custom_error_message = array_search($id, $this->custom_error_message_by_fields) !== false ? 1 : 0;
+        $have_custom_error_message = in_array($id, $this->custom_error_message_by_fields);
 
         switch ($args['type']) {
             case 'input':
@@ -1471,6 +1482,25 @@ unset($args);
                 # code...
                 break;
         }
+        //echo "</div></div>";
+        if( ($have_example || $have_custom_error_message) /*&& !$not_print*/){
+            echo "<div class='btns'>";
+            if($have_example){
+                
+                echo "<a class='your-button-class' data-array='$have_example' data-title='$subject' href='#' data-popup-id='popup-id'><span class='dashicons dashicons-visibility'></span> See examples</a>";
+            }
+            if($have_custom_error_message){
+                $custom_error_message_value =  esc_html( get_option("$custom_error_id") );
+                    echo "<a class='custom-validation-trigger'><span class='dashicons dashicons-edit'></span>  Create custom Validation error message for this option</a>";
+                echo "</div>";// end .btns and make new div for custom-validation-box
+                echo "<div class='custom-validation-box'>";
+                    echo '<h4>Custom Validation error for for this option</h4>';
+                    echo '<input  type="text" id="'.$custom_error_id.'" name="'.$custom_error_id.'" size="40" value=" '.$custom_error_message_value.' " />';
+            }
+            echo "</div>"; // end .btns OR validation-box 
+        } //  
+        
+        // start api grey box
         if ($api && !$not_print) { 
             echo "<div class='api'><small style='display: block;padding: 3px 0;'>".__('Options already added automatically from the API', 'contact-forms-anti-spam' )."</small><div>";
             if (!is_array($api)) {
@@ -1483,25 +1513,11 @@ unset($args);
             } else { // else is_array $api
                 echo "<pre class='not-array'>$api</pre>";
             }
+             echo "</div>";
+            echo "</div>";
         }
-        echo "</div></div>";
-        if( ($have_example || $have_custom_error_message) && !$not_print){
-            echo "<div class='btns'>";
-            if($have_example){
-                
-                echo "<a class='your-button-class' data-array='$have_example' data-title='$subject' href='#' data-popup-id='popup-id'><span class='dashicons dashicons-visibility'></span> See examples</a>";
-            }
-            if($have_custom_error_message){
-                $custom_error_message_value =  get_option("$custom_error_id");
-                    echo "<a class='custom-validation-trigger'><span class='dashicons dashicons-edit'></span>  Create custom Validation error message for this option</a>";
-                echo "</div>";
-                echo "<div class='custom-validation-box'>";
-                    echo '<h4>Custom Validation error for for this option</h4>';
-                    echo '<input  type="text" id="'.$custom_error_id.'" name="'.$custom_error_id.'" size="40" value=" '.$custom_error_message_value.' " />';
-            }
-        echo "</div>";
-        }
+
         echo "<small style='display: block;'>$description</small>";
-    }
+    } // render_settings_field
 
 }
