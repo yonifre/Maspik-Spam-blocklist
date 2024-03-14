@@ -107,6 +107,7 @@ class Configuration {
 	 * @return bool
 	 */
 	public function isActivationPage() {
-		return !empty( $_GET['page'] ) && $_GET['page'] !== $this->getActivationPageSlug();
+		return !empty( $_GET['page'] ) && $_GET['page'] === $this->getActivationPageSlug();
+
 	}
 }

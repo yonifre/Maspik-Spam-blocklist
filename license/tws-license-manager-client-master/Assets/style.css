@@ -1,0 +1,298 @@
+/**
+ * License form styling.
+ *
+ * -----------------------------------
+ * DEVELOPED-MAINTAINED-SUPPPORTED BY
+ * -----------------------------------
+ * ███║     ███╗   ████████████████
+ * ███║     ███║   ═════════██████╗
+ * ███║     ███║        ╔══█████═╝
+ *  ████████████║      ╚═█████
+ * ███║═════███║      █████╗
+ * ███║     ███║    █████═╝
+ * ███║     ███║   ████████████████╗
+ * ╚═╝      ╚═╝    ═══════════════╝
+ */
+
+ :root {
+	--primary-color: #009688;
+	--primary-focus: #00796a;
+	--dark: #263238;
+	--dark-gray: #808080;
+	--mid-gray: #ccc;
+	--light-gray: #eee;
+	--error: #ce0000;
+	--white: #fff;
+	--light: #eae9e9;
+	--warning: #ff8300;
+	--shadow-normal: rgba(152, 185, 227, 0.15);
+	--shadow-primary: rgba(0, 150, 136, 0.15);
+	--shadow-warning: rgba(255, 131, 0, 0.15);
+	--shadow-error: rgba(206, 0, 0, 0.15);
+}
+body {
+	background-color: var(--shadow-normal);
+}
+a {
+	text-decoration: none !important;
+}
+body.active {
+	background-color: var(--shadow-primary);
+}
+body.inactive {
+	background-color: var(--shadow-warning);
+}
+body.expired {
+	background-color: var(--shadow-error);
+}
+.notice {
+	padding-top: 10px;
+	padding-bottom: 10px;
+	margin: 30px auto 15px;
+	max-width: 600px;
+}
+#hz_license_form {
+	padding-right: 20px;
+	max-width: 600px;
+	margin: 50px auto;
+}
+.hz_license_form_content {
+	padding: 20px;
+	margin-top: 15px;
+	background-color: var(--white);
+	border-radius: 5px;
+	overflow: hidden;
+}
+.hz_license_form_content.disabled {
+	background-color: var(--light-gray);
+}
+#hz_activate_plugin {
+	display: flex;
+	flex-direction: column;
+}
+#hz_activate_plugin div {
+	margin-bottom: 30px;
+	margin-block-end: 30px;
+}
+#hz_activate_plugin p {
+	margin-bottom: 0;
+	margin-block-end: 0;
+}
+#hz_activate_plugin p.label {
+	color: var(--dark-gray);
+}
+#hz_activate_plugin p.field {
+	margin-top: 5px;
+	margin-block-start: 5px;
+}
+#hz_activate_plugin input {
+	width: 100%;
+	min-height: 50px;
+	border: 2px solid var(--light);
+	border-radius: 5px;
+}
+.error {
+	color: var(--error);
+	padding-left: 5px;
+	padding-inline-start: 5px;
+	margin-top: 3px;
+	margin-block-start: 3px;
+}
+
+.hz_license_form_head, #hz_license_branding, #hz_license_actions {
+	display: flex;
+	align-items: center;
+	flex-flow: row nowrap;
+}
+#logo {
+	margin-right: 10px;
+	padding: 10px 0;
+}
+#logo img {
+	max-width: 60px;
+}
+#hz_license_status {
+	margin-left: auto;
+	min-width: 105px;
+}
+#hz_license_status span {
+	display: block;
+	text-align: center;
+	font-weight: 600;
+}
+#hz_license_status .value {
+	padding: 2px 10px;
+	border-radius: 999px;
+	border: 2px solid var(--dark-gray);
+	margin-top: 5px;
+	text-transform: capitalize;
+}
+#hz_license_status .value.active {
+	color: var(--primary-color);
+	border-color: var(--primary-color);
+}
+#hz_license_status .value.inactive {
+	color: var(--warning);
+	border-color: var(--warning);
+}
+#hz_license_status .value.expired {
+	color: var(--error);
+	border-color: var(--error);
+}
+
+.hz_license_links {
+	margin-right: auto;
+}
+.hz_license_links > a {
+	margin-right: 5px;
+	display: inline-block;
+}
+.hz_license_links a.dashboard,
+.hz_license_links a.dashboard:hover {
+	color: var(--dark-gray);
+}
+.hz_license_links .activate,
+.hz_license_links .deactivate,
+.hz_license_links .cancel,
+.hz_license_button input.hz_btn__prim {
+	font-weight: bold;
+}
+.hz_license_button input.hz_btn__prim,
+.hz_expired_notice,
+.hz_expired_notice a {
+	color: var(--white);
+}
+
+.hz_license_button input.hz_btn__prim,
+.hz_expired_notice a {
+	border-radius: 50px;
+	line-height: 1em !important;
+	padding: 15px 30px !important;
+	border: none;
+	cursor: pointer;
+}
+fieldset:disabled input.hz_btn__prim:disabled {
+	color: var(--mid-gray);
+}
+
+.hz_license_button {
+	margin-bottom: 1em;
+	margin-block-end: 1em;
+}
+
+.hz_license_button input.hz_lmac_btn {
+	background: var(--primary-color);
+}
+.hz_license_button input.hz_lmdac_btn,
+.hz_expired_notice {
+	background: var(--error);
+}
+fieldset:disabled input,
+fieldset:disabled input.hz_btn__prim:disabled {
+	background-color: var(--light);
+	cursor: not-allowed;
+}
+.hz_license_form_content,
+fieldset input,
+.hz_license_button input.hz_lmac_btn,
+.hz_license_button input.hz_lmdac_btn,
+.hz_expired_notice a {
+	transition: background-color 0.4s ease-in-out !important;
+}
+.hz_expired_notice {
+	padding: 10px 20px 20px;
+	margin-bottom: -25px;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	font-weight: bold;
+	display: flex;
+	flex-wrap: nowrap;
+	align-items: center;
+}
+.hz_expired_notice p:first-of-type {
+	margin-right: 15px;
+}
+.hz_expired_notice p:last-of-type {
+	margin-left: auto;
+}
+.hz_expired_notice a {
+	display: inline-block;
+	min-width: 78px;
+	background-color: var(--shadow-primary);
+}
+.hz_expired_notice a:hover {
+	background-color: var(--shadow-warning);
+}
+fieldset.hz_switcher_control {
+	font-weight: bold;
+	position: relative;
+	margin: -20px -20px auto;
+	padding: 20px;
+	background-color: var(--shadow-normal);
+}
+fieldset.hz_switcher_control label {
+	display: inline-block;
+	max-width: calc(100% - 60px);
+}
+.hz_switcher_control input {
+	border: none;
+	background: transparent;
+	color: transparent;
+	box-shadow: none;
+	width: 0;
+	min-width: 0;
+	flex-basis: auto;
+}
+.hz_switcher_control input:before {
+	background: var(--light-gray);
+	box-shadow: inset 0px 0px 10px var(--dark);
+	border-radius: 8px;
+	content: '';
+	right: 15px;
+	height: 16px;
+	margin: 0 !important;
+	position: absolute;
+	opacity: 0.3 !important;
+	transition: all 0.4s ease-in-out;
+	width: 40px !important;
+}
+.hz_switcher_control input:before,
+.hz_switcher_control input:after {
+	top: 50%;
+	transform: translateY(-50%);
+}
+.hz_switcher_control input:after {
+	background: var(--mid-gray);
+	border-radius: 16px;
+	box-shadow: 0px 0px 5px var(--shadow-normal);
+	content: '';
+	height: 24px;
+	right: 32px;
+	position: absolute;
+	/* transform: translateY(-20%); */
+	transition: all 0.3s ease-in-out, translate 0.3s ease-in-out;
+	width: 24px;
+}
+.hz_switcher_control input {
+	color: transparent;
+}
+.hz_switcher_control input:checked:before {
+	background: var(--primary-focus);
+	opacity: 0.5;
+}
+.hz_switcher_control input:checked:after {
+	background: var(--primary-color);
+	right: 15px;
+}
+.hz_switcher_control input:focus:before {
+	background: var(--primary-color);
+}
+/* yoni */
+.hz_license_form_content.disabled .hz_license_key input{
+  	text-security: circle;
+    -moz-text-security: circle;
+    -webkit-text-security: circle;
+}
+.rtl div.hz_license_form_head, .rtl #hz_license_branding, .rtl #hz_license_actions{
+  flex-flow: row-reverse;
+}

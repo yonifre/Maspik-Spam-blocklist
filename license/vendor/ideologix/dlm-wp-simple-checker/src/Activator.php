@@ -59,23 +59,26 @@ class Activator extends AbstractActivator {
 	public function enqueueScripts() {
 
 		if ( $this->configuration->isActivationPage() ) {
-			return;
+			//return; // yoni comment this
 		}
+        
+        if( isset($_GET['page']) && $_GET['page'] === $this->configuration->prefix .'activator'){ // yoni add this check
 
-		wp_enqueue_style(
-			$this->configuration->prefix . 'activator',
-			trailingslashit( $this->configuration->public_url ) . 'assets/style.css',
-			[],
-			filemtime( trailingslashit( $this->configuration->public_path ) . 'assets/style.css' ),
-			'all'
-		);
-		wp_enqueue_style(
-			$this->configuration->prefix . 'activator',
-			trailingslashit( $this->configuration->public_path ) . 'assets/script.js',
-			[],
-			filemtime( trailingslashit( $this->configuration->public_path ) . 'assets/script.js' ),
-			'all'
-		);
+            wp_enqueue_style(
+                $this->configuration->prefix . 'activator',
+                trailingslashit( $this->configuration->public_url ) . 'assets/style.css',
+                [],
+                filemtime( trailingslashit( $this->configuration->public_path ) . 'assets/style.css' ),
+                'all'
+            );
+            wp_enqueue_style(
+                $this->configuration->prefix . 'activator',
+                trailingslashit( $this->configuration->public_path ) . 'assets/script.js',
+                [],
+                filemtime( trailingslashit( $this->configuration->public_path ) . 'assets/script.js' ),
+                'all'
+            );
+        }// yoni add this end
 	}
 
 	/**

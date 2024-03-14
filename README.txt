@@ -4,7 +4,7 @@ Donate link: paypal.me/yonifre
 Tags: spam , Blacklist, Validation, CAPTCHA, Anti spam, 
 Requires at least: 4.3
 Tested up to: 6.4
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -121,6 +121,9 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 == Changelog ==
 
+= 1.0.1 -  14/03/2024 =
+* Bug fix - Remove unnecessary css file in admin area
+* Bug fix - Disable cron checker log if no key is set
 
 = 1.0.0 -  12/03/2024 =
 * Enhancement - New License Manager (Please delete your current license and re-activate it if it does not work)
@@ -333,17 +336,14 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 * Tweek added  -  Change country drop down list
 * Tweek added  -  Show your API list in the main setting page
 
-
 = 0.4.3 =
 * Add translation   - Add Hebrew translation
 
 = 0.4.2 =
 * Bug fix  - fix Block empty source URL option 
 
-
 = 0.4.1 =
 * Bug fix  - fix PHP error in 0.4.0v 
-
 
 = 0.4.0 =
 upgrade_notice: 'You may need to activate the plugin again after the update, as the plugin name changed'
@@ -365,14 +365,11 @@ upgrade_notice: 'You may need to activate the plugin again after the update, as 
 
 
 = 0.2.1 =
-
 * Bug fix  - Fix phone filed in CF7 always blocked. 
 
 = 0.2.0 =
-
 * Tweek added  - Spam log 
 * Bug fix  - Not blocking Email field. 
-
 
 = 0.1.0 =
 *Tweek added  - Add plugin support to- Contact form 7 

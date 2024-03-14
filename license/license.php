@@ -61,6 +61,9 @@ if ( ! function_exists( 'maspik_license_checker' ) ) {
 					'menu_title' => 'License Activation',
 					'parent_slug' => 'maspik',
 					'capaibility' => 'manage_options',
+				],
+				'cron'           => [
+					'interval' => 'hourly',
 				]
 			] );
 		}
