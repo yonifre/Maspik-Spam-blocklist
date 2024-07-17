@@ -2,34 +2,1488 @@
  * All of the CSS for your admin-specific functionality should be
  * included in this file.
  */
-tbody {
-    display: block !important;
-    max-width: 600px;
-    background: #fff;
-    padding: 30px;
-    border-radius: 20px !important;
-}
 
-table.form-table {
-    display: block !important;
-}
+ 
 
-.form-table tr {
-    display: block !important;
-}
+ @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
-.form-table th {
-    display: block !important;
-    padding-bottom: 0px;
-}
 
-.form-table textarea {
-    width: 100%;
-}
 
-.form-table td {
-    padding: 5px 0px 20px 0px;
-}
 tr.hide {
     display: none !important;
+}
+.maspik-settings .notice {
+  display: none !important;
+}
+.limit-api-label{
+  font-size:12px;
+}
+
+.limit-api-value{
+  font-size:12px;
+  padding: 8px 12px;
+  border-radius: 5px;
+  background-color: #F6F6F6;
+}
+
+
+/**--SPAM LOG TABLE - START --**/
+.spam-log-button-wrapper{
+  display:flex;
+  gap:15px;
+}
+
+
+ .maspik-log-table td.column-value.column-entries{
+  padding:0;
+}
+
+.detail-show:after{
+  font-size:14px;
+  color:#F48722;
+  content:"more details";
+  width:100px;
+  display:block;
+  text-align: right;
+}
+
+.active .detail-show:after{
+  content:"hide details";
+  color:#888;
+}
+
+ .column-value{
+  display:table-cell;
+}
+
+.column-value .maspik-accordion-item{
+  margin:0;
+}
+
+.column-value .maspik-accordion-item, .column-value .maspik-accordion-item .maspik-accordion-header, .column-value .maspik-accordion-item .maspik-accordion-content{
+  background:none;
+}
+
+.column-value .maspik-accordion-item .maspik-accordion-content pre{
+  padding: 0 30px;
+  max-width:50vw;
+  text-wrap: wrap;
+}
+
+.maspik-log-table{
+  width: 100%;
+  font-size:16px;
+}
+.maspik-log-table th, .maspik-log-table td{
+  padding:18px 20px;
+  vertical-align: top;
+
+}
+
+.maspik-log-table th{
+  background-color:#F48722;
+  color:#FFF;
+  border-radius:3px;
+}
+
+.maspik-log-table tr.row-odd{
+  background-color:#F6F6F6;
+  border-radius:3px;
+}
+
+.maspik-log-table tr.row-even{
+  background-color:#FAFAFA;
+  border-radius:3px;
+}
+
+.maspik-log-table .row-entries .column-entries.column-value{
+  text-align: left;
+}
+
+.maspik-log-table .row-entries .column-entries{
+  text-align: center;
+}
+
+
+
+/**--SPAM LOG TABLE - END --**/
+/**--GENERAL STYLE - START --**/
+
+.maspik-test-form input, .maspik-test-form textarea, .maspik-accordion-content-wrap input, .maspik-accordion-content-wrap textarea{
+  background-color:#E9E9E9;
+  border:none;
+  width:100%;
+  border-radius: 10px;
+}
+
+
+#frmContact input.maspik-btn, .maspik-accordion-content-wrap #submit, .copy.maspik-btn, .log-reset.maspik-btn, .maspik-update-db #submit,#exp-imp-settings .export-import-btn{
+    color:#FFF;
+    font-family:'Montserrat', 'Open Sans', sans-serif;
+    font-weight: 300;
+    text-transform: Uppercase;
+    background-color: #F48722;
+    cursor: pointer;
+    border-radius: 100px;
+    height:auto;
+    transition: 0.3s;
+    border:none;
+}
+
+input.export-import-btn {
+    padding: 5px 20px !important;
+}
+
+.maspik-btn:hover,.log-reset.maspik-btn:hover, .maspik-accordion-content-wrap #submit:hover{
+    color:#fff;
+    transition: 0.3s;
+    background-color: #374945!important;
+}
+h4.maspik-header{
+    font-size:20px;
+    font-weight: 700;
+}
+
+h3.maspik-header{
+    font-size:24px;
+    font-weight: 700;
+}
+
+h2.maspik-header{
+    font-size:28px;
+    font-weight: 700;
+}
+
+/**--Toggle style - START --**/
+
+.togglebox {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+    margin-top: -10px;
+    border-inline-start: solid 2px #F48722;
+    border-image: linear-gradient(to top, #FFF, #F48722 ) 1;
+    padding-inline-start: 15px;
+    margin-inline-start: 15px;
+}
+
+/* Style to show the div */
+.togglebox.showontoggle {
+  max-height: 1000px; 
+  transition: max-height 0.3s ease-in;
+}
+
+
+.maspik-toggle {
+  position: relative;
+  display: inline-block;
+  width: 35px;
+  min-width:35px;
+  height: 20px;
+}
+
+.maspik-toggle input {
+  display: none;
+}
+
+.maspik-toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+  border-radius: 34px;
+  display: flex;
+  align-items: center;
+}
+
+.maspik-toggle-slider:before {
+  position: absolute;
+  content: "";
+  height: 14px;
+  width: 14px;
+  left: 3.2px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+input:checked + .maspik-toggle-slider {
+  background-color: #F48722;
+}
+
+input:checked + .maspik-toggle-slider:before {
+  -webkit-transform: translateX(14px);
+  -ms-transform: translateX(14px);
+  transform: translateX(14px);
+}
+
+.maspik-numbox-wrap input[type=number]{
+  width:90px;
+  margin-bottom:0;
+}
+.togglebox .maspik-numbox-wrap{
+  margin-top:-5px;
+}
+
+.maspik-numbox-wrap label{
+  font-size:16px;
+  text-wrap:nowrap;
+  margin-top:5px;
+  margin-right:5px;
+}
+
+.maspik-subtext{
+  font-size:12px;
+  padding-left: 13px;
+}
+
+.maspik-update-db form, .maspik-update-db-result {
+    display: flex;
+    width: 100%;
+    max-width: 1080px;
+    align-items: center;
+    gap: 10px;
+    background-color: #FFF;
+    padding: 10px 20px;
+    border: solid 1px #c3c4c7;
+    border-radius: 3px;
+    border-inline-start: solid 4px #9E5942;
+    justify-content: start;
+}
+
+@media only screen and (max-width: 900px) {
+  .maspik-update-db form, .maspik-update-db-result {
+    flex-wrap:wrap;
+    width: 85%;
+  }
+
+
+  .maspik-update-db .submit{
+    padding:3px;
+    margin-inline-start: 0px!important;
+  }
+
+}
+
+.accordion-disable .maspik-accordion{
+  background:rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  border-radius:10px;
+  transition: 0.3s;
+}
+
+.accordion-disable .maspik-accordion .maspik-accordion-item{
+  opacity: 0.6;
+  pointer-events: none;
+}
+.maspik-database-update-overlay{
+  display: none;
+}
+
+.spam-empty-log{
+  display:flex;
+  justify-content: center;
+  background-color:#475351;
+  color:#FFF;
+  border-radius: 5px;
+  width:80%;
+  max-width: 400px;;
+  left:0;
+  right:0;
+  margin-left: auto;
+  margin-right:auto;
+  margin-top:50px;
+  height:80px;
+  z-index:999;
+  opacity: 0.6;
+  transition: 0.3s;
+
+}
+
+
+.maspik-blacklist-options.accordion-disable .maspik-accordion .maspik-database-update-overlay{
+  display:flex;
+  justify-content: center;
+  background-color:#475351;
+  color:#FFF;
+  border-radius: 5px;
+  position:absolute;
+  width:80%;
+  max-width: 400px;
+  left:0;
+  right:0;
+  margin-left: auto;
+  margin-right:auto;
+  margin-top:50px;
+  height:80px;
+  z-index:999;
+  opacity: 0.6;
+  transition: 0.3s;
+}
+
+.maspik-blacklist-options.accordion-disable .maspik-accordion:hover .maspik-database-update-overlay, .spam-empty-log:hover{
+  opacity: 1;
+  transition: 0.3s;
+}
+
+.accordion-disable .maspik-database-update-overlay h4, .spam-empty-log h4{
+  font-size:20px;
+}
+
+.maspik-form-update-db .db-update-text h3{
+  font-size: 18px;
+  margin:5px;
+  font-weight: 400;
+  line-height:1.2;
+}
+
+
+.maspik-form-update-db .db-update-text span{
+font-size:14px;
+padding-left:8px;
+}
+
+.maspik-update-db-result, .save-notice{
+  max-width: 900px;
+  width:100%;
+  text-align:left;
+
+}
+
+.maspik-update-db .submit{
+  padding:3px;
+  margin-inline-start: 20px;
+}
+
+
+.maspik-update-db input#submit{
+  font-size: 14px;
+  letter-spacing: 2px;
+}
+
+
+.maspik-accordion-form-option-field .maspik-accordion-content .maspik-form-switch-wrap{
+  width:45%;
+  padding: 10px;
+  margin:5px 0;
+  flex-wrap:nowrap;
+}
+
+.maspik-accordion-form-option-field .maspik-accordion-content .maspik-form-switch-wrap .wp-reg {
+  display:flex;
+  flex-wrap:nowrap;
+  justify-content: flex-start;
+  opacity:1!important;
+}
+
+ .forms-pro-block.maspik-pro{
+  background-color:#FAFAFA;
+  padding:3px;
+  border-radius: 10px;
+}
+
+.maspik-accordion-form-option-field .maspik-accordion-content .maspik-form-switch-wrap.disabled:has(.wp-reg) {
+  opacity:1;
+  background-color: #F3F3F3;
+
+}
+
+.maspik-accordion-form-option-field .maspik-accordion-content .maspik-form-switch-wrap.disabled:has(.wp-reg) .maspik-toggle, .maspik-accordion-form-option-field .maspik-accordion-content .maspik-form-switch-wrap.disabled:has(.wp-reg) h4{
+  opacity:0.7;
+}
+
+.maspik-accordion-form-option-field .maspik-accordion-content .maspik-form-switch-wrap .wp-reg .maspik-tooltip{
+  margin-left:10px;
+  pointer-events: auto!important;
+  z-index: 99;
+  opacity: 1!important;
+}
+
+@media only screen and (max-width: 1180px) {
+  .maspik-accordion-form-option-field .maspik-accordion-content .maspik-form-switch-wrap{
+    width:100%!important;
+  }
+  
+}
+
+
+.maspik-accordion-form-option-field div.maspik-accordion-content-wrap, .maspik-accordion-form-option-field  div.maspik-pro, .maspik-accordion-form-option-field  div.maspik-not-pro{
+  display:flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.maspik-accordion-form-option-field  div.maspik-not-pro, .maspik-form-switch-wrap.disabled{
+  opacity: 0.7;
+  pointer-events: none;
+  background-color:#eee;
+  padding: 10px;
+  border-radius:10px;
+}
+
+
+div.pro-btn-wrapper.maspik-pro{
+  display:none;
+}
+
+div.pro-btn-wrapper.maspik-not-pro{
+    opacity: 1; 
+    display:flex;
+    pointer-events: auto;
+    background-color: #fff;
+    padding-bottom:0;
+    margin-top:30px;
+    margin-bottom:15px;
+}
+
+.maspik-accordion-form-option-field .maspik-accordion-content .submit,  .pro-btn-wrapper{
+  width:100%;
+}
+
+
+
+/**--Toggle style - END --**/
+
+
+/* Custom Scroll */
+
+.maspik-custom-scroll::-webkit-scrollbar {
+  width: 3px;
+  height: 3px;
+}
+
+.maspik-custom-scroll::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.maspik-custom-scroll::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 3px;
+}
+
+.maspik-custom-scroll::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Custom Scroll - END */
+
+.maspik-simple-divider{
+  width:90%;
+  display:flex;
+  margin:35px 20px;
+  height:1px;
+  background:#F48722;
+  align-self:center;
+}
+
+.add-space-top{
+  margin-top:20px;
+}
+
+/**--GENERAL STYLE - END --**/
+
+
+.maspik-more-options{
+  padding-top:30px;
+}
+.maspik-blacklist-options a{
+    color: #F48722;
+    text-decoration: none;
+}
+
+.maspik-blacklist-options a:hover{
+    color: #404040;
+}
+
+.maspik-save-message-wrap{
+  padding-inline-end:20px;
+  margin-bottom:20px;
+}
+.maspik-save-message{
+  padding:10px;
+  font-size:18px;
+  text-align: center;
+  width:100%;
+  max-width: 100%;
+  color:#FFF;
+}
+
+.maspik-save-message.success{
+  background-color: #F48722;
+}
+
+.maspik-save-message.error{
+  background-color: #9E5942;
+}
+
+
+
+.maspik-settings{
+    display:flex;
+    flex-direction:column;
+    align-items: center;
+}
+
+.notice-pointer h2{
+  position:absolute;
+}
+
+/**--- HEAD - START ---**/
+
+.maspik-setting-head-wrap{
+  width:100%;
+  max-width:1400px;
+  display:flex;
+  flex-direction: column;
+  align-items:flex-start;
+}
+.maspik-setting-header{
+    display:flex;
+    flex-direction:column-reverse;
+    padding-bottom: 40px;
+}
+.maspik-setting-header-wrap{
+  display:flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+}
+h1.maspik-title{
+    color:#F48722;
+    font-family:'Montserrat', 'Open Sans', sans-serif;
+    font-weight:900!important;
+    font-size:40px;
+}
+
+h3.maspik-protag{
+    background-color:#F48722;
+    font-family:'Montserrat', 'Open Sans', sans-serif;
+    text-transform: Uppercase;
+    height:14px;
+    line-height: 1em;
+    border-radius:50px;
+    font-size:14px;
+    color:#FFF;
+    font-weight:700;
+    padding:5px 12px;
+    display:flex;
+    letter-spacing:1px;
+    margin-top:20px;
+}
+
+h3.maspik-protag.maspik-not-pro{
+  display: none;
+}
+
+.maspik-tooltip .dashicons-info:before{
+  font-size:24px;
+  color: #FFBBA6;
+}
+
+.maspik-tooltip .dashicons-info{
+  margin-top:-3px;
+}
+
+
+.maspik-tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.maspik-tooltip .maspik-tooltiptxt {
+  visibility: hidden;
+  width: 330px;
+  background-color: #404040;
+  color: #fff;
+  text-align: left;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  top: -5px;
+  left: 110%;
+  padding:8px;
+}
+
+.maspik-tooltip .maspik-tooltiptxt::after {
+  content: "";
+  position: absolute;
+  top: 20px;
+  right: 100%;
+  margin-top: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent #404040 transparent transparent;
+}
+.maspik-tooltip:hover>.maspik-tooltiptxt {
+  visibility: visible;
+
+}
+
+.maspik-tooltip:hover{
+  cursor:pointer;
+}
+
+/** Affected forms **/
+
+.maspik-aform{
+    margin-top:20px;
+    margin-bottom:28px;
+    font-size:16px;
+    display:flex;
+    align-items: flex-start;
+    gap:15px;
+}
+.mpk-form-list-lbl{
+  margin-top:5px;
+}
+
+.maspik-aform ul.supportforms {
+    display:flex;
+    margin:0;
+    gap:inherit;
+    flex-wrap: wrap;
+}
+
+
+.maspik-aform ul.supportforms li, .maspik-api-status{
+    margin:0;
+    background-color:#F48722;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius:50px;
+    font-size:12px;
+    font-weight: 300;
+    font-family:'Montserrat', 'Open Sans', sans-serif;
+    cursor: pointer;
+}
+
+.maspik-aform ul.supportforms li.disabled{
+  margin:0;
+  background-color:#888!important;
+  color:#FFF;
+  padding: 5px 10px;
+  border-radius:50px;
+  font-size:12px;
+  font-weight: 300;
+  font-family:'Montserrat', 'Open Sans', sans-serif;
+}
+
+.not-connected{
+  background:#8D8E93!important;
+}
+
+/**--- HEAD - END ---**/
+/**--- BODY - START ---**/
+
+.maspik-setting-body{
+    display: flex;
+    gap:30px;
+    max-width:1400px;
+    width:95%;
+    align-self: center;
+    flex-wrap: nowrap;
+}
+
+/**--- BLACKLIST OPTIONS - START ---**/
+
+.maspik-blacklist-options{
+    width:55%;
+    position: relative;
+}
+
+.maspik-blacklist-head{
+    margin-top:10px;
+    margin-bottom:30px;
+}
+.maspik-blacklist-head>h2{
+    margin:0;
+}
+
+.maspik-blacklist-head p , .maspik-spam-head p{
+    font-size: 16px;
+    margin-left:20px;
+}
+
+
+/** Accordion **/
+
+.maspik-accordion {
+    margin: 0 auto;
+  }
+
+  .maspik-accordion-item{
+    margin-bottom:20px;
+    border-radius: 10px;
+  }
+
+
+  /* top of textarea - I and ex - wrap*/
+  .maspik-accordion .maspik-setting-info{
+    display:flex;
+    justify-content: space-between;
+    align-items:center;
+  }
+
+  .maspik-accordion-item .maspik-accordion-header .maspik-tooltip{
+    opacity:0;
+    pointer-events: none;
+    transition: 0.3s;
+  }
+  .maspik-accordion-item.has-high-tooltip .mpk-acc-header-texts{
+    flex-direction:row;
+  }
+
+  .maspik-accordion-item .maspik-accordion-header.active .maspik-tooltip{
+    opacity:1;
+    transition: 0.3s;
+    pointer-events: auto;
+  }
+
+
+
+  /* pop up button - start */
+  .maspik-small-btn-wrap, .maspik-status-wrap{
+    display: flex;
+    gap:10px;
+    align-items: center;
+
+  }
+
+  .maspik-small-btn{
+    margin:10px 0;
+  }
+
+
+  .maspik-small-btn>a{
+    color:#fff;
+    background-color: #014921;
+    border-radius: 10px;
+    display:inline;
+    align-self: flex-end;
+    width:auto;
+    text-decoration: none;
+    padding:5px 12px 5px 10px;
+    font-size:12px;
+    align-content:center;
+  }
+
+  .maspik-small-btn>a .dashicons {
+    width:auto;
+    height:18px;
+    padding-inline-end:3px;
+  }
+
+    .maspik-small-btn>a:hover{
+    color:#fff;
+    background-color: #475351;
+    }
+  
+  .maspik-small-btn .dashicons{
+    font-size:14px;
+    vertical-align: middle;
+  }
+
+  /* example button - end */
+
+  .maspik-accordion-item:last-child {
+    border-bottom: none;
+  }
+  .maspik-accordion-header {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 10px;
+    cursor: pointer;
+    display:flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap:10px;
+    padding:18px 30px;
+  }
+  .maspik-accordion-header.active {
+    border-radius:10px 10px 0 0;
+  }
+
+
+  h4.maspik-accordion-header-text{
+    margin:0;
+  }
+
+  .maspik-accordion-subheader{
+    font-size:16px;
+  }
+
+  .mpk-acc-header-texts{
+    display:flex;
+    gap:inherit;
+  }
+
+  .active .mpk-acc-header-texts{
+    flex-direction: column;
+  }
+
+  .maspik-accordion-header .dashicons-arrow-right{
+    color:#F48722;
+    font-size:28px;
+    transition: 0.3s;
+    margin: -4px;
+  }
+
+  .active .dashicons-arrow-right{
+    rotate:90deg;
+    transform-origin: 50% 50%;
+    transition: 0.3s;
+  }
+
+  .maspik-accordion-content {  
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+    background: #FFF!important;
+    border-radius: 0 0 10px 10px;
+  }
+
+
+  .maspik-accordion-content .maspik-accordion-content-wrap {
+    padding:  0 40px 30px 40px;
+    display:flex;
+    flex-direction:column;
+    transition: max-height 0.3s ease-in;
+  }
+
+  .maspik-accordion-content-wrap textarea.maspik-textarea{
+    max-width:100%;
+  }
+
+  .maspik-accordion-content-wrap textarea.maspik-textarea:focus, .maspik-numbox-wrap input:focus, .maspik-accordion-item .maspik-country-dropdown:focus, .maspik-accordion-item .maspik-country-dropdown:hover{
+   box-shadow:none;
+   color: #000;
+  }
+  
+  .maspik-accordion-content .form-table>tbody tr:first-child th:first-child{
+    display:none;/*Hides first section title*/
+  }
+
+  .maspik-accordion-content .hide-form-title .form-table>tbody tr{
+    display:flex;
+    flex-direction: column;
+    align-items:flex-start;
+  }
+
+  .maspik-form-tip{
+    margin-left:13px;
+  }
+
+  .maspik-accordion-content-wrap tr{
+    max-width:800px;
+  }
+
+  .maspik-accordion-content-wrap td{
+    width:100%;
+  }
+
+
+  .maspik-accordion-content-wrap .maspik-textarea,.maspik-accordion-content-wrap input, .maspik-accordion-content-wrap input.maspik-inputbox{
+    max-width:800px; 
+  }
+
+  .maspik-accordion-content-wrap .is-number::-webkit-inner-spin-button{
+    -webkit-appearance: none;
+  }
+
+
+  .maspik-accordion-content-wrap #submit, .maspik-update-db #submit, #clear_log{
+    min-width: 140px;
+    width:auto;
+    letter-spacing: 3px;
+    padding: 12px 25px;
+    font-size:14px;
+    line-height:1.2em;
+    border:none;
+  }
+
+  .maspik-accordion-content-wrap .submit{
+    display:flex;
+    justify-content: flex-end;
+    padding:0;
+    margin:0;
+    margin-top:20px;
+  }
+
+
+/* Accordion animation */
+
+
+.maspik-accordion-item > .active + .maspik-accordion-content {
+    max-height: 1000px!important;
+    transition: max-height 0.3s ease-in;
+  }
+
+  .maspik-accordion-item .maspik-main-list-wrap, .maspik-accordion-subtitle-wrap{
+    display:flex;
+    flex-wrap:nowrap;
+    gap:10px;
+    
+  }
+
+  .maspik-accordion-item .maspik-select-list{
+    display:flex;
+    flex-direction: row;
+    flex-wrap:wrap;
+    gap:10px;
+  }
+  .maspik-accordion-item .maspik-select-list .maspik-form-api-list, .maspik-accordion-item .maspik-select-list .maspik-main-list-wrap, .maspik-accordion-item {
+    width:100%;
+  }
+.maspik-accordion-item.maspik-accordion-general-field .maspik-numbox-wrap .limit-api-wrap {
+    min-width: 70px !important;
+}
+.maspik-api-text-wrap {
+    max-width: 100%;
+    overflow: scroll;
+}
+  .maspik-accordion-subtitle-wrap h3{
+    margin:0;
+  }
+
+  .maspik-accordion-subtitle-wrap{
+    margin-bottom:15px;
+    align-items: center;
+  }
+
+  .maspik-accordion .text-caution{
+    color:#9E5942;
+    font-weight: 800;
+  }
+
+  .maspik-accordion-item .dashicons-star-filled{
+    color:#F48722;
+    margin-inline-end: 8px;
+    margin-inline-start: -8px;
+  }
+  .maspik-not-pro.maspik-accordion-item{
+    border:solid 1px #F48722;
+  }
+
+  .maspik-not-pro.maspik-accordion-item .maspik-accordion-header{
+    background: #F6F6F6;
+  }
+
+  .maspik-not-pro.maspik-accordion-item .maspik-accordion-content-wrap{
+    background: #F6F6F6;
+  }
+  .maspik-not-pro.maspik-accordion-item .maspik-accordion-content{
+    opacity: 0.7;
+    pointer-events: none;
+  }
+
+  .maspik-pro .maspik-small-btn.get-pro{
+    display:none;
+  }
+
+  .maspik-small-btn.get-pro{
+    margin:0;
+    margin-inline-end: 20px;
+  }
+  .maspik-small-btn.get-pro a{
+    background:#F48722;
+    font-size:16px;
+  }
+
+  .upsell-btn{
+    display:flex;
+    flex-direction: row;
+  }
+
+  .upsell-btn .maspik-small-btn.get-pro a{
+    background: #374945;
+  }
+  .upsell-btn .maspik-small-btn.get-pro a:hover{
+    background: #F48722;
+  }
+
+  .maspik-small-btn.get-pro a:hover{
+    background:#374945;
+  }
+
+
+  .maspik-pro-button-wrap{
+    display:flex;
+  }
+
+
+
+  .maspik-main-list-wrap .maspik-form-api-list{
+    width: 70%;
+    display:flex;
+    flex-direction: column;
+  }
+
+  .maspik-accordion-item .maspik-form-api-list h5.maspik-api-title{
+    margin:0;
+    font-size:12px;
+  }
+
+  .maspik-main-list-wrap.maspik-select-list .maspik-form-api-list .maspik-api-text{
+    height:auto;
+    padding:0 10px;
+    gap: 5px;
+    flex-wrap:wrap;
+  }
+
+ .maspik-api-text .api-entry{
+    border: solid 1px #ddd;
+    border-radius: 3px;
+    background: #FFF;
+    padding: 2px 6px;
+  }
+
+  .maspik-main-list-wrap.maspik-select-list .maspik-form-api-list{
+    width:100%;
+  }
+
+  .maspik-main-list-wrap .maspik-form-api-list .maspik-api-text{
+    font-size:12px;
+    color:#475351;
+    height:105px;
+    overflow: auto;
+    display:flex;
+  }
+
+   .maspik-form-api-list .maspik-api-text-wrap{
+    background-color:#F6F6F6;
+    padding: 10px;
+    border-radius:10px;
+
+  }
+
+  .maspik-accordion-item  .maspik-country-dropdown{
+    border:none;
+    width: 115px;
+    background-color: #E9E9E9;
+    border-radius:10px;
+  }
+
+  .maspik-accordion-item  .maspik-country-dropdown option{
+    padding:20px;
+  }
+
+
+/* Select 2 restyle */
+  .maspik-main-list-wrap > .select2-container .select2-selection {
+    background-color:#E9E9E9;
+    border:none;
+    width:100%;
+    border-radius: 10px;
+    padding: 8px 10px;
+  }
+
+  .maspik-main-list-wrap  .select2-container--focus .select2-selection--multiple{
+    border:none!important;
+  }
+
+  .maspik-main-list-wrap .select2-search__field{
+    margin-bottom:6px;
+  }
+
+
+  .maspik-main-list-wrap > .select2-container{
+    width:100%!important;
+  }
+
+ .select2-container--default .select2-results__option--selected{
+    background: #F48722!important;
+    color:#FFF!important;
+    transition:0.3s;
+  }
+
+  .select2-container--default .select2-results__option--highlighted.select2-results__option--selectable{
+    background: #475351!important;
+    transition:0.3s;
+  }
+
+
+  .maspik-main-list-wrap > .select2-container .select2-selection li{
+    background:#FFF;
+
+  }
+.maspik-main-list-wrap .select2-container--disabled li.select2-selection__choice {
+    background: #bababa !important;
+}
+
+
+  /* Custom Scroll for Select 2*/
+.select2-results{
+  padding: 10px;
+  padding-left: 0;
+}
+
+.select2-results li{
+  margin: 3px 10px;
+  border-radius: 20px;
+  padding-left:15px;
+}
+.select2-results__options::-webkit-scrollbar {
+  width: 3px;
+  height: 3px;
+}
+
+.select2-results__options::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.select2-results__options::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 3px;
+}
+
+.select2-results__options::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Select 2 restyle - END */
+
+  
+
+  /* Pop up */
+.maspik-popup-wrap>h3{
+  margin-top:0;
+}
+.maspik-popup-wrap {
+  position: fixed;
+  top: 50%; 
+  left: 50%; 
+  transform: translate(-50%, -50%);
+  background-color: #fff; 
+  padding: 30px 20px; 
+  border: 1px solid #ddd; 
+  border-radius: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); 
+  display: none; 
+  width:400px;
+}
+
+.maspik-popup-wrap.active { 
+    display: block; 
+    z-index: 999; 
+    border: 3px solid #F48722;
+}
+
+.maspik-popup-wrap .close-popup {
+    float: right; 
+    cursor: pointer; 
+    color: #374945;
+    background-color: transparent; 
+    border: none; 
+    position: absolute;
+    right: 10px;
+    top: 10px;
+  }
+
+  .maspik-popup-wrap .close-popup>.dashicons{
+    font-size: 24px; 
+  }
+
+.maspik-popup-wrap .close-popup:hover {
+  color: #F48722; 
+}
+
+.maspik-popup-wrap .data-array-here{
+  overflow-y: auto;
+  line-height: 1.2em;
+}
+
+
+#pop-up-example .data-array-here{
+  height: 120px;
+}
+
+#pop-up-shortcode .data-array-here{
+  height: 180px;
+}
+
+
+.maspik-popup-wrap .data-array-wrap{
+  background-color:#F6F6F6;
+  border-radius:10px;
+  padding: 10px 10px;
+}
+
+
+.maspik-btn.copy{
+  margin-top: 15px;
+  min-height:30px;
+  padding: 8px 25px;
+  font-size:14px;
+  letter-spacing: 3px;
+}
+
+.maspik-copy-btn-wrap{
+  display: flex;
+  justify-content:flex-end;
+}
+
+body.rtl .maspik-tooltip .maspik-tooltiptxt::after {
+  left: 110%;
+  right: -9px;
+  border-color: transparent  transparent  transparent #404040;
+}
+
+body.rtl span.maspik-tooltiptxt {
+  left: 0;
+  right: 120%;
+  text-align:start
+}
+
+.togglewrap{
+  display:flex;
+  gap:10px;
+  margin: 20px 0;
+  align-items:center;
+}
+
+.togglewrap span{
+  font-size:12px;
+}
+
+.togglewrap>h4, .maspik-accordion-content h4{
+  margin:0;
+  font-size:16px;
+  font-weight:400;
+  margin-bottom: 5px;
+}
+
+.togglewrap .maspik-tooltiptxt, .short-tooltip .maspik-tooltiptxt{
+  width:220px;
+}
+
+.maspik-accordion-maspik-api-field .active + .maspik-accordion-content .maspik-accordion-content-wrap{
+  padding-top:40px;
+}
+
+.maspik-popular-spam-wrap{
+  gap:0;
+  display:flex;
+}
+
+.togglewrap{
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.maspik-api-buttons-warp{
+  display:flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap:10px;
+  margin-top:20px;
+  margin-bottom:10px;
+  flex-wrap: wrap;
+}
+
+
+.maspik-accordion-content-wrap #submit.maspik-btn-outline, .spam-log-button-wrapper #expand-all,.downloadform .maspik-btn{
+  color:#F48722;
+  font-family:'Montserrat', 'Open Sans', sans-serif;
+  font-weight: 400;
+  text-transform: Uppercase;
+  background-color: #FFF!important;
+  border-radius: 100px!important;
+  height:auto!important;
+  transition: 0.3s;
+  border:solid 1px #F48722;
+  padding: 11px 25px;
+  letter-spacing: 1px;
+  line-height: 1em;
+}
+
+.maspik-api-buttons-warp #submit, .maspik-api-buttons-warp .submit, .maspik-api-buttons-warp .maspik-btn-outline{
+  margin:0;
+}
+
+#submit.maspik-btn-outline:hover, .spam-log-button-wrapper #expand-all:hover,.downloadform .maspik-btn:hover{
+  color: #fff!important;
+  background-color: #374945!important;
+  transition: 0.3s;
+  border-color: #374945;
+}
+
+.maspik-threshold-wrap .maspik-numbox-wrap{
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+
+.maspik-minmax-wrap{
+  display:flex; 
+  justify-content: flex-start;
+  gap:20px;
+}
+
+.maspik-accordion-content .maspik-minmax-wrap .character-limit{
+  width: 70px;
+}
+
+.maspik-numbox-wrap{
+  display:flex;
+  align-items:center;
+}
+
+.maspik-numbox-wrap .limit-api-wrap{
+  padding-top:8px;
+  padding-left: 10px;
+}
+
+
+.maspik-accordion-content .maspik-limit-char-box span.maspik-subtext{
+  padding-left:0;
+}
+ 
+.maspik-accordion-content .maspik-limit-char-box .maspik-subtext strong{
+  color:#F48722!important;
+  text-transform: uppercase;
+} 
+
+
+
+
+/**--- BLACKLIST OPTIONS - END ---**/
+
+
+/**--- TEST FORM - START ---**/
+
+.maspik-test-form{
+    width:40%;
+    min-width: 350px!important;
+    gap:22px;
+
+}
+
+.maspik-test-form-sub, .maspik-test-form>form{
+    font-size:14px;
+}
+
+.maspik-test-form>form{
+    padding: 50px 40px!important; 
+    background-color:#014921;
+    position:sticky;
+    border-radius:10px;
+    top:50px;
+    color:white;
+}
+
+h3.maspik-test-form-head.maspik-header {
+    color: #fff;
+}
+
+.maspik-test-form .input-row{
+  display:flex;
+  flex-direction:column;
+  justify-content: flex-start;
+  padding-bottom:5px;
+  align-items:flex-end;
+}
+
+.maspik-test-form .input-row label{
+  align-self:flex-start;
+}
+
+.maspik-test-form .red.input-row input{
+  border:solid 1px #9E5942;
+}
+
+.maspik-test-form-head{
+    margin-bottom:20px;
+    margin-top:0;
+}
+
+
+
+.maspik-test-form input, .maspik-test-form textarea{
+    max-width: 550px;
+}
+
+.maspik-test-form input, .maspik-accordion-content-wrap input{
+    padding:4px 10px;
+}
+
+.maspik-test-form textarea, .maspik-accordion-content-wrap textarea{
+    padding:10px;
+}
+
+.maspik-test-form input, .maspik-accordion-content-wrap input{
+    height:35px;
+    margin-top:5px;
+}
+
+.maspik-test-form .btn-submit{
+    max-width: 180px;
+    letter-spacing: 3px;
+    padding: 12px 25px;
+    margin-top:20px; 
+}
+
+.maspik-test-form .note{
+    color: #ffbba6;
+    font-size: 14px;
+    margin-top: 1px!important;
+    max-width: 95%;
+    place-self: self-start;
+}
+.input-row.red .input-field {
+    border: 1px solid red;
+}
+
+.maspik-test-form #statusMessage p{
+  width:auto;
+  max-width:130%;
+  display:block;
+  text-align: center;
+  padding: 15px 15px;
+  color:#FFF;
+  margin:10px -40px -50px -40px;
+  border-radius: 0 0 10px 10px;
+
+}
+.maspik-test-form .successMessage{
+  background-color:#429E55;
+}
+
+.maspik-test-form .loadingMessage{
+  background-color:#374945;
+}
+
+.maspik-test-form .ErrorMessage{
+    background-color:#9E5942;
+}
+
+/**--- TEST FORM - END ---**/
+
+.maspik-footer a {
+    color: black;
+    text-decoration: underline;
+}
+
+@media only screen and (max-width: 767px) {
+  .maspik-setting-body {
+    flex-wrap:wrap;
+    justify-content: center;
+  }
+
+  .maspik-blacklist-options{
+    width:100%;
+  }
+
+  .maspik-test-form{
+    width:100%;
+    max-width:550px;
+  }
+
+
 }

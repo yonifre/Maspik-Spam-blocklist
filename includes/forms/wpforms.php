@@ -94,7 +94,7 @@ add_action( 'wpforms_process_validate_phone', function( $field_id, $field_submit
     $message = isset($checkTelForSpam['message']) ? $checkTelForSpam['message'] : 0 ;  
   
     if(!$valid){
-         efas_add_to_log($type = "tel","Telephone number '$field_value' not feet the given format ", $_POST, "Wpforms");
+         efas_add_to_log($type = "tel", $reason, $_POST, "Wpforms");
       	 wpforms()->process->errors[ $form_data['id'] ][ $field_id ] = cfas_get_error_text($message);
       }
 }, 10, 3 );

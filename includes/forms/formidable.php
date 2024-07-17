@@ -77,7 +77,7 @@ function maspik_validate_formidable_tel($errors, $posted_field, $posted_value, $
     $message = isset($checkTelForSpam['message']) ? $checkTelForSpam['message'] : 0 ;  
 
   	if(!$valid){
-        efas_add_to_log($type = "tel","Phone number $field_value not feet the given format ($reason)", $_POST, "Formidable");
+        efas_add_to_log($type = "tel", $reason, $_POST, "Formidable");
         $errors[ 'field'. $posted_field->id ] = cfas_get_error_text($message);  
     } 
 
@@ -109,7 +109,7 @@ add_filter('frm_validate_field_entry', 'maspik_validate_formidable_textarea', 10
 // maspik_add_text_to_mail_components
 add_filter('frm_email_message', 'maspik_add_text_to_mail_formidable', 10, 2);
 function maspik_add_text_to_mail_formidable($message, $atts) {
-  $add_country_to_emails = get_option( 'add_country_to_emails' );
+  $add_country_to_emails = maspik_get_settings("add_country_to_emails", '', 'old')  == "yes";
   if($message && $add_country_to_emails){
      $countryName = maspik_add_country_to_submissions($linebreak = "");
      $message = $message.$countryName;

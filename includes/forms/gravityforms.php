@@ -105,7 +105,7 @@ add_filter( 'gform_field_validation', function ( $result, $value, $form, $field 
 
       if(!$valid){
         $error_message = cfas_get_error_text($message); 
-        efas_add_to_log($type = "tel","Phone number $field_value not feet the given format ", $_POST, "Gravityforms");
+        efas_add_to_log($type = "tel", $reason, "Gravityforms");
         GFCommon::log_debug( __METHOD__ . '(): '.$error_message.': ' . $value );
         $result['is_valid'] = false;
         $result['message']  = $error_message;    

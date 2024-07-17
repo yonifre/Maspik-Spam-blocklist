@@ -2,9 +2,52 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("frmContact").addEventListener("submit", function(event) {
         event.preventDefault(); // Prevent the form from submitting normally
 
+        // Show loading spinner or message
+        document.getElementById("statusMessage").innerHTML = "<p class='loadingMessage'>Processing...</p>";
+
         // Your AJAX logic goes here
         var formData = new FormData(this);
-        formData.append('action', 'handle_contact_form'); // Add action to formData
+        formData.append('action', 'maspik_handle_playground_form'); // Add action to formData
+
+        fetch(ajax_object.ajax_url, {
+            method: "POST",
+            body: formData,
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Update status message
+            document.getElementById("statusMessage").innerHTML = "<p class='" + data.status + "Message'>" + data.message + "</p>";
+
+            // Update input values and their parent elements based on data
+            updateInputElement("note-name", data.name);
+            updateInputElement("note-email", data.email);
+            updateInputElement("note-tel", data.tel);
+            updateInputElement("note-textarea", data.textarea);
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            // Display error message to the user
+            document.getElementById("statusMessage").innerHTML = "<p class='errorMessage'>An error occurred. Please try again later.</p>";
+        });
+    });
+
+    // Function to update input element and its parent based on data value
+    function updateInputElement(id, value) {
+        var element = document.getElementById(id);
+        element.innerHTML = value;
+        
+        // Toggle "red" class based on whether the value is empty or not
+        element.parentElement.classList.toggle("red", value);
+    }
+});
+
+/*document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("frmContact").addEventListener("submit", function(event) {
+        event.preventDefault(); // Prevent the form from submitting normally
+
+        // Your AJAX logic goes here
+        var formData = new FormData(this);
+        formData.append('action', 'maspik_handle_playground_form'); // Add action to formData
 
         fetch(ajax_object.ajax_url, {
             method: "POST",
@@ -36,3 +79,4 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 });
+*/

@@ -8,6 +8,329 @@ if ( ! defined( 'WPINC' ) ) {
  *
  *
  */
+
+
+    function maspik_auto_update_db(){
+                
+        $min_php_version = '7.0';
+        $current_php_version = phpversion();
+
+        if (version_compare($current_php_version, $min_php_version, '>=') && !maspik_table_exists()) { 
+
+            create_maspik_log_table();
+            create_maspik_table("auto");
+            echo maspik_run_transfer();
+            
+            add_action('admin_footer', function() {
+                ?>
+                <script type="text/javascript">
+                    // Refresh the page
+                    window.location.reload(true);
+                </script>
+                <?php
+            });
+
+    
+        }
+
+    }
+
+    add_action('admin_init', 'maspik_auto_update_db');
+
+     //Check for PRO -addclass- 
+        function maspik_add_pro_class(){
+            if(cfes_is_supporting()){
+                return "maspik-pro";
+            }
+            else{
+                return "maspik-not-pro";
+            }
+        }
+    //Check for PRO - END
+
+    //Small buttons
+
+        function maspik_tooltip($message){
+            echo "<div class='maspik-tooltip'>
+            <span class='dashicons dashicons-info'></span>
+            <span class='maspik-tooltiptxt'>". $message ."</span></div>";
+        }
+
+        function maspik_popup($data, $subject, $label , $icon){
+
+            if($icon == 'visibility'){
+                $popuptype = "example";
+            }
+            else{
+                $popuptype = "shortcode";
+            }
+
+            echo "<div class='maspik-small-btn btns'>
+                <a class='your-button-class' 
+                data-array='". esc_attr($data) . "' 
+                data-title ='" .esc_attr($subject) . "' 
+                href='#' 
+                data-popup-id='pop-up-".  esc_attr($popuptype) ."'>
+                <span class='dashicons dashicons-". esc_attr($icon) ."'></span>". 
+                esc_html($label) .
+                "</a> </div>";
+        }
+
+        function maspik_get_pro(){    
+
+            echo "<div class='maspik-small-btn btns get-pro'>
+                <a class='maspik-get-pro-a' href='https://wpmaspik.com/?ref=inpluginad' target='_blank'><span class='dashicons dashicons-star-empty'></span> Get Maspik PRO</a> </div>";
+        }
+
+        function maspik_activate_license(){    
+
+            echo "<div class='maspik-small-btn btns get-pro activate-license'>
+                <a class='maspik-get-pro-a' href='". get_site_url() ."/wp-admin/admin.php?page=maspik_activator' target='self'><span class='dashicons dashicons-admin-network'></span> Activate License</a> </div>";
+        }
+
+
+    //Small buttons - END
+
+    // Generate Elements
+
+        function maspik_simple_dropdown($name, $class , $array, $attr = ""){
+            $dbresult = maspik_get_settings($name);
+                
+            $dropdown= "  <select name=". esc_attr($name) ." class=". esc_attr($class) ."  $attr >";
+                foreach($array as $entries => $value){
+                    $dropdown .="<option value='". esc_attr($value) . "'";
+                    if(  $dbresult == $value){
+                        $dropdown .= " selected='select'";
+                    }
+                    $dropdown .= ">". esc_html($entries) ."</option>";   
+                }
+
+            
+            $dropdown .= "</select>";
+
+            return $dropdown;
+
+        }
+
+function maspik_toggle_button($name, $id, $dbrow_name, $class, $type = "", $manual_switch = "", $api_array = false){
+    toggle_ready_check($dbrow_name); //make db row if there's none yet
+
+    if($type == "form-toggle"){
+        $checked = maspik_get_settings($dbrow_name, 'form-toggle') == 1 ? 'checked': "";
+    }
+    elseif($type == "yes-no"){
+        $checked = maspik_get_settings($dbrow_name) == 'yes' ? 'checked': "";
+
+    } elseif($type == "other_options"){
+        $checked = maspik_get_settings($dbrow_name, '', 'old') == 'yes' ? 'checked': "";
+    } else {
+        $checked = maspik_get_settings($dbrow_name, 'toggle');
+        $checked = maspik_is_contain_api($api_array) ? 'checked' : $checked ;
+    }
+
+    if($manual_switch === 0){
+        $checked = "";
+    } elseif($manual_switch === 1 && maspik_get_settings($dbrow_name) == ""){
+        $checked = "checked";
+    }
+
+    $toggle= " <label class='maspik-toggle' >
+                <input type='checkbox' id=". esc_attr($id) ." name='". esc_attr($name) . "' " . esc_attr($checked) . " class='". esc_attr($class) ."'> 
+                <span class='maspik-toggle-slider'></span>
+                </label>";
+
+    return $toggle;
+}
+
+
+        function maspik_save_button_show($label = "Save", $add_class = "", $name = "maspik-save-btn" ){
+
+            echo "<div class='submit'><input type='submit' name='". $name."' value='". esc_attr($label) ."' id='submit' class='". esc_attr($add_class) ."'></div>";
+
+        } 
+
+        function create_maspik_textarea($name, $rows = 4, $cols = 50, $class = '', $pholder = "") { 
+
+        
+            if($pholder == "error-message"){
+                $txtplaceholder = maspik_get_settings( "error_message" ) ? maspik_get_settings( "error_message" ) : __('This looks like spam. Try to rephrase, or contact us in an alternative way.', 'contact-forms-anti-spam');
+            } else{
+                $txtplaceholder = $pholder;
+            }
+            
+            $data = maspik_get_settings($name);
+
+            $class_attr = !empty($class) ? ' class="' . esc_attr($class) . '"' : '';
+            $textarea = '<textarea name="' . esc_attr($name) . '" rows="' . esc_attr($rows) . '" cols="' . esc_attr($cols) . '"' . $class_attr . '"';
+            if($txtplaceholder!= ""){
+                $textarea .= ' placeholder="' . $txtplaceholder . '"';
+            }
+            $textarea .= '>' . esc_html($data) . '</textarea>';
+
+            
+
+
+            return $textarea;
+        }
+
+        function create_maspik_input($name, $class = '', $mode = "text") {      
+            
+            $data = maspik_get_settings($name);
+
+            $class_attr = !empty($class) ? ' class="' . esc_attr($class . " is-". $mode) . '"' : '';
+            $input = "<input  name='" . esc_attr($name) . "' id='". esc_attr($name) . " '" . $class_attr . " type='" . $mode . "' value='". esc_attr($data) ."'></input>";
+
+
+            return $input;
+        }
+
+        function create_maspik_numbox($id, $name, $class, $label, $default = '', $min = 2, $max = 10000) {      
+            
+            $data = maspik_get_settings($name);
+            if(is_array(efas_get_spam_api($name))){
+                $api_value = efas_get_spam_api($name)[0];
+            }else{
+                $api_value = efas_get_spam_api($name);
+            }
+
+           
+
+            $class_attr = !empty($class) ? ' class="' . esc_attr($class) . '"' : '';
+
+            $numbox = "";
+            $numbox .= "<div class='maspik-numbox-wrap'><label for=". esc_attr($id) .">". esc_html($label) .":</label>
+            <input type='number' id=". esc_attr($id) ." name=". esc_attr($name) ." ". $class_attr ." min='". $min ." ' max='" . $max . "' step='1' value='";
+
+
+            if($data != ''){
+                $numbox .=  esc_attr($data);
+
+            }else{
+                    $numbox .= esc_attr($default);
+
+            }
+
+            $numbox .= "'>";
+            
+             if($api_value){
+                $numbox .= " <div class='limit-api-wrap'><span class='limit-api-label'>API: </span><span class='limit-api-value'>" . $api_value . "</span></div>";
+            }
+
+            
+            
+            $numbox.= "</div>";
+                    
+            return $numbox;
+        }
+
+        function create_maspik_select($name, $class, $array, $attr="") {      
+            
+            $the_array = $array;
+            $setting_value = maspik_get_dbvalue();
+            
+            $results = $data = maspik_get_settings($name, 'select');
+            $class_attr = !empty($class) ? ' class="js-states form-control maspik-select ' . esc_attr($class) . '"' : '';
+            foreach ($results as $result){
+                $result_array = explode(" ", $result -> $setting_value);
+            }
+
+            
+
+                $select =  '<select '. $class_attr .' multiple="multiple" '.$attr.' name="'.esc_attr($name).'[]" id="'.esc_attr($name).'"  >';
+                foreach ($the_array as $key => $value) {
+                    $select .=  ' <option value="'.esc_attr($key).'" ';
+                    foreach ($result_array as $aresult) {
+                        if ($key == preg_replace('/\s+/', '', $aresult)) {
+                            $select .=  ' selected="selected"';
+                        }
+   
+                    }
+                    $select .= '>'. esc_html($value) .'</option>';
+                }
+
+                $select .= "</select>";
+                       
+            return $select;
+            
+        }
+
+         
+    // Generate Elements - END ---
+
+    //Check if DB has toggle rows, if none, make them
+        function toggle_ready_check($name){
+            global $wpdb;
+                
+            $table = maspik_get_dbtable();
+            $setting_label = maspik_get_dblabel();
+            $setting_value = maspik_get_dbvalue();
+
+            // Check DB if data exists
+            $toggle_lim_exists = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM $table WHERE $setting_label = %s", $name ) );
+
+            if ( $toggle_lim_exists == 0 ) {
+                // If the row doesn't exist, insert a new row
+                $wpdb->insert(
+                    $table,
+                    array(
+                        $setting_label => $name, 
+                        $setting_value => 0,
+                    )
+                );
+        
+            }
+
+
+        }
+    //Check if DB has toggle rows, if none, make them - END --
+
+    //Maspik API
+        function maspik_spam_api_list($name, $array = ""){
+            $api = efas_get_spam_api($name);
+ 
+            $apitext = '';
+
+            if ($api) { 
+                echo "<div class='maspik-form-api-list'><h5 class='maspik-api-title'>From Maspik Dashboard & Auto-populate</h5>";
+                if (!is_array($api)) {
+                    $api =  explode( "\n", str_replace("\r", "", $api) );
+                }
+                if (is_array($api)) { 
+                    foreach ($api as $line){
+                        if( is_array($array) ){
+                           
+                            foreach ($array as $key => $value) {
+                               if ($key == preg_replace('/\s+/', '', $line)) {
+                                    $apitext .='<span class="api-entry">' . esc_html($value) . '</span> ';
+                                }
+                            }
+                        } else $apitext .= esc_html($line) . '<br>';
+                    }
+                } else { // else is_array $api
+                    $apitext = $api;
+                }
+
+                echo "<div class='maspik-api-text-wrap'><div class='maspik-api-text ";
+                if( !is_array($array) ) echo "maspik-custom-scroll";
+                echo "'>" . $apitext . "</div></div></div>";
+            }
+        }
+    //Maspik API - END
+
+    //Maspik API status checker
+        function check_maspik_api_values(){
+            if(
+                efas_get_spam_api("text_field") ||
+                efas_get_spam_api("email_field") ||
+                efas_get_spam_api("textarea_field") 
+            ){
+                return true;
+
+            }
+        }
+    //Maspik API status checker - END
+
+    
 class Maspik_Admin {
 
 	/**
@@ -25,6 +348,7 @@ class Maspik_Admin {
     
     private $custom_error_message_by_fields = array(
             'MaxCharactersInTextField',
+            'MaxCharactersInTextAreaField',
             'lang_needed',
             'contain_links',
             'tel_formats',
@@ -45,6 +369,7 @@ class Maspik_Admin {
 		add_action('admin_init', array( $this, 'registerAndBuildFields' ));
 	}
 
+    
 	/**
 	 * Register the stylesheets for the admin area.
 	 *
@@ -72,14 +397,16 @@ class Maspik_Admin {
 		//wp_enqueue_script( "js_select2_".$this->plugin_name, 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js', array( 'jquery' ), $this->version, false );
 
 	}
+    
     public function addPluginAdminMenu() {
         add_menu_page($this->plugin_name, 'Maspik Spam', 'administrator', $this->plugin_name, array($this, 'displayPluginAdminDashboard'), 'dashicons-welcome-comments', 85);
 
-        $numlogspam = get_option('spamcounter') ? "(" . get_option('spamcounter') . ")" : false;
-        add_submenu_page($this->plugin_name, 'Maspik List', 'Maspik List', 'administrator', $this->plugin_name, array($this, 'displayPluginAdminDashboard'));
+        $numlogspam = maspik_spam_count() ? "(" . maspik_spam_count() . ")" : false;
+
+        add_submenu_page($this->plugin_name, 'Blacklist Option', 'Blacklist Options', 'administrator', $this->plugin_name, array($this, 'displayPluginAdminDashboard'));
+
         add_submenu_page($this->plugin_name, 'Spam Log', 'Spam Log ' . $numlogspam, 'edit_pages', $this->plugin_name . '-log.php', array($this, 'displayPluginAdminSettings'));
-        add_submenu_page($this->plugin_name, 'Maspik API', 'Maspik API', 'administrator', $this->plugin_name . '-api.php', array($this, 'displayPluginAdminPro'));
-        add_submenu_page($this->plugin_name, 'Options', 'Options', 'administrator', $this->plugin_name . '-options.php', array($this, 'displayPluginAdminOptions'));
+
         add_submenu_page($this->plugin_name, 'Import/Export Settings', 'Import/Export Settings', 'administrator', $this->plugin_name . '-import-export.php', array($this, 'Maspik_import_export_settings_page'));
     }
 
@@ -141,38 +468,33 @@ class Maspik_Admin {
         if (in_array($name, $arr)) {
             return $input;
         }
-        $input = str_replace("\n", ",", $input);
-        $sanitize_input = sanitize_text_field($input);
-        $sanitize_input = str_replace(",", "\n", $sanitize_input);
-        return $sanitize_input;
-    }
-    
-    public function maspik_build_settings_custom_error_message($input) {
-        // Get the current filter name
-        $name = str_replace('sanitize_option_', '', current_filter());
-
-        // Get the existing custom error message array
-        $custom_error_message = get_option('custom_error_message');
-
-        if (!is_array($custom_error_message)) {
-            // If the array doesn't exist yet, create a new one with the current key-value pair
-            $array = array($name => $input);
+        // Check if $input is not null
+        if ($input !== null) {
+            $input = str_replace("\n", ",,", $input);
+            $sanitize_input = sanitize_text_field($input);
+            $sanitize_input = str_replace(",,", "\n", $sanitize_input);
+            return $sanitize_input;
         } else {
-            // If the array already exists, add the current key-value pair to it
-            $custom_error_message[$name] = $input;
-            $array = $custom_error_message;
+            return $input;
         }
-
-        // Return the updated custom error message array
-        return $array;
     }
-    
+
+        
 	public function registerAndBuildFields() {
 			/**
 		 * First, we add_settings_section. This is necessary since all future settings must belong to one.
 		 * Second, add_settings_field
 		 * Third, register_setting
-		 */     
+		 */ 
+
+
+
+        //Making Isolated Setting groups for each Accordion segments
+
+       
+
+        //End of Accordion segments
+
 		add_settings_section(
 			// ID used to identify this section and with which to register options
 			'settings_page_general_section', 
@@ -183,27 +505,9 @@ class Maspik_Admin {
 			// Page on which to add this section of options
 			'settings_page_general_settings'                   
 		);
-            add_settings_section(
-			// ID used to identify this section and with which to register options
-			'settings_page_bonus_section', 
-			// Title to be displayed on the administration page
-			'',  
-			// Callback used to render the description of the section
-				array( $this, 'settings_page_display_bonus_text' ),    
-			// Page on which to add this section of options
-			'settings_page_general_settings'                   
-		);
-            add_settings_section(
-			// ID used to identify this section and with which to register options
-			'settings_page_pro_section', 
-			// Title to be displayed on the administration page
-			'Connect your site to the SPAM API',  
-			// Callback used to render the description of the section
-				array( $this, 'settings_page_display_general_account' ),    
-			// Page on which to add this section of options
-			'settings_page_pro_settings_page'                   
-		);
-            add_settings_section(
+        
+        
+        add_settings_section(
 			// ID used to identify this section and with which to register options
 			'settings_page_option_section', 
 			// Title to be displayed on the administration page
@@ -213,427 +517,10 @@ class Maspik_Admin {
 			// Page on which to add this section of options
 			'settings_page_option_settings_page'                   
 		);
-
-      		
+	
 
 		unset($args);
-// First field
-		$args = array (
-          'type'      => 'textarea',
-          'subtype'   => 'textarea',
-          'id'    => 'text_blacklist',
-          'placeholder'      => 'Eric Jones',          
-          'name'      => 'text_blacklist',
-          'description'      => __( 'If the text value CONTAINS one of the given values, it will be marked as spam and blocked.
-<br><b>Wildcard pattern</b> accepted as well, asterisk * symbol is nessery for the recognition of the wildcard.', 'contact-forms-anti-spam' ),
-          'required' => 'true',
-          'api'=>'text_field',
-          'get_options_list' => '',
-          'example'=>'Eric jones,SEO,ranking,currency,click here ',
-          'subject'=>'Text field',
-          'value_type'=>'normal',
-          'wp_data' => 'option'
-					);
-		add_settings_field(
-			'text_blacklist',
-			__("Text field", 'contact-forms-anti-spam' )."<br><small>".__("(Usually Name/Subject)", 'contact-forms-anti-spam' )."</small>",
-			array( $this, 'settings_page_render_settings_field' ),
-			'settings_page_general_settings',
-			'settings_page_general_section',
-			$args
-		);
-      	unset($args);
-// MaxCharactersInTextField 
-		$args = array (
-          'type'      => 'input',
-          'subtype'   => 'number',
-          'id'    => 'MaxCharactersInTextField',
-          'placeholder'      => '',          
-          'name'      => 'MaxCharactersInTextField',
-          'description'      => __('If the text field contains more characters that this value, it will be considered spam and it will be blocked.<br>Recommended character limit: 30.', 'contact-forms-anti-spam' ),
-          'required' => '',
-          'api'=>'MaxCharactersInTextField',
-          'get_options_list' => '',
-          'value_type'=>'normal',
-          'wp_data' => 'option'
-					);
-		add_settings_field(
-			'MaxCharactersInTextField',
-			__("Limit text field to X characters.", 'contact-forms-anti-spam' ),
-			array( $this, 'settings_page_render_settings_field' ),
-			'settings_page_general_settings',
-			'settings_page_general_section',
-			$args
-		);
-      	unset($args);
       
-// secend field
-		$args = array (
-          'type'      => 'textarea',
-          'subtype'   => 'textarea',
-          'id'    => 'emails_blacklist',
-          'name'      => 'emails_blacklist',
-          'description'      => __('If the text value is EQUAL to one of the values above, MASPIK will tag it as spam and it will be blocked.
-<br><b>Email Domain</b> You can enter ending of email as well, like: @gmail.com will block all the email comming from @gmail.com (xyz@gmail.com) 
-<br>You can use the <b>Regex format</b><br>*Note - Regex must start and end with a slash / <br><b>Wildcard pattern</b> accepted as well, asterisk * symbol is nessery for the recognition of the wildcard.', 'contact-forms-anti-spam' ),
-          'placeholder'      => 'ericjonesonline@outlook.com',          
-          'attr' => false,
-          'example'=>'georginahaynes620@gmail.com,ericjonesonline@outlook.com,*.ru,/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.ru\b/,eric*@*.com,xrumer888@outlook.com',
-          'subject'=>'Email field',
-          'api'=>'email_field',
-          'get_options_list' => '',
-          'value_type'=>'normal',
-          'wp_data' => 'option'
-					);
-		add_settings_field(
-			'emails_blacklist',
-			__("Email field", 'contact-forms-anti-spam' ),
-			array( $this, 'settings_page_render_settings_field' ),
-			'settings_page_general_settings',
-			'settings_page_general_section',
-			$args
-		);
-unset($args);
-$name = get_bloginfo('name');  
-$url = get_bloginfo('url');  
-$description = get_bloginfo('description');  
-// Text area field
-		$args = array (
-          'type'      => 'textarea',
-          'subtype'   => 'textarea',
-          'id'    => 'textarea_blacklist',
-          'name'      => 'textarea_blacklist',
-          'description'      => __("Try to use full sentences that you typically find in spam emails, rather than single words
-          <br>If the Textarea value CONTAINS one of the given values, it will be marked as spam and blocked.
-          <br>You can also use the following shortcodes:<br>", 'contact-forms-anti-spam' ).__("
-[name] - Title of the web site- $name<br>
-[url] - URL of the web site- $url<br>
-[description] - Description of the web site- $description", 'contact-forms-anti-spam' ),
-          'atter' => false,
-          'get_options_list' => '',
-          'value_type'=>'normal',
-          'api'=>'textarea_field',
-          'subject'=>'Text area field',
-          'example'=>'submit your website,seo,ranking,currency,click here ',
-          'wp_data' => 'option'
-					);
-		add_settings_field(
-			'textarea_blacklist',
-			__("Text area field", 'contact-forms-anti-spam' )."<br><small>".__("(Usually Message/Long text)", 'contact-forms-anti-spam' )."</small>",
-			array( $this, 'settings_page_render_settings_field' ),
-			'settings_page_general_settings',
-			'settings_page_general_section',
-			$args
-		);
-unset($args);
-/*$sitetitle = get_bloginfo ( 'name' );      
-$sitedescription = get_bloginfo ( 'description' );      
-$siteurl = get_bloginfo ( 'url' );      
-// Contain site details
-		$args = array (
-          'type'      => 'input',
-          'subtype'   => 'select',
-          'id'    => 'forbidden_strings',
-          'name'      => 'forbidden_strings',
-          'array' => array(
-            				$sitetitle => __("Site title", 'contact-forms-anti-spam' )." ($sitetitle)" ,
-            				$sitedescription => __("Site description", 'contact-forms-anti-spam' )." ($sitedescription)" ,
-            				$siteurl => __("Site URL", 'contact-forms-anti-spam' )." ($siteurl)" ,
-                          ),
-          'description'      => '',
-          'atter' => false,
-          'get_options_list' => '',
-          'value_type'=>'normal',
-          'wp_data' => 'option'
-					);
-		add_settings_field(
-			'forbidden_strings',
-			__("Don't allow leads that textarea field <u>Contain</u> those strings", 'contact-forms-anti-spam' ),
-			array( $this, 'settings_page_render_settings_field' ),
-			'settings_page_general_settings',
-			'settings_page_general_section',
-			$args
-		);
-unset($args);  */   
-// Contain links 
-		$args = array (
-          'type'      => 'input',
-          'subtype'   => 'number',
-          'id'    => 'contain_links',
-          'name'      => 'contain_links',
-          'description'      => __('Spammers tend to include links.<br>If there is no reason for anyone to send links when completing your forms, set this to 1.', 'contact-forms-anti-spam' ),
-          'api'=>'contain_links',
-          'atter' => false,
-          'min' => '0',
-          'step' => '1', 
-          'value_type'=>'normal',
-          'wp_data' => 'option'
-					);
-		add_settings_field(
-			'contain_links',
-			__("Considered as spam IF a text-area field containing at least X links (X or more).", 'contact-forms-anti-spam' ),
-			array( $this, 'settings_page_render_settings_field' ),
-			'settings_page_general_settings',
-			'settings_page_general_section',
-			$args
-		);
-unset($args);  
-// tel format
-	$args = array (
-          'type'      => 'textarea',
-          'subtype'   => 'textarea',
-          'id'    => 'tel_formats',
-          'name'      => 'tel_formats',
-          'description'      => __('If you want more than one format, use the next line.<br>For example, if you want the  XXX-XXX-XXXX format, please add:<br> /[0-9]{3}-[0-9]{3}-[0-9]{4}/<br>
-You can get more ideas here: <a target="_blank" href="https://regex101.com/library?orderBy=MOST_POINTS&search=phone%20number%20validation">https://regex101.com/library?orderBy=MOST_POINTS&search=phone%20number%20validation</a><br>
-<b>Wildcard pattern</b> accepted as well, asterisk * symbol is nessery for the recognition of the wildcard. ', 'contact-forms-anti-spam' ),
-          'attr' => false,  
-          'get_options_list' => '',
-          'value_type'=>'normal',
-          'api'=>'phone_format',
-          'wp_data' => 'option'
-					);
-		add_settings_field(
-			'tel_formats',
-			__("Only allow phone numbers in this format:", 'contact-forms-anti-spam' ),
-			array( $this, 'settings_page_render_settings_field' ),
-			'settings_page_general_settings',
-			'settings_page_general_section',
-			$args
-		);  
-unset($args);    
-// Ip field
-		$args = array (
-          'type'      => 'textarea',
-          'subtype'   => 'textarea',
-          'id'    => 'ip_blacklist',
-          'name'      => 'ip_blacklist',
-          'description'      => 'Any IP you enter above will be blocked. One IP per line.<br>You can also filter entire CIDR range such as 134.209.0.0/16<br>The submitter IP will be loop through this list.',
-          'attr' => false,
-          'api'=>'ip',
-          'get_options_list' => '',
-          'value_type'=>'normal',
-          'wp_data' => 'option'
-					);
-		add_settings_field(
-			'ip_blacklist',
-			__("IP", 'contact-forms-anti-spam' ),
-			array( $this, 'settings_page_render_settings_field' ),
-			'settings_page_general_settings',
-			'settings_page_general_section',
-			$args
-		);
-unset($args);
-// Lang needed
-	$args = array (
-          'type'      => 'input',
-          'subtype'   => 'select',
-          'id'    => 'lang_needed',
-          'class' => 'lang_needed pro',         
-          'pro' => '1',         
-         'name'      => 'lang_needed',
-          'description'      => __('If you use this field, it will ONLY accept form submissions that contain at least one character of the chosen language.<br>Leave blank if you prefer to forbid certain languages.', 'contact-forms-anti-spam' ),
-          'array' => efas_array_of_lang_needed(),
-      	  'title' =>  __('Beware that requiring Latin languages as an individual (Like: Dutch, French), the check is in the language punctuation letters and letters A to Z (So including English) because sometimes the punctuation letters as not used, Its to prevent false positive.'),
-          'get_options_list' => '',
-          'api'=>'lang_needed',
-          'value_type'=>'normal',
-          'wp_data' => 'option'
-					);
-		add_settings_field(
-			'lang_needed',
-			__("Languages required", 'contact-forms-anti-spam' ),
-			array( $this, 'settings_page_render_settings_field' ),
-			'settings_page_general_settings',
-			'settings_page_general_section',
-			$args
-		);  
-unset($args);
-//lang_forbidden      
-	$args = array (
-          'type'      => 'input',
-          'subtype'   => 'select',
-          'id'    => 'lang_forbidden',
-          'class' => 'lang_forbidden pro',         
-          'pro' => '1',         
-          'title' =>  __('Note that when blocking Latin languages in an individual (such as: Dutch, French), the chack is in the punctuation letters (But they are not always in use). Its to prevent false positive'),
-          'name'      => 'lang_forbidden',
-          'description'      => __('Select the languages you wish to block from filling out your forms.<br>Even one character in the text field from any of these languages will be caught by MASPIK, tagged as spam, and blocked.', 'contact-forms-anti-spam' ),
-          'array' => efas_array_of_lang_forbidden(),
-          'get_options_list' => '',
-          'api'=>'lang_forbidden',
-          'value_type'=>'normal',
-          'wp_data' => 'option'
-					);
-		add_settings_field(
-			'lang_forbidden',
-			__("Languages forbidden", 'contact-forms-anti-spam' ),
-			array( $this, 'settings_page_render_settings_field' ),
-			'settings_page_general_settings',
-			'settings_page_general_section',
-			$args
-		);  
-unset($args);
-// allowed Or block Countries
-	$args = array (
-          'type'      => 'input',
-          'subtype'   => 'radio',
-          'id'    => 'AllowedOrBlockCountries',
-          'pro' => '1',         
-          'api'    => 'AllowedOrBlockCountries',
-          'class' => 'AllowedOrBlockCountries pro', 
-          'name'      => 'AllowedOrBlockCountries',
-          'description'      => __('Choose one of the options above and enter the countries in the next field.
-          <br>If <b>allowed</b>, only forms from these countries will be accepted, if blocked, all countries in the following list will be blocked', 'contact-forms-anti-spam' ),
-          'attr' => false,
-          'array' => array(
-            'block' => 'Block the following countries',
-            'allow' => 'Allow only the following countries',
-          ),
-          'get_options_list' => '',
-          'value_type'=>'normal',
-          'wp_data' => 'option'
-					);
-		add_settings_field(
-			'AllowedOrBlockCountries',
-			__("Countries allowed/blocked:", 'contact-forms-anti-spam' ),
-			array( $this, 'settings_page_render_settings_field' ),
-			'settings_page_general_settings',
-			'settings_page_general_section',
-			$args
-		);  
-unset($args);
-// country field
-	$args = array (
-          'type'      => 'input',
-          'subtype'   => 'select',
-          'id'    => 'country_blacklist',
-          'name'      => 'country_blacklist',
-          'pro' => '1',         
-          'api'      => 'country_blacklist',
-          'description'      => __('You can choose as many as you like.', 'contact-forms-anti-spam' ),
-          'attr' => false,
-          'array' => efas_array_of_countries(),
-          'get_options_list' => '', 
-          'class' => 'country_blacklist pro', 
-          'value_type'=>'normal',
-          'wp_data' => 'option'
-					);
-		add_settings_field(
-			'country_blacklist',
-			__("Allow/block the following countries to allow/block (based on your selection above):", 'contact-forms-anti-spam' ),
-			array( $this, 'settings_page_render_settings_field' ),
-			'settings_page_general_settings',
-			'settings_page_general_section',
-			$args
-		);  
-unset($args);
-//NeedPageurl
-		$args = array (
-          'type'      => 'input',
-          'subtype'   => 'checkbox',
-          'id'    => 'NeedPageurl',
-          'name'      => 'NeedPageurl',
-          'description'=>__('Some of the bots that fill out forms will send a form missing a source URL. If you check this box, any empty source URL forms will be considered to be spam.', 'contact-forms-anti-spam' ),
-          'label'      => 0,          
-          'attr' => false,
-          'api'=>'block_empty_source',
-          'get_options_list' => '',
-          'value_type'=>'normal',
-          'wp_data' => 'option'
-		);
-          add_settings_field(
-              'NeedPageurl',
-              __('Block inquiries devoid of source URL. <small>(Elementor forms only)</small>', 'contact-forms-anti-spam' ),
-              array( $this, 'settings_page_render_settings_field' ),
-              'settings_page_general_settings',
-              'settings_page_general_section',
-              $args
-          );  
-unset($args); 
-//Maspik_human_verification
-/*
-		$args = array (
-          'type'      => 'input',
-          'subtype'   => 'checkbox',
-          'id'    => 'Maspik_human_verification',
-          'name'    => 'Maspik_human_verification',
-          'description'      => __('Bot capture - BETA', 'contact-forms-anti-spam' ),
-          'label'      => 0,          
-          'attr' => false,
-          'api'=>'Maspik_human_verification',
-          'get_options_list' => '',
-          'value_type'=>'normal',
-          'wp_data' => 'option'
-		);
-          add_settings_field(
-              'Maspik_human_verification',
-              __('Maspik human verification', 'contact-forms-anti-spam' ),
-              array( $this, 'settings_page_render_settings_field' ),
-              'settings_page_general_settings',
-              'settings_page_general_section',
-              $args
-          );  
-      */
-//error_message
- unset($args); 
-		$args = array (
-          'type'      => 'input',
-          'subtype'   => 'text',
-          'id'    => 'error_message',
-          'name'      => 'error_message',
-          'description'      => __('Default: "This looks like spam. Try to rephrase, or contact us in an alternative way." <br>You can leave this as the default or rephrase it as you like. This is the error message that the user/spammer will receive.', 'contact-forms-anti-spam' ),
-          'label'      => 0,          
-          'attr' => false,
-          'get_options_list' => '',
-          'value_type'=>'normal',
-          'wp_data' => 'option'
-		);
-		add_settings_field(
-			'error_message',
-			__('Validation error message', 'contact-forms-anti-spam' ),
-			array( $this, 'settings_page_render_settings_field' ),
-			'settings_page_general_settings',
-			'settings_page_general_section',
-			$args
-		);   
-//////
-// List of setting names
-$custom_error_message_by_fields = $this->custom_error_message_by_fields;
-
-// Loop through each setting name
-foreach ($custom_error_message_by_fields as $setting_name) {
-    // Construct unique ID based on setting name
-    $id = 'custom_error_message_' . $setting_name;
-
-    // Configure settings field arguments
-    $args = array(
-        'type'             => 'input',
-        'subtype'          => 'text',
-        'id'               => $id,
-        'name'             => $id, // Use setting name as name
-        'description'      => __('custom error message per field', 'contact-forms-anti-spam'),
-        'label'            => 0,
-        'attr'             => false,
-        'class' => 'hide',         
-        'get_options_list' => '',
-        'print'            => 'no',
-        'value_type'       => 'normal',
-        'wp_data'          => 'option'
-    );
-
-    // Add settings field
-    add_settings_field(
-        $id,
-        __('Validation custom error message per field', 'contact-forms-anti-spam'),
-        array($this, 'settings_page_render_settings_field'),
-        'settings_page_general_settings',
-        'settings_page_general_section',
-        $args
-    );
-}
-     
-unset($args); 
 //spamcounter      
 		$args = array (
           'type'      => 'input',
@@ -657,557 +544,38 @@ unset($args);
 			$args
 		);       
 unset($args);
-      
-//error log      
-		$args = array (
-          'type'      => 'textarea',
-          'subtype'   => 'textarea',
-          'id'    => 'errorlog',
-          'name'      => 'errorlog',
-          'class' => 'hide',         
-          'description'      => '',
-          'attr'      => "style='display:none;'",          
-          'default' => '0',
-          'get_options_list' => '',
-          'value_type'=>'normal',
-          'wp_data' => 'option'
-					);
-		add_settings_field(
-			'errorlog',
-			'',
-			array( $this, 'settings_page_render_settings_field' ),
-			'settings_page_general_settings',
-			'settings_page_general_section',
-			$args
-	);       
-      
-//AbuseIPDB API (Thanks to @josephcy95)
-unset($args);
-$args = array(
-  'type'      => 'input',
-  'subtype'   => 'text',
-  'id'    => 'abuseipdb_api',
-  'name'      => 'abuseipdb_api',
-  'description'      => __('AbuseIPDB.com API (Leave blank to disable)', 'contact-forms-anti-spam'),
-  'label'      => 0,
-  'attr' => false,
-  'get_options_list' => '',
-  'api'=>'abuseipdb_api',
-  'value_type' => 'normal',
-  'wp_data' => 'option'
-);
-add_settings_field(
-  'abuseipdb_api',
-  __('AbuseIPDB API', 'contact-forms-anti-spam'),
-  array($this, 'settings_page_render_settings_field'),
-  'settings_page_general_settings',
-  'settings_page_general_section',
-  $args
-);
 
-// AbuseIPDB Score Threshold
-unset($args);
-$args = array(
-  'type'      => 'input',
-  'subtype'   => 'number',
-  'id'    => 'abuseipdb_score',
-  'name'      => 'abuseipdb_score',
-  'api'=>'abuseipdb_score',
-  'description'      => __('Recommend not lower than 25 for less false positives.', 'contact-forms-anti-spam'),
-  'atter' => false,
-  'min' => '0',
-  'max' => '100',
-  'step' => '1',
-  'value_type' => 'normal',
-  'wp_data' => 'option'
-);
-add_settings_field(
-  'abuseipdb_score',
-  __('AbuseIPDB Risk Threshold', 'contact-forms-anti-spam'),
-  array($this, 'settings_page_render_settings_field'),
-  'settings_page_general_settings',
-  'settings_page_general_section',
-  $args
-);
 
-// Proxycheck.io API
-unset($args);
-$args = array(
-  'type'      => 'input',
-  'subtype'   => 'text',
-  'id'    => 'proxycheck_io_api',
-  'api'=>'proxycheck_io_api',
-  'name'      => 'proxycheck_io_api',
-  'description'      => __('Proxycheck.io API (Leave blank to disable)', 'contact-forms-anti-spam'),
-  'label'      => 0,
-  'attr' => false,
-  'get_options_list' => '',
-  'value_type' => 'normal',
-  'wp_data' => 'option'
-);
-add_settings_field(
-  'proxycheck_io_api',
-  __('Proxycheck.io API', 'contact-forms-anti-spam'),
-  array($this, 'settings_page_render_settings_field'),
-  'settings_page_general_settings',
-  'settings_page_general_section',
-  $args
-);
 
-// Proxycheck.io Risk Score
-unset($args);
-$args = array(
-  'type'      => 'input',
-  'subtype'   => 'number',
-  'api'=>'proxycheck_io_risk',
-  'id'    => 'proxycheck_io_risk',
-  'name'      => 'proxycheck_io_risk',
-  'description'      => __('Low risk 0-33, MidHigh risk = 33-66, Dangerous = 66 Above', 'contact-forms-anti-spam'),
-  'atter' => false,
-  'min' => '0',
-  'max' => '100',
-  'step' => '1',
-  'value_type' => 'normal',
-  'wp_data' => 'option'
-);
-add_settings_field(
-  'proxycheck_io_risk',
-  __('Proxycheck.io Risk Threshold', 'contact-forms-anti-spam'),
-  array($this, 'settings_page_render_settings_field'),
-  'settings_page_general_settings',
-  'settings_page_general_section',
-  $args
-);
-//
-unset($args);       
-//Pro
-//to active API license files?
-/*
+
+    //Store log 
         $args = array (
             'type'      => 'input',
-            'subtype'   => 'checkbox',
-            'id'    => 'remove_pro_option',
-            'name'      => 'remove_pro_option',
-            'description'      => __('<b>For old version of PHP ( version  = < 6 ).</b>', 'contact-forms-anti-spam' ),
+            'subtype'   => 'radio',
+            'id'    => 'maspik_Store_log',
+            'name'      => 'maspik_Store_log',
+            'description'      => __('If disabled, the Log of the blocked spam will not be saved.', 'contact-forms-anti-spam' ),
             'label'      => 0,
             'attr' => false,
-            'get_options_list' => '',
-            'value_type'=>'normal',
-            'wp_data' => 'option'
-        );
-        add_settings_field(
-            'remove_pro_option',
-            __('Do you want to Disactivate the API/Pro options?', 'contact-forms-anti-spam' ),
-            array( $this, 'settings_page_render_settings_field' ),
-            'settings_page_pro_settings_page',
-            'settings_page_pro_section',
-            $args
-        );
-        unset($args);
-*/
-
-// $popular_spam
-		$args = array (
-          'type'      => 'input',
-          'subtype'   => 'checkbox',
-          'id'    => 'popular_spam',
-          'name'      => 'popular_spam',
-          'description'      => __('Popular spam words from <a target="_blank" href="https://wpmaspik.com/public-api/">Maspik public API</a><br>If Maspik pro available.', 'contact-forms-anti-spam' ),
-          'label'      => 0,          
-          'attr' => false,
-          'get_options_list' => '',
-          'value_type'=>'normal',
-          'wp_data' => 'option'
-		);
-		add_settings_field(
-			'popular_spam',
-			__('Automatically adding spam phrases from the MASPIK API (BETA)', 'contact-forms-anti-spam' ),
-			array( $this, 'settings_page_render_settings_field' ),
-			'settings_page_pro_settings_page',
-			'settings_page_pro_section',
-			$args
-		);   
-unset($args); 
-
-//Privet API file (Post ID)
-
-		$args = array (
-          'type'      => 'input',
-          'subtype'   => 'text', 
-          'id'    => 'private_file_id',
-          'name'      => 'private_file_id',
-          'description'      => __('After you create an API file, you will see an ID number on the API page.<br>For example: 62 (Only one ID)', 'contact-forms-anti-spam' ),
-          'label'      => 0,          
-          'attr' => false,
-          'get_options_list' => '',
-          'value_type'=>'normal',
-          'wp_data' => 'option'
-		);
-		add_settings_field(
-			'private_file_id',
-			__('The ID of the API you create', 'contact-forms-anti-spam' ),
-			array( $this, 'settings_page_render_settings_field' ),
-			'settings_page_pro_settings_page',
-			'settings_page_pro_section',
-			$args
-		);   
-unset($args); 
-
-////////////////////////options page
-//support Elementor forms 
-        $args = array (
-            'type'      => 'input',
-            'subtype'   => 'radio',
-            'id'    => 'maspik_support_Elementor_forms',
-            'name'      => 'maspik_support_Elementor_forms',
-            'description'      => __('If plugin is active and Maspik pro available.', 'contact-forms-anti-spam' ),
-            'label'      => 0,
-          	'depends' => 'elementor-pro',
-            'array' => array(
-              'yes' => 'Support',
-              'no' => "Don't support",
-            ),
-            'default' => 1,
-            'get_options_list' => '',
-            'value_type'=>'normal',
-            'wp_data' => 'option'
-        );
-        add_settings_field(
-            'maspik_support_Elementor_forms',
-            __('Support Elementor forms', 'contact-forms-anti-spam' ),
-            array( $this, 'settings_page_render_settings_field' ),
-            'settings_page_option_settings_page',
-            'settings_page_option_section',
-            $args
-        );
-        unset($args);
-//support CF7 
-        $args = array (
-            'type'      => 'input',
-            'subtype'   => 'radio',
-            'id'    => 'maspik_support_cf7',
-            'name'      => 'maspik_support_cf7',
-            'description'      => __('If plugin is active.', 'contact-forms-anti-spam' ),
-            'label'      => 0,
-          	'depends' => "contact-form-7",
-            'array' => array(
-              'yes' => 'Support',
-              'no' => "Don't support",
-            ),
-            'default' => 1,
-            'get_options_list' => '',
-            'value_type'=>'normal',
-            'wp_data' => 'option'
-        );
-        add_settings_field(
-            'maspik_support_cf7',
-            __('Support Contact from 7', 'contact-forms-anti-spam' ),
-            array( $this, 'settings_page_render_settings_field' ),
-            'settings_page_option_settings_page',
-            'settings_page_option_section',
-            $args
-        );
-        unset($args);
-      
-//support wp comment
-        $args = array (
-            'type'      => 'input',
-            'subtype'   => 'radio',
-            'id'    => 'maspik_support_wp_comment',
-            'name'      => 'maspik_support_wp_comment',
-            'description'      => __('', 'contact-forms-anti-spam' ),
-            'label'      => 0,
-          	'depends' => 1,
-            'array' => array(
-              'yes' => 'Support',
-              'no' => "Don't support",
-            ),
-            'default' => 1,
-            'get_options_list' => '',
-            'value_type'=>'normal',
-            'wp_data' => 'option'
-        );
-        add_settings_field(
-            'maspik_support_wp_comment',
-            __('Support wp comment', 'contact-forms-anti-spam' ),
-            array( $this, 'settings_page_render_settings_field' ),
-            'settings_page_option_settings_page',
-            'settings_page_option_section',
-            $args
-        );
-        unset($args);
-//support Wp Registration
-        $args = array (
-            'type'      => 'input',
-            'subtype'   => 'radio',
-            'id'    => 'maspik_support_registration',
-            'name'      => 'maspik_support_registration',
-            'description'      => __('If Anyone can register is checked (At WP Options =>  General).', 'contact-forms-anti-spam' ),
-            'label'      => 0,
-          	'depends' => 'Wordpress Registration',
-            'array' => array(
-              'yes' => 'Support',
-              'no' => "Don't support",
-            ),
-            'default' => 1,
-            'get_options_list' => '',
-            'value_type'=>'normal',
-            'wp_data' => 'option'
-        );
-        add_settings_field(
-            'maspik_support_registration',
-            __('Support wp Registration', 'contact-forms-anti-spam' ),
-            array( $this, 'settings_page_render_settings_field' ),
-            'settings_page_option_settings_page',
-            'settings_page_option_section',
-            $args
-        );
-        unset($args);
-//support woocommerce review
-        $args = array (
-            'type'      => 'input',
-            'subtype'   => 'radio',
-            'id'    => 'maspik_support_woocommerce_review',
-            'name'      => 'maspik_support_woocommerce_review',
-            'description'      => __('If woocommerce is active and Maspik pro available.', 'contact-forms-anti-spam' ),
-            'label'      => 0,
-          	'depends' => 'woocommerce',
-            'array' => array(
-              'yes' => 'Support',
-              'no' => "Don't support",
-            ),
-            'default' => 1,
-            'get_options_list' => '',
-            'value_type'=>'normal',
-            'wp_data' => 'option'
-        );
-        add_settings_field(
-            'maspik_support_woocommerce_review',
-            __('Support woocommerce review', 'contact-forms-anti-spam' ),
-            array( $this, 'settings_page_render_settings_field' ),
-            'settings_page_option_settings_page',
-            'settings_page_option_section',
-            $args
-        );
-        unset($args);
-//support Woocommerce Registration
-        $args = array (
-            'type'      => 'input',
-            'subtype'   => 'radio',
-            'id'    => 'maspik_support_Woocommerce_registration',
-            'name'      => 'maspik_support_Woocommerce_registration',
-            'description'      => __('If Woocommerce is active and Maspik pro available.', 'contact-forms-anti-spam' ),
-            'label'      => 0,
-          	'depends' => 'woocommerce',
-            'array' => array(
-              'yes' => 'Support',
-              'no' => "Don't support",
-            ),
-            'default' => 1,
-            'get_options_list' => '',
-            'value_type'=>'normal',
-            'wp_data' => 'option'
-        );
-        add_settings_field(
-            'maspik_support_Woocommerce_registration',
-            __('Support Woocommerce Registration', 'contact-forms-anti-spam' ),
-            array( $this, 'settings_page_render_settings_field' ),
-            'settings_page_option_settings_page',
-            'settings_page_option_section',
-            $args
-        );
-        unset($args);
-//support Wpforms 
-        $args = array (
-            'type'      => 'input',
-            'subtype'   => 'radio',
-            'id'    => 'maspik_support_Wpforms',
-            'name'      => 'maspik_support_Wpforms',
-            'description'      => __('If Wpforms is active and Maspik pro available.', 'contact-forms-anti-spam' ),
-            'label'      => 0,
-          	'depends' => 'wpforms',
-            'array' => array(
-              'yes' => 'Support',
-              'no' => "Don't support",
-            ),
-            'default' => 1,
-            'get_options_list' => '',
-            'value_type'=>'normal',
-            'wp_data' => 'option'
-        );
-        add_settings_field(
-            'maspik_support_Wpforms',
-            __('Support Wpforms', 'contact-forms-anti-spam' ),
-            array( $this, 'settings_page_render_settings_field' ),
-            'settings_page_option_settings_page',
-            'settings_page_option_section',
-            $args
-        );
-        unset($args);
-    //maspik_support_formidabley_forms
-        $args = array (
-            'type'      => 'input',
-            'subtype'   => 'radio',
-            'id'    => 'maspik_support_formidable_forms',
-            'name'      => 'maspik_support_formidable_forms',
-            'description'      => __('If Formidable is active.', 'contact-forms-anti-spam' ),
-            'label'      => 0,
-          	'depends' => 'formidable',
-            'array' => array(
-              'yes' => 'Support',
-              'no' => "Don't support",
-            ),
-            'default' => 1,
-            'get_options_list' => '',
-            'value_type'=>'normal',
-            'wp_data' => 'option'
-        );
-        add_settings_field(
-            'maspik_support_formidable_forms',
-            __('Support Formidable', 'contact-forms-anti-spam' ),
-            array( $this, 'settings_page_render_settings_field' ),
-            'settings_page_option_settings_page',
-            'settings_page_option_section',
-            $args
-        );
-        unset($args);
-    //maspik_support_forminator_forms
-        $args = array (
-            'type'      => 'input',
-            'subtype'   => 'radio',
-            'id'    => 'maspik_support_forminator_forms',
-            'name'      => 'maspik_support_forminator_forms',
-            'description'      => __('If Forminator is active.', 'contact-forms-anti-spam' ),
-            'label'      => 0,
-          	'depends' => 'forminator',
-            'array' => array(
-              'yes' => 'Support',
-              'no' => "Don't support",
-            ),
-            'default' => 1,
-            'get_options_list' => '',
-            'value_type'=>'normal',
-            'wp_data' => 'option'
-        );
-        add_settings_field(
-            'maspik_support_forminator_forms',
-            __('Support Forminator', 'contact-forms-anti-spam' ),
-            array( $this, 'settings_page_render_settings_field' ),
-            'settings_page_option_settings_page',
-            'settings_page_option_section',
-            $args
-        );
-        unset($args);
-    //maspik_support_forminator_forms
-        $args = array (
-            'type'      => 'input',
-            'subtype'   => 'radio',
-            'id'    => 'maspik_support_fluentforms_forms',
-            'name'      => 'maspik_support_fluentforms_forms',
-            'description'      => __('If Fluentforms is active.', 'contact-forms-anti-spam' ),
-            'label'      => 0,
-          	'depends' => 'fluentforms',
-            'array' => array(
-              'yes' => 'Support',
-              'no' => "Don't support",
-            ),
-            'default' => 1,
-            'get_options_list' => '',
-            'value_type'=>'normal',
-            'wp_data' => 'option'
-        );
-        add_settings_field(
-            'maspik_support_fluentforms_forms',
-            __('Support Fluentforms', 'contact-forms-anti-spam' ),
-            array( $this, 'settings_page_render_settings_field' ),
-            'settings_page_option_settings_page',
-            'settings_page_option_section',
-            $args
-        );
-        unset($args);
-    //maspik_support_forminator_forms
-        $args = array (
-            'type'      => 'input',
-            'subtype'   => 'radio',
-            'id'    => 'maspik_support_bricks_forms',
-            'name'      => 'maspik_support_bricks_forms',
-            'description'      => __('If theme is Bricks.', 'contact-forms-anti-spam' ),
-            'label'      => 0,
-          	'depends' => 'bricks',
-            'array' => array(
-              'yes' => 'Support',
-              'no' => "Don't support",
-            ),
-            'default' => 1,
-            'get_options_list' => '',
-            'value_type'=>'normal',
-            'wp_data' => 'option'
-        );
-        add_settings_field(
-            'maspik_support_bricks_forms',
-            __('Support Bricks forms', 'contact-forms-anti-spam' ),
-            array( $this, 'settings_page_render_settings_field' ),
-            'settings_page_option_settings_page',
-            'settings_page_option_section',
-            $args
-        );
-        unset($args);
-//support gravity forms 
-        $args = array (
-            'type'      => 'input',
-            'subtype'   => 'radio',
-            'id'    => 'maspik_support_gravity_forms',
-            'name'      => 'maspik_support_gravity_forms',
-            'description'      => __('If Gravity_forms is active and Maspik pro available.', 'contact-forms-anti-spam' ),
-            'label'      => 0,
-            'attr' => false,
-          	'depends' => 'gravityforms',
             'default' => 'yes',
             'array' => array(
-              'yes' => 'Support',
-              'no' => "Don't support",
+            'yes' => 'Save spam Log (Only last 100 blockages)',
+            'no' => "Disable Spam Log",
             ),
             'get_options_list' => '',
             'value_type'=>'normal',
             'wp_data' => 'option'
         );
         add_settings_field(
-            'maspik_support_gravity_forms',
-            __('Support Gravity Forms', 'contact-forms-anti-spam' ),
+            'maspik_Store_log',
+            __('Spam Log', 'contact-forms-anti-spam' ),
             array( $this, 'settings_page_render_settings_field' ),
             'settings_page_option_settings_page',
             'settings_page_option_section',
             $args
         );
         unset($args);
- //Store log 
-      $args = array (
-        'type'      => 'input',
-        'subtype'   => 'radio',
-        'id'    => 'maspik_Store_log',
-        'name'      => 'maspik_Store_log',
-        'description'      => __('If disabled, the Log of the blocked spam will not be saved.', 'contact-forms-anti-spam' ),
-        'label'      => 0,
-        'attr' => false,
-        'default' => 'yes',
-        'array' => array(
-          'yes' => 'Save spam Log (Only last 100 blockages)',
-          'no' => "Disable Spam Log",
-        ),
-        'get_options_list' => '',
-        'value_type'=>'normal',
-        'wp_data' => 'option'
-      );
-      add_settings_field(
-        'maspik_Store_log',
-        __('Spam Log', 'contact-forms-anti-spam' ),
-        array( $this, 'settings_page_render_settings_field' ),
-        'settings_page_option_settings_page',
-        'settings_page_option_section',
-        $args
-      );
- unset($args);
- //add_country_to_emails    
+    //add_country_to_emails    
 		$args = array (
           'type'      => 'input',
           'subtype'   => 'checkbox',
@@ -1229,15 +597,15 @@ unset($args);
               'settings_page_option_section',
               $args
           );  
-unset($args);       
-//Disable comments 
+        unset($args);       
+    //Disable comments 
 		$args = array (
           'type'      => 'input',
           'subtype'   => 'checkbox',
           'id'    => 'disable_comments',
           'name'      => 'disable_comments',
           'description'=> __('Disable comments on *ALL* types of posts and remove/hide any existing comments from displaying, as well as hiding the comment forms.<br>
-If you check this box comments will be disable.', 'contact-forms-anti-spam' ),
+            If you check this box comments will be disable.', 'contact-forms-anti-spam' ),
           'label'      => 0,          
           'attr' => false,
           'api'=>'disable_comments',
@@ -1254,82 +622,9 @@ If you check this box comments will be disable.', 'contact-forms-anti-spam' ),
               $args
           );  
 
- unset($args); 
- //shere_data 
-      $args = array (
-        'type'      => 'input',
-        'subtype'   => 'checkbox',
-        'id'    => 'shere_data',
-        'name'      => 'shere_data',
-        'description'=> __('By allowing us to track usage data, we can better help you by knowing which WordPress configurations, themes, and plugins to test and which options are needed.', 'contact-forms-anti-spam' ),
-        'label'      => 0,          
-        'attr' => false,
-        'api'=>'shere_data',
-        'get_options_list' => '',
-        'value_type'=>'normal',
-        'wp_data' => 'option'
-      );
-      add_settings_field(
-        'shere_data',
-        __('Allow usage tracking', 'contact-forms-anti-spam' ),
-        array( $this, 'settings_page_render_settings_field' ),
-        'settings_page_option_settings_page',
-        'settings_page_option_section',
-        $args
-      );  
-unset($args); 
-   
-/*
-//Public API file      
-		$args = array (
-          'type'      => 'input',
-          'subtype'   => 'checkbox',
-          'id'    => 'public_file',
-          'name'      => 'public_file',
-          'description'      => __('A black list file with common spam words', 'contact-forms-anti-spam' ),
-          'label'      => 0,          
-          'attr' => false,
-          'get_options_list' => '',
-          'value_type'=>'normal',
-          'wp_data' => 'option'
-		);
-		add_settings_field(
-			'public_file',
-			__('Do you wanna use the Public API file?', 'contact-forms-anti-spam' ),
-			array( $this, 'settings_page_render_settings_field' ),
-			'settings_page_pro_settings_page',
-			'settings_page_pro_section',
-			$args
-		);   
+         unset($args); 
 
-*/
 
-        $general_settings_array = array (
-            'abuseipdb_api',
-            'abuseipdb_score',
-            'proxycheck_io_api',
-            'proxycheck_io_risk',
-            'text_blacklist',
-            'MaxCharactersInTextField',
-            'emails_blacklist',
-            'textarea_blacklist',
-            'contain_links',
-            'lang_needed',
-            'lang_forbidden',
-            'ip_blacklist',
-            'AllowedOrBlockCountries',
-            'country_blacklist',
-            'NeedPageurl',
-            'error_message',
-            //'custom_error_message',
-            //'custom_error_message_MaxCharactersInTextField',
-            //'custom_error_message_lang_needed',
-            //'custom_error_message_lang_forbidden',
-            //'custom_error_message_tel_formats',
-            //'custom_error_message_country_blacklist',
-            //'custom_error_message_contain_links',
-            'tel_formats'
-        );
 
         $option_settings_array = array (
             'maspik_support_Elementor_forms',
@@ -1356,15 +651,6 @@ unset($args);
             'public_file'
         );
 
-        $pro_settings_array = array (
-            'popular_spam',
-            'private_file_id',
-            'public_file'
-        );
-
-        foreach ($general_settings_array as $setting) {
-            register_setting('settings_page_general_settings_page', $setting, array( 'sanitize_callback' => array( $this, 'maspik_settings_sanitize_callback' ) ) );
-        }
 
         foreach ($option_settings_array as $setting) {
             register_setting('settings_page_option_settings_page', $setting, array( 'sanitize_callback' => array( $this, 'maspik_settings_sanitize_callback' ) ) );
@@ -1382,16 +668,18 @@ unset($args);
 	public function settings_page_display_general_account() {
 		//echo '<p>These settings apply to all Plugin Name functionality.</p>';
 	} 
-  	public function settings_page_display_bonus_text() {
 
-	} 
-    public function settings_page_render_settings_field($args) {   
+
+
+    public function settings_page_render_settings_field($args) {  
+         
         if($args['wp_data'] == 'option'){
             $wp_data_value = get_option($args['name']);
         } elseif($args['wp_data'] == 'post_meta'){
             $wp_data_value = get_post_meta($args['post_id'], $args['name'], true );
         }
         $description = (isset($args['description'])) ? $args['description'] : '';
+        $tooltip = (isset($args['tooltip'])) ? $args['tooltip'] : '';
         $placeholder = (isset($args['placeholder'])) ? 'placeholder="'.$args['placeholder'].'"' : '';
         $value = ($args['value_type'] == 'serialized') ? serialize($wp_data_value) : $wp_data_value;
         $attr = isset($args['attr']) ? $args['attr'] : "";
@@ -1408,6 +696,20 @@ unset($args);
         $id = $args['id'];
         $custom_error_id = "custom_error_message_$id";
         
+        if( ($tooltip) /*&& !$not_print*/){
+            echo '<div class="maspik-tooltip"><span class="dashicons dashicons-info maspik-tooltip"></span><span class="maspik-tooltiptxt">'. $tooltip;
+            echo "</span></div>"; // end .btns OR validation-box 
+        } // 
+        
+        // Example Button
+        if( ($have_example) /*&& !$not_print*/){
+            echo "<div class='maspik-small-btn btns'>";
+                
+            echo "<a class='your-button-class' data-array='$have_example' data-title='$subject' href='#' data-popup-id='popup-id'><span class='dashicons dashicons-visibility'></span> See examples</a>";
+            
+            echo "</div>"; // end .btns OR validation-box 
+        } //  
+
         if( isset($args['title']) ){
             echo "<h4>".$args['title']."</h4>" ;
         }
@@ -1483,12 +785,9 @@ unset($args);
                 break;
         }
         //echo "</div></div>";
-        if( ($have_example || $have_custom_error_message) /*&& !$not_print*/){
+
+        if( ($have_custom_error_message) ){
             echo "<div class='btns'>";
-            if($have_example){
-                
-                echo "<a class='your-button-class' data-array='$have_example' data-title='$subject' href='#' data-popup-id='popup-id'><span class='dashicons dashicons-visibility'></span> See examples</a>";
-            }
             if($have_custom_error_message){
                 $custom_error_message_value =  esc_html( get_option("$custom_error_id") );
                     echo "<a class='custom-validation-trigger'><span class='dashicons dashicons-edit'></span>  Create custom Validation error message for this option</a>";
@@ -1521,3 +820,4 @@ unset($args);
     } // render_settings_field
 
 }
+

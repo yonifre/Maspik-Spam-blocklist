@@ -9,10 +9,22 @@ $statusText = $statusCode === $license::STATUS_MISSING_LICENSE_KEY ? __( 'Not Ac
 <div id="dlm_license_form" class="2">
     <div class="dlm_license_form_head">
         <div id="dlm_license_branding">
-			<?php if ( ! empty( $configuration->logo ) ): ?>
-                <div id="logo"><img alt="logo" src="<?php echo esc_url( $configuration->logo ); ?>"></div>
-			<?php endif; ?>
-            <h2 id="tagline"><?php echo esc_html( $configuration->name ); ?></h2>
+        <div class= "maspik-setting-header">
+            <div class="notice-pointer"><h2></h2></div>
+                <?php 
+                echo "<div class='upsell-btn " . maspik_add_pro_class() . "'>";
+                maspik_get_pro();
+                echo "</div>";
+                            
+                ?>
+                <div class="maspik-setting-header-wrap">
+            <h1 class="maspik-title">MASPIK.</h1>
+            <?php
+                echo '<h3 class="maspik-protag '. maspik_add_pro_class() .'">Pro</h3>';
+            ?>
+        </div> 
+    
+</div>
         </div>
         <div id="dlm_license_status">
             <span class="label"><?php _e( 'License Status' ); ?></span>

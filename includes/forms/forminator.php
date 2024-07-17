@@ -68,7 +68,7 @@ function maspik_validate_forminator_general($submit_errors, $form_id, $field_dat
             $message = isset($checkTelForSpam['message']) ? $checkTelForSpam['message'] : 0 ;  
             if(!$valid) {
                 $message = $checkTelForSpam['message'];
-                efas_add_to_log($type = "tel","Telephone number $field_value not feet the given format ($reason)", $_POST, "Forminator");
+                efas_add_to_log($type = "tel", $reason, $_POST, "Forminator");
                 $submit_errors[][$field_id] = cfas_get_error_text($message);
                 return $submit_errors;
             }

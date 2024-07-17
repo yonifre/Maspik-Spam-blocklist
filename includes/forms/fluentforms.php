@@ -85,7 +85,7 @@ function maspik_validate_fluentforms_tel($errorMessage, $field, $formData, $fiel
     $message = isset($checkTelForSpam['message']) ? $checkTelForSpam['message'] : 0 ;  
 
   	if(!$valid){
-        efas_add_to_log($type = "tel","Phone number $field_value not feet the given format ($reason)", $formData, "Fluent Forms");
+        efas_add_to_log($type = "tel",$reason , $formData, "Fluent Forms");
         $errorMessage = cfas_get_error_text($message);  
     } 
 
@@ -120,7 +120,7 @@ add_filter('fluentform/validate_input_item_textarea', 'maspik_validate_fluentfor
 // maspik_add_text_to_mail_components fluentforms
 add_filter('fluentform/email_template_footer_text', 'maspik_add_text_to_mail_fluentforms', 10, 3);
 function maspik_add_text_to_mail_fluentforms($footerText, $form, $notification) {
-  $add_country_to_emails = get_option( 'add_country_to_emails' );
+  $add_country_to_emails = maspik_get_settings("add_country_to_emails", '', 'old')  == "yes";
   if($footerText && $add_country_to_emails){
      $countryName = maspik_add_country_to_submissions($linebreak = "");
      $footerText = $footerText.$countryName;

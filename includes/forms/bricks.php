@@ -59,7 +59,7 @@ function maspik_validate_bricks_form($errors, $form) {
             $valid = isset($checkTelForSpam['valid']) ? $checkTelForSpam['valid'] : "yes" ;   
             $message = isset($checkTelForSpam['message']) ? $checkTelForSpam['message'] : 0 ;  
             if(!$valid) {
-                efas_add_to_log($type = "tel","Phone number $field_value not feet the given format ($reason)", $values, "Bricks");
+                efas_add_to_log($type = "tel", $reason , $values, "Bricks");
                 $errors[] = cfas_get_error_text($message);
                 return $errors;
             }

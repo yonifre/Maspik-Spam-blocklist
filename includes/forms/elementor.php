@@ -26,8 +26,8 @@ function efas_validation_process ( $record, $ajax_handler ) {
 
   $NeedPageurl =  get_option( 'NeedPageurl' ) ;   
   
-  if ( efas_get_spam_api('block_empty_source') ){
-    $NeedPageurl = $NeedPageurl ? $NeedPageurl : efas_get_spam_api('block_empty_source')[0];
+  if ( efas_get_spam_api('NeedPageurl') ){
+    $NeedPageurl = $NeedPageurl ? $NeedPageurl : efas_get_spam_api('block_empty_source',"bool");
   }
 
 
@@ -107,7 +107,7 @@ add_action( 'elementor_pro/forms/validation/tel', function( $field, $record, $aj
     $message = isset($checkTelForSpam['message']) ? $checkTelForSpam['message'] : 0 ;  
     
     if(!$valid){
-      efas_add_to_log($type = "tel","Phone number '$field_value' not feet the given format ($reason)",$_POST['form_fields']);
+      efas_add_to_log($type = "tel",$reason ,$_POST['form_fields']);
       $ajax_handler->add_error( $field['id'], cfas_get_error_text( $message) );
     }
     
@@ -134,7 +134,7 @@ add_action( 'elementor_pro/forms/validation/textarea', function( $field, $record
 }, 10, 3 );
 
 add_filter( 'elementor_pro/forms/wp_mail_message', function( $content ) {
-  $add_country_to_emails = get_option( 'add_country_to_emails' );
+  $add_country_to_emails = maspik_get_settings("add_country_to_emails", '', 'old')  == "yes";
   if( $content && $add_country_to_emails ){
     $countryName = maspik_add_country_to_submissions($linebreak = "<br>");
      return $content.$countryName;

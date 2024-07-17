@@ -106,14 +106,17 @@ function efas_cf7_tel_validation_filter($result,$tag){
   	$checkTelForSpam = checkTelForSpam($field_value);
  	$reason = isset($checkTelForSpam['reason']) ? $checkTelForSpam['reason'] : 0 ;      
  	$valid = isset($checkTelForSpam['valid']) ? $checkTelForSpam['valid'] : "yes" ;   
-    $message = isset($checkTelForSpam['message']) ? $checkTelForSpam['message'] : 0 ;  
+    $message = isset($checkTelForSpam['message']) ? $checkTelForSpam['message'] : 0 ;
+   // $condition = isset($checkTelForSpam['condition']) ? $checkTelForSpam['condition'] : 0 ;
+
+  
 
   	if(!$valid){
         $post_entrys = array_filter($_POST, function($key) {
             return strpos($key, '_wpcf7') === false;
             }, ARRAY_FILTER_USE_KEY);
-        $error_message = cfas_get_error_text($message);  
-        efas_add_to_log($type = "tel","Telephone number $field_value not feet the given format ", $post_entrys, "Contact from 7");
+        $error_message = cfas_get_error_text($message); 
+        efas_add_to_log($type = "tel", $reason , $post_entrys, "Contact from 7");
         $result['valid'] = false;
         $result->invalidate( $tag, $error_message );
     } 
@@ -156,7 +159,7 @@ add_filter('wpcf7_validate_textarea*', 'efas_cf7_textarea_validation_filter', 10
 
 // maspik_add_text_to_mail_components
 function maspik_add_text_to_mail_components( $components, $number ) {
-  $add_country_to_emails = get_option( 'add_country_to_emails' );
+  $add_country_to_emails = maspik_get_settings("add_country_to_emails", '', 'old')  == "yes";
   if($components && $add_country_to_emails){
      $countryName = maspik_add_country_to_submissions($linebreak = "");
 	 $body = $components['body'];

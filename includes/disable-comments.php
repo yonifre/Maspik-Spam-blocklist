@@ -7,8 +7,8 @@ if ( ! defined( 'WPINC' ) ) {
  Completely Disable Comments 
 *****/
 
-
 add_action('admin_init', function () {
+
     // Redirect any user trying to access comments page
     global $pagenow;
      

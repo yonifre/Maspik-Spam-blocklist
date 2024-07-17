@@ -76,26 +76,33 @@ class Maspik {
       * Forms functions
       */
 
+	  // Ninja-Forms
+      if( maspik_get_settings( "maspik_support_ninjaforms" ) != "no" ){ 
+        if ( maspik_is_plugin_active( 'ninja-forms/ninja-forms.php' ) ) {
+          require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/forms/ninjaforms.php';
+		}
+	}
+
       // wp-general
       	require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/forms/wp-general.php';
 
       	require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/forms/playground.php';
       
-      if( get_option( "maspik_support_Elementor_forms" ) != "no"  ){
+      if( maspik_get_settings( "maspik_support_Elementor_forms" ) != "no"  ){
 	// if elementor pro active
         if ( maspik_is_plugin_active( 'elementor-pro/elementor-pro.php' ) ) {
           require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/forms/elementor.php';
         }
       }
     // if cf7 active
-      if( get_option( "maspik_support_cf7" ) != "no" ){
+      if( maspik_get_settings( "maspik_support_cf7" ) != "no" ){
         if ( maspik_is_plugin_active( 'contact-form-7/wp-contact-form-7.php' ) ) {
           require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/forms/cf7.php';
         }
       }
 
 	  //wpforms
-      if( get_option( "maspik_support_Wpforms" ) != "no" ){
+      if( maspik_get_settings( "maspik_support_Wpforms" ) != "no" ){
         if (
             (  maspik_is_plugin_active( 'wpforms-lite/wpforms.php' )|| maspik_is_plugin_active( 'wpforms/wpforms.php' ))
              && cfes_is_supporting() ) {
@@ -104,47 +111,49 @@ class Maspik {
       }
 
 	  // Gravity Forms
-      if( get_option( "maspik_support_gravity_forms" ) != "no" ){
+      if( maspik_get_settings( "maspik_support_gravity_forms" ) != "no" ){
         if ( maspik_is_plugin_active( 'gravityforms/gravityforms.php' ) && cfes_is_supporting() ) {
           require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/forms/gravityforms.php';
         }
       }
 
 	  //  Formidable hook file
-      if( get_option( "maspik_support_formidable_forms" ) != "no" ){ 
+      if( maspik_get_settings( "maspik_support_formidable_forms" ) != "no" ){ 
         if ( maspik_is_plugin_active( 'formidable/formidable.php' ) ) {
           require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/forms/formidable.php';
         }
       }
         
       //Forminator-hooks.php
-      if( get_option( "maspik_support_forminator_forms" ) != "no" ){ 
+      if( maspik_get_settings( "maspik_support_forminator_forms" ) != "no" ){ 
         if ( maspik_is_plugin_active( 'forminator/forminator.php' ) ) {
           require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/forms/forminator.php';
         }
       }
 
       //fluentforms-hooks.php
-      if( get_option( "maspik_support_fluentforms_forms" ) != "no" ){ 
+      if( maspik_get_settings( "maspik_support_fluentforms_forms" ) != "no" ){ 
         if ( maspik_is_plugin_active( 'fluentform/fluentform.php' ) ) {
           require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/forms/fluentforms.php';
         }
       }
 
       //Bricks-hooks.php
-      if( get_option( "maspik_support_bricks_forms" ) != "no" ){ 
+      if( maspik_get_settings( "maspik_support_bricks_forms" ) != "no" ){ 
         if ( maspik_if_bricks_exist() ) {
           require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/forms/bricks.php';
         }
       }
         
       // Disable Comments
-      if( get_option( "disable_comments" ) ) { 
+      if( maspik_get_settings("disable_comments", '', 'old') == "yes"  ) { 
           require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/disable-comments.php';
       }
+
+	  
       
       // If agree to shere Non sensitive information 
-      if( get_option( "shere_data" ) ) { 
+      if( maspik_get_settings("shere_data", '', 'old') == "yes"  ) { 
           require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/statistics-data.php';
       }
 

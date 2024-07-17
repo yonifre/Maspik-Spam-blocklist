@@ -43,6 +43,7 @@ if ( ! class_exists( 'Maspik_License_Checker' ) ) {
  */
 if ( ! function_exists( 'maspik_license_checker' ) ) {
 	function maspik_license_checker() {
+
 		static $checker;
 
 		if ( ! $checker ) {
@@ -63,7 +64,7 @@ if ( ! function_exists( 'maspik_license_checker' ) ) {
 					'capaibility' => 'manage_options',
 				],
 				'cron'           => [
-					'interval' => 'hourly',
+					'interval' => 'twicedaily',
 				]
 			] );
 		}

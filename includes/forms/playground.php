@@ -6,10 +6,10 @@ if ( ! defined( 'WPINC' ) ) {
 
 // Playground Form
 
-add_action('wp_ajax_handle_contact_form', 'handle_contact_form');
-add_action('wp_ajax_nopriv_handle_contact_form', 'handle_contact_form');
+add_action('wp_ajax_maspik_handle_playground_form', 'maspik_handle_playground_form');
+add_action('wp_ajax_nopriv_maspik_handle_playground_form', 'maspik_handle_playground_form');
 
-function handle_contact_form() {
+function maspik_handle_playground_form() {
     
 
     //check_ajax_referer('contact_form_nonce', 'nonce');
@@ -59,7 +59,7 @@ function handle_contact_form() {
          $tel_spam = checkTelForSpam($tel);  
          $tel_spam_reason = $tel_spam['reason'];      
          $tel_spam_valid = $tel_spam['valid'];   
-         $tel_spam = $tel_spam_valid ? "" : "SPAM - Phone number $tel not feet the given format ($tel_spam_reason)";
+         $tel_spam = $tel_spam_valid ? "" : $tel_spam_reason;
     }
     if($content){
         $checkTextareaForSpam = checkTextareaForSpam($content);

@@ -3,13 +3,13 @@
  */
 
 :root {
-    --primary-color: #009688;
-    --primary-focus: #00796a;
+    --primary-color: #F48722;
+    --primary-focus: #F48722;
     --dark: #263238;
     --dark-gray: #808080;
     --mid-gray: #ccc;
     --light-gray: #eee;
-    --error: #ce0000;
+    --error: #404040;
     --white: #fff;
     --light: #eae9e9;
     --warning: #ff8300;
@@ -145,7 +145,11 @@ body.expired {
 .dlm_license_links .deactivate,
 .dlm_license_links .cancel,
 .dlm_license_button input.dlm_btn__prim {
-    font-weight: bold;
+    font-family:'Montserrat', 'Open Sans', sans-serif;
+    font-weight: 400;
+    text-transform: Uppercase;
+    font-size:14px;
+    letter-spacing: 1px;
 }
 .dlm_license_button input.dlm_btn__prim,
 .dlm_expired_notice,

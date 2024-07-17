@@ -1,11 +1,11 @@
 <?php
 /**
  * @wordpress-plugin
- * Plugin Name:       Maspik - Spam blacklist
+ * Plugin Name:       Maspik - Advanced Spam Protection
  * Plugin URI:        https://wpmaspik.com/
- * Description:       Anti spam. Block specific words, IP, country, languages, from contact-froms and more...
- * Version:           1.0.1
- * Author:            yonifre
+ * Description:       Overall Spam block, blacklist words, IP, country, languages, from contact-forms and more...
+ * Version:           2.0.5
+ * Author:            WpMaspik
  * Author URI:        https://wpmaspik.com/blog/
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
@@ -19,7 +19,7 @@ if (!defined('ABSPATH')) exit;
 /**
  * Currently plugin version.
  */
-define( 'MASPIK_VERSION', '1.0.1' );
+define( 'MASPIK_VERSION', '2.0.5' );
 
 /**
  * The code that runs during plugin activation.
@@ -59,10 +59,6 @@ if (version_compare(PHP_VERSION, '7.0.0', '>=') && apply_filters( 'maspik_active
 /**
  * Begins execution of the plugin.
  *
- * Since everything within the plugin is registered via hooks,
- * then kicking off the plugin from this point in the file does
- * not affect the page life cycle.
- *
  * @since    1.0.0
  */
 function Run_Maspik() {
@@ -70,19 +66,22 @@ function Run_Maspik() {
 	$plugin = new Maspik();
 	$plugin->run();
 
+	
+
 }
 Run_Maspik();
 
 add_filter( 'plugin_row_meta', 'maspik_plugin_row_meta', 10, 2 );
 function maspik_plugin_row_meta( $links, $file ) {
 	if( strpos( $file, basename(__FILE__) ) ) {
-		$leads_link = array(
-			'donat_link' => '<a href="https://wordpress.org/support/plugin/contact-forms-anti-spam/reviews/#new-post" target="_blank">'.__( 'Give me 5 stars', 'contact-forms-anti-spam' ).'</a>',
+		$maspik_links = array(
+			'donat_link' => '<a href="https://wordpress.org/support/plugin/contact-forms-anti-spam/reviews/#new-post" target="_blank">'.__( 'Give us 5 stars', 'contact-forms-anti-spam' ).'</a>',
 			'settings' => '<a href="'.admin_url().'admin.php?page=maspik" target="_blank">'.__( 'Setting page', 'contact-forms-anti-spam' ).'</a>',
 		);
 		
-		$links = array_merge( $links, $leads_link );
+		$links = array_merge( $links, $maspik_links );
 	}
 	
 	return $links;
 }
+
