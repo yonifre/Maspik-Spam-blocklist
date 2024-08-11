@@ -4,7 +4,7 @@ Donate link: paypal.me/yonifre
 Tags: spam, blacklist, antispam, contact form, security
 Tested up to: 6.6
 Requires PHP: 7.0
-Stable tag: 2.0.5
+Stable tag: 2.1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -38,8 +38,9 @@ Maspik allows you to specify words, email addresses, phone formats, IP addresses
   * Spam submissions in WordPress comments and subscription forms
 * **Spam Log:**
   * Review blocked submissions
-* **Elementor Form Blocking:**
-  * Block submissions without source URLs
+* **Advance Blocking:**
+  * Honeypot
+  * Block submissions without source URLs (Elementor)
 * **API Integrations:**
   * Proxycheck.io
   * AbuseIPDB.com
@@ -136,6 +137,22 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 
 == Changelog ==
+
+= 2.1.2 - 26/07/2024 =
+* Bug Fix - Fix error when Max links set on 0 
+
+= 2.1.1 - 24/07/2024 =
+* Improvement - Improve Honeypot check for Elementor + CF7 + Comments + Woocommerce Review + Registration 
+* Bug Fix - Fix css glitch on some casese with new Honeypots
+
+= 2.1.0 - 22/07/2024 =
+* New Feature - Time check (If spent less then 5 secund in site - Spam)
+* New Feature - Honeypot field (If not ampty- Spam )
+* New Feature - Advance Honeypot field (If Js Year is diffrent from server year - Spam)
+
+= 2.0.6 - 19/07/2024 =
+* Improvement - Improve spam check performance 
+* Bug Fix - Fix error appearing in Country check in some environments
 
 = 2.0.5 - 16/07/2024 =
 * Bug Fix - Fix phone check

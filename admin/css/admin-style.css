@@ -921,7 +921,7 @@ h3.maspik-protag.maspik-not-pro{
 
 
 .maspik-accordion-item > .active + .maspik-accordion-content {
-    max-height: 1000px!important;
+    max-height: 1400px!important;
     transition: max-height 0.3s ease-in;
   }
 
@@ -1116,8 +1116,16 @@ h3.maspik-protag.maspik-not-pro{
 .maspik-main-list-wrap .select2-container--disabled li.select2-selection__choice {
     background: #bababa !important;
 }
+td.column-value.column-entries {
+    max-width: 600px;
+}
 
-
+.togglewrap span.new {
+    background: #f48623;
+    color: white;
+    padding: 3px;
+    border-radius: 3px;
+}
   /* Custom Scroll for Select 2*/
 .select2-results{
   padding: 10px;

@@ -17,7 +17,7 @@ function maspik_validate_bricks_form($errors, $form) {
     $ip =  efas_getRealIpAddr();
 
     // Country IP Check 
-    $CountryCheck = CountryCheck($ip,$spam,$reason);
+    $CountryCheck = CountryCheck($ip,$spam,$reason,$_POST);
     $spam = isset($CountryCheck['spam']) ? $CountryCheck['spam'] : false ;
     $reason = $CountryCheck['reason']? $CountryCheck['reason'] : false ;
     $message = isset($CountryCheck['message']) ? $CountryCheck['message'] : false ;

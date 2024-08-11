@@ -2,18 +2,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Maspik - Spam blacklist\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-05 03:38+0000\n"
+"POT-Creation-Date: 2024-02-22 02:13+0000\n"
 "PO-Revision-Date: 2024-07-22 15:47+0000\n"
-"Last-Translator: Елена Олеговна\n"
-"Language-Team: Russian\n"
-"Language: ru_RU\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10 >= 2 && "
-"n%10<=4 &&(n%100<10||n%100 >= 20)? 1 : 2);\n"
+"Last-Translator: \n"
+"Language-Team: French (France)\n"
+"Language: fr_FR\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Loco https://localise.biz/\n"
-"X-Loco-Version: 2.6.4; wp-6.2.2\n"
+"X-Loco-Version: 2.6.11; wp-6.6\n"
 "X-Domain: contact-forms-anti-spam"
 
 #: admin/partials/maspik-admin-display.php:1500
@@ -88,7 +87,7 @@ msgstr ""
 
 #: includes/functions.php:1468
 msgid "Allow"
-msgstr ""
+msgstr "Permettre"
 
 #: admin/partials/maspik-log.php:68
 msgid "and since installing"
@@ -96,11 +95,11 @@ msgstr ""
 
 #: includes/functions.php:716 includes/functions.php:755
 msgid "Arabic"
-msgstr "Арабский"
+msgstr ""
 
 #: includes/functions.php:717 includes/functions.php:756
 msgid "Armenian"
-msgstr "Армянский"
+msgstr ""
 
 #: includes/functions.php:1353
 msgid ""
@@ -114,7 +113,7 @@ msgstr ""
 
 #: includes/functions.php:718 includes/functions.php:757
 msgid "Bengali"
-msgstr "Бенгальский"
+msgstr ""
 
 #: admin/partials/maspik-admin-display.php:935
 msgid ""
@@ -134,7 +133,7 @@ msgstr ""
 
 #: includes/functions.php:719 includes/functions.php:758
 msgid "Braille"
-msgstr "шрифт Брайля"
+msgstr ""
 
 #: admin/partials/maspik-admin-display.php:637
 #: admin/partials/maspik-admin-display.php:780
@@ -172,10 +171,8 @@ msgstr ""
 #: admin/partials/maspik-admin-display.php:942
 #: admin/partials/maspik-admin-display.php:982
 #: admin/partials/maspik-admin-display.php:1051
-#, fuzzy
-#| msgid "Validation error message"
 msgid "Custom validation error message"
-msgstr "Сообщение об ошибке проверки"
+msgstr ""
 
 #: includes/functions.php:781
 msgid "Czech (A-Za-zÁáČčĎďÉéÍíĹĺĽľŇňÓóŔŕŠšŤťÚúÝýŽž)"
@@ -238,10 +235,8 @@ msgid "Email (Email field)"
 msgstr ""
 
 #: admin/partials/maspik-admin-display.php:659
-#, fuzzy
-#| msgid "Email field"
 msgid "Email Fields"
-msgstr "Поле электронной почты"
+msgstr ""
 
 #: includes/functions.php:734 includes/functions.php:773
 msgid "English (A-Za-z)"
@@ -257,7 +252,7 @@ msgstr ""
 
 #: includes/functions.php:720 includes/functions.php:759
 msgid "Ethiopic"
-msgstr "Эфиопский"
+msgstr ""
 
 #: admin/partials/maspik-admin-display.php:975
 msgid ""
@@ -309,7 +304,7 @@ msgstr ""
 
 #: includes/functions.php:721 includes/functions.php:760
 msgid "Georgian"
-msgstr "Грузинский"
+msgstr ""
 
 #: includes/functions.php:771
 msgid "German ([A-Za-zÄäÖöÜüß])"
@@ -325,7 +320,7 @@ msgstr ""
 
 #: includes/functions.php:722 includes/functions.php:761
 msgid "Greek"
-msgstr "Греческий"
+msgstr ""
 
 #: includes/functions.php:723 includes/functions.php:762
 msgid "Han (Chinese)"
@@ -333,7 +328,7 @@ msgstr ""
 
 #: includes/functions.php:726 includes/functions.php:765
 msgid "Hebrew"
-msgstr "Иврит"
+msgstr ""
 
 #: admin/partials/maspik-admin-display.php:830
 msgid "HERE"
@@ -349,7 +344,7 @@ msgstr ""
 
 #: includes/functions.php:725 includes/functions.php:764
 msgid "Hiragana"
-msgstr "Японский разг"
+msgstr ""
 
 #: admin/partials/maspik-admin-display.php:1164
 msgid "Honeypot Trap"
@@ -414,19 +409,15 @@ msgstr ""
 
 #: includes/functions.php:724 includes/functions.php:763
 msgid "Katakana"
-msgstr "Японский"
+msgstr ""
 
 #: admin/partials/maspik-admin-display.php:960
-#, fuzzy
-#| msgid "Languages forbidden"
 msgid "Language Forbidden"
-msgstr "Запрещенные языки"
+msgstr ""
 
 #: admin/partials/maspik-admin-display.php:920
-#, fuzzy
-#| msgid "Languages required"
 msgid "Language Required"
-msgstr "Разрешенные языки"
+msgstr ""
 
 #: admin/partials/maspik-admin-display.php:908
 msgid "Language restrictions"
@@ -434,7 +425,7 @@ msgstr ""
 
 #: includes/functions.php:728 includes/functions.php:767
 msgid "Latin"
-msgstr "Латинский"
+msgstr ""
 
 #: admin/partials/maspik-admin-display.php:546
 msgid "Learn more about those option in our documentation"
@@ -469,10 +460,8 @@ msgid "Maspik Import/Export Settings"
 msgstr ""
 
 #: admin/partials/maspik-admin-display.php:1093
-#, fuzzy
-#| msgid "Maspik- Spam Blacklist"
 msgid "Maspik spam blacklist"
-msgstr "Maspik - черный список спама"
+msgstr ""
 
 #: admin/partials/maspik-admin-display.php:1552
 msgid "Message (Text area field)"
@@ -480,7 +469,7 @@ msgstr ""
 
 #: includes/functions.php:729 includes/functions.php:768
 msgid "Mongolian"
-msgstr "Монгольский"
+msgstr ""
 
 #: admin/partials/maspik-admin-display.php:1298
 msgid "More Options"
@@ -517,7 +506,7 @@ msgstr ""
 
 #: admin/class-maspik-admin.php:805
 msgid "Options already added automatically from the API"
-msgstr "Параметры уже добавлены автоматически из API"
+msgstr ""
 
 #: admin/partials/maspik-admin-display.php:1438
 msgid "Other Options"
@@ -581,7 +570,7 @@ msgstr ""
 
 #: admin/partials/maspik-log.php:58
 msgid "Reset Log"
-msgstr "Сбросить журнал"
+msgstr ""
 
 #: includes/functions.php:780
 msgid "Romanian (A-Za-zĂăÂâÎîȘșȚț)"
@@ -597,7 +586,7 @@ msgstr ""
 
 #: admin/partials/maspik-admin-display.php:1718
 msgid "Select"
-msgstr "Выбрать"
+msgstr ""
 
 #: includes/functions.php:788
 msgid "Serbian (A-Za-zА-Яа-яЋћĆć)"
@@ -609,7 +598,7 @@ msgstr ""
 
 #: contact-forms-anti-spam.php:79
 msgid "Setting page"
-msgstr "Страница настроек"
+msgstr ""
 
 #: admin/partials/maspik-admin-display.php:1596
 msgid "Shortcode List"
@@ -626,10 +615,8 @@ msgstr ""
 #: admin/class-maspik-admin.php:572
 #: admin/partials/maspik-admin-display.php:1454
 #: admin/partials/maspik-log.php:50
-#, fuzzy
-#| msgid "Spam log"
 msgid "Spam Log"
-msgstr "Журнал спама"
+msgstr ""
 
 #: admin/partials/maspik-log.php:65
 msgid "Spams blocked by MASPIK since the last reset"
@@ -705,11 +692,11 @@ msgstr ""
 
 #: includes/functions.php:727 includes/functions.php:766
 msgid "Syriac"
-msgstr "Сирийский"
+msgstr ""
 
 #: admin/partials/maspik-admin-display.php:1578
 msgid "Text field"
-msgstr "Текстовое поле"
+msgstr ""
 
 #: admin/partials/maspik-admin-display.php:1579
 msgid "text field"
@@ -720,30 +707,22 @@ msgid "Text Fields"
 msgstr ""
 
 #: admin/partials/maspik-admin-display.php:698
-#, fuzzy
-#| msgid "Text area field"
 msgid "Textarea Fields"
-msgstr "Поле текстовой области"
+msgstr ""
 
 #: includes/functions.php:730 includes/functions.php:769
 msgid "Thai"
-msgstr "Тайский"
+msgstr ""
 
 #: admin/partials/maspik-admin-display.php:544
 msgid "The system is not case-sensitive"
 msgstr ""
 
 #: admin/class-maspik-admin.php:457
-#, fuzzy
-#| msgid ""
-#| "There was an error adding this setting. Please try again.  If this "
-#| "persists, shoot us an email."
 msgid ""
 "There was an error adding this setting. Please try again. If this persists, "
 "shoot us an email."
 msgstr ""
-"При добавлении этого параметра произошла ошибка. Пожалуйста, попробуйте еще "
-"раз. Если это не исчезнет, напишите нам по электронной почте."
 
 #: admin/partials/maspik-admin-display.php:1533
 msgid ""
@@ -754,8 +733,6 @@ msgstr ""
 msgid ""
 "This looks like spam. Try to rephrase, or contact us in an alternative way."
 msgstr ""
-"Это похоже на спам. Попробуйте перефразировать или свяжитесь с нами другим "
-"способом."
 
 #: admin/partials/maspik-admin-display.php:1173
 msgid "Time Trap"
@@ -789,7 +766,7 @@ msgstr ""
 
 #: includes/functions.php:737 includes/functions.php:776
 msgid "Unknown language"
-msgstr "Неизвестный язык"
+msgstr ""
 
 #: admin/partials/maspik-import-export.php:36
 msgid "Use this feature with caution."
@@ -800,9 +777,6 @@ msgid ""
 "Use this plugin with caution and only if you understand the risk, "
 "blacklisting some words can lead to the termination of valid leads."
 msgstr ""
-"Используйте этот плагин с осторожностью и только в том случае, если вы "
-"понимаете риск, занесение некоторых слов в черный список может привести к "
-"прекращению действия действительных лидов."
 
 #: includes/functions.php:1467
 msgid ""
@@ -819,13 +793,6 @@ msgid "website"
 msgstr ""
 
 #: admin/partials/maspik-log.php:52
-#, fuzzy
-#| msgid ""
-#| "Whenever a bot/person tries to spam your contact forms and MASPIK blocks "
-#| "the spam, you will see a new line below showing the details.<br>The log "
-#| "containing these details resides on your database  and you can reset it "
-#| "at any time.<br>Resetting the log doesn’t change anything – it just "
-#| "removes the history."
 msgid ""
 "Whenever a bot/person tries to spam your contact forms and MASPIK blocks the "
 "spam, you will see a new line below showing the details.<br>The log "
@@ -833,11 +800,6 @@ msgid ""
 "any time.<br>Resetting the log doesn’t change anything – it just removes the "
 "history."
 msgstr ""
-"Всякий раз, когда бот/человек пытается спамить ваши контактные формы, а "
-"MASPIK блокирует спам, вы увидите новую строку ниже с подробностями.<br>"
-"Журнал, содержащий эти данные, находится в вашей базе данных, и вы можете "
-"сбросить его в любое время.< br>Сброс журнала ничего не меняет — он просто "
-"удаляет историю."
 
 #: admin/partials/maspik-admin-display.php:684
 #: admin/partials/maspik-admin-display.php:827

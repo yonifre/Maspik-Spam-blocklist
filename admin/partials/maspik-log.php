@@ -65,7 +65,7 @@ if(isset($_POST['clear_log'])){
       <p><?php echo "<b>".maspik_spam_count()."</b> ";  _e('Spams blocked by MASPIK since the last reset', 'contact-forms-anti-spam' ); 
 
   if( get_option("spamcounter") ){ ?>
-    <?php echo ", and <b>".get_option("spamcounter")."</b> ";  _e('and since installing', 'contact-forms-anti-spam' ); ?></p>
+    <?php echo ", <b>".get_option("spamcounter")."</b> ";  _e('and since installing', 'contact-forms-anti-spam' ); ?></p>
   <?php } 
   ?>
 

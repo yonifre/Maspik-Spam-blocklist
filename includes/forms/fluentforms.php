@@ -13,16 +13,25 @@ function maspik_validate_fluentform_general( $errors, $formData, $form, $fields)
   $reason ="";
   // ip
   $ip =  efas_getRealIpAddr();
-  
+
+// For HP
+parse_str($_POST['data'], $parsed_data);
+$extracted_data = array(
+    'Maspik-exactTime' => isset($parsed_data['Maspik-exactTime']) ? $parsed_data['Maspik-exactTime'] : false,
+    'Maspik-currentYear' => isset($parsed_data['Maspik-currentYear']) ? $parsed_data['Maspik-currentYear'] : false,
+    'full-name-maspik-hp' => isset($parsed_data['full-name-maspik-hp']) ? $parsed_data['full-name-maspik-hp'] : false
+);
+
+
   // Country IP Check 
-  $CountryCheck = CountryCheck($ip,$spam,$reason);
+  $CountryCheck = CountryCheck($ip,$spam,$reason,$extracted_data);
   $spam = isset($CountryCheck['spam']) ? $CountryCheck['spam'] : false ;
   $reason = isset($CountryCheck['reason']) ? $CountryCheck['reason'] : false ;
   $message = isset($CountryCheck['message']) ? $CountryCheck['message'] : false ;
 
    
   if ( $spam) {
-    efas_add_to_log($type = "Country/IP",$reason, $formData, "Fluent Forms" );
+    efas_add_to_log($type = "General",$reason, $_POST, "Fluent Forms" );
     $errors['spam'] = cfas_get_error_text($message);
   }
 return $errors;
@@ -35,7 +44,7 @@ function maspik_validate_fluentforms_text($errorMessage, $field, $formData, $fie
     if (empty($formData[$fieldName])) {
         return $errorMessage;
     }
-    $field_value = strtolower( $formData[$fieldName]); 
+    $field_value = is_array($formData[$fieldName])  ?  strtolower( implode( " ", $formData[$fieldName] ) ) : strtolower( $formData[$fieldName] ) ; 
 
 	$validateTextField = validateTextField($field_value);
     $spam = isset($validateTextField['spam']) ? $validateTextField['spam'] : 0;

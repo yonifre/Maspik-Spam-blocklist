@@ -138,7 +138,8 @@ function maspik_toggle_button($name, $id, $dbrow_name, $class, $type = "", $manu
                 <input type='checkbox' id=". esc_attr($id) ." name='". esc_attr($name) . "' " . esc_attr($checked) . " class='". esc_attr($class) ."'> 
                 <span class='maspik-toggle-slider'></span>
                 </label>";
-
+    $apitext = __('Active from Dashboard', 'contact-forms-anti-spam');
+    $toggle .= maspik_is_contain_api($api_array) ? "<span class='limit-api-value'>$apitext</span>" : "";
     return $toggle;
 }
 
@@ -399,7 +400,11 @@ class Maspik_Admin {
 	}
     
     public function addPluginAdminMenu() {
-        add_menu_page($this->plugin_name, 'Maspik Spam', 'administrator', $this->plugin_name, array($this, 'displayPluginAdminDashboard'), 'dashicons-welcome-comments', 85);
+        $svg = '<svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 800 800"><path fill="#a7abae" d="M659.46,2.52H140.54C65.13,2.52,4,63.65,4,139.06v521.88c0,75.41,61.13,136.54,136.54,136.54h518.92c75.41,0,136.54-61.13,136.54-136.54V139.06c0-75.41-61.13-136.54-136.54-136.54ZM524.27,653.8l-10.19-231.45-4.27-92.38c-1.54,17.75-3.29,34.68-5.26,50.79-1.97,16.11-4.39,31.72-7.23,46.85l-43.07,226.19h-111.78l-36.82-226.52c-2.19-13.15-5.15-35.72-8.88-67.72-.44-4.82-1.43-14.68-2.96-29.59l-3.29,93.7-12.16,230.13h-145.97l59.18-507.61h170.63l28.6,170.96c2.41,14.03,4.55,29.26,6.41,45.7,1.86,16.44,3.56,34.3,5.1,53.59,2.85-32.22,6.79-61.04,11.84-86.46l34.85-183.78h169.31l49.31,507.61h-143.34Z"/></svg>';
+        $base64 = base64_encode($svg);
+        $icon_url = 'data:image/svg+xml;base64,' . $base64;
+
+        add_menu_page($this->plugin_name, 'Maspik Spam', 'administrator', $this->plugin_name, array($this, 'displayPluginAdminDashboard'), $icon_url, 85);
 
         $numlogspam = maspik_spam_count() ? "(" . maspik_spam_count() . ")" : false;
 

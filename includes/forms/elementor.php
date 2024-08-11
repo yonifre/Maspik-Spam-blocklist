@@ -18,17 +18,17 @@ function efas_validation_process ( $record, $ajax_handler ) {
   $ip =  $meta['remote_ip']['value'] ?   $meta['remote_ip']['value'] : efas_getRealIpAddr();
 
   // Country IP Check 
-  $CountryCheck = CountryCheck($ip,$spam,$reason);
+  $CountryCheck = CountryCheck($ip,$spam,$reason,$_POST);
   $spam = isset($CountryCheck['spam']) ? $CountryCheck['spam'] : false ;
   $reason = isset($CountryCheck['reason']) ? $CountryCheck['reason'] : false ;
   $message = isset($CountryCheck['message']) ? $CountryCheck['message'] : false ;
   $error_message = cfas_get_error_text($message);
 
-  $NeedPageurl =  get_option( 'NeedPageurl' ) ;   
+  $NeedPageurl =  maspik_get_settings("NeedPageurl");   
   
-  if ( efas_get_spam_api('NeedPageurl') ){
-    $NeedPageurl = $NeedPageurl ? $NeedPageurl : efas_get_spam_api('block_empty_source',"bool");
-  }
+    if ( efas_get_spam_api('NeedPageurl') ){
+        $NeedPageurl = $NeedPageurl ? $NeedPageurl : efas_get_spam_api('NeedPageurl',"bool");
+    }
 
 
   if( !array_key_exists('referrer', $_POST ) && $NeedPageurl ){
@@ -141,3 +141,34 @@ add_filter( 'elementor_pro/forms/wp_mail_message', function( $content ) {
   }
   return $content;
 }, 10, 1 );
+
+function add_maspikhp_html_to_elementor_form( $item, $item_index, $form ) {
+
+    if ( maspik_get_settings('maspikHoneypot') || maspik_get_settings('maspikTimeCheck') || maspik_get_settings('maspikYearCheck') ) {
+        $addhtml = "";
+
+        $addhtml .= maspik_get_settings('maspikHoneypot') ? '<div class="elementor-field-type-text elementor-field-group maspik-field">
+            <label for="full-name-maspik-hp" class="elementor-field-label">Leave this field empty</label>
+            <input size="1" type="text" autocomplete="off" autofill="off" aria-hidden="true" tabindex="-1" name="'.maspik_HP_name().'" id="'.maspik_HP_name().'" class="elementor-field elementor-size-sm elementor-field-textual" placeholder="Leave this field empty">
+        </div>' : '';
+        
+        $addhtml .= maspik_get_settings('maspikYearCheck') ? '<div class="elementor-field-type-text elementor-field-group maspik-field">
+            <label for="Maspik-currentYear" class="elementor-field-label">Leave this field empty</label>
+            <input size="1" type="text" autocomplete="off" autofill="off" aria-hidden="true" tabindex="-1" name="Maspik-currentYear" id="Maspik-currentYear" class="elementor-field elementor-size-sm elementor-field-textual" placeholder="">
+        </div>' : '';
+        
+        $addhtml .= maspik_get_settings('maspikTimeCheck') ? '<div class="elementor-field-type-text elementor-field-group maspik-field">
+            <label for="Maspik-exactTime" class="elementor-field-label">Leave this field empty</label>
+            <input size="1" type="text" autocomplete="off" autofill="off" aria-hidden="true" tabindex="-1" name="Maspik-exactTime" id="Maspik-exactTime" class="elementor-field elementor-size-sm elementor-field-textual" placeholder="">
+        </div>' : '';
+
+        $total_fields = count( $form->get_settings( 'form_fields' ) );
+
+        if ( $item_index == $total_fields - 1 ) {
+            echo $addhtml;
+        }
+    }
+
+    return $item;
+}
+add_filter( 'elementor_pro/forms/render/item', 'add_maspikhp_html_to_elementor_form', 10, 3 );

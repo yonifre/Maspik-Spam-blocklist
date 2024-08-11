@@ -265,7 +265,7 @@ $spamcounter = maspik_spam_count();
                 } //main list
                 
 
-                if( maspik_save_settings( 'AllowedOrBlockCountries' , sanitize_text_field( $_POST['AllowedOrBlockCountries'] )) != "success" ){ 
+                if( maspik_save_settings( 'AllowedOrBlockCountries' , sanitize_text_field( isset( $_POST['AllowedOrBlockCountries'] ) ?  $_POST['AllowedOrBlockCountries'] : "block") ) != "success" ){ 
                     $error_message .= $result_check . " ";
                 } //Allow or block dropdown
 
@@ -298,6 +298,15 @@ $spamcounter = maspik_spam_count();
             //MASPIK API field END --
 
             //General field
+                if( maspik_save_settings( 'maspikHoneypot' , sanitize_text_field(isset( $_POST['maspikHoneypot'] )) ? 1 : 0) != "success" ){ 
+                    $error_message .= $result_check . " ";
+                } //honeypot
+                if( maspik_save_settings( 'maspikYearCheck' , sanitize_text_field(isset( $_POST['maspikYearCheck'] )) ? 1 : 0) != "success" ){ 
+                    $error_message .= $result_check . " ";
+                } //honeypot
+                if( maspik_save_settings( 'maspikTimeCheck' , sanitize_text_field(isset( $_POST['maspikTimeCheck'] )) ? 1 : 0) != "success" ){ 
+                    $error_message .= $result_check . " ";
+                } //honeypot
 
                 if( maspik_save_settings( 'NeedPageurl' , sanitize_text_field(isset( $_POST['NeedPageurl'] )) ? 1 : 0) != "success" ){ 
                     $error_message .= $result_check . " ";
@@ -659,7 +668,7 @@ $spamcounter = maspik_spam_count();
                             <?php 
                             maspik_tooltip("If the text value is EQUAL to one of the values above, MASPIK will tag it as spam and it will be blocked.");
                                 
-                            maspik_popup("georginahaynes620@gmail.com|ericjonesonline@outlook.com|*.ru|/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.ru\b/|eric*@*.com|xrumer888@outlook.com", "Email field", "See examples" ,"visibility");
+                            maspik_popup("georginahaynes620@gmail.com|ericjonesonline@outlook.com|*.ru|*+*@*.*|/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.ru\b/|eric*@*.com|xrumer888@outlook.com", "Email field", "See examples" ,"visibility");
                                 ?>
                         </div> <!--end of maspik-setting-info-->
                             
@@ -672,10 +681,8 @@ $spamcounter = maspik_spam_count();
                             ?>      
 
                         </div> <!-- end of maspik-main-list-wrap -->
-                        <span class="maspik-subtext"><?php _e('
-                            Email Domains are accepted. Ex: <em>@gmail.com will block all the email coming from @gmail.com (xyz@gmail.com)</em>
-                            <br>Wildcard patterns are accepted. asterisk * symbol is necessary for the recognition of the wildcard.
-                            <br>Regex must start and end with a slash /', 'contact-forms-anti-spam'); ?>
+                        <span class="maspik-subtext"><?php _e('Wildcard patterns are accepted. asterisk * Or question mark ? symbol are necessary for the recognition of the wildcard.', 'contact-forms-anti-spam'); ?><br>
+                        <?php _e('Regex must start and end with a slash /', 'contact-forms-anti-spam'); ?>
 
                         </span>
                                 
@@ -735,7 +742,7 @@ $spamcounter = maspik_spam_count();
                             </div>
 
                             <div class="maspik-limit-char-box togglebox">
-                                <?php echo create_maspik_numbox("text_limit_link", "contain_links", "link-limit" , "Maximum number of Links", "", "") ?>
+                                <?php echo create_maspik_numbox("text_limit_link", "contain_links", "link-limit" , "Maximum number of Links", "", "0") ?>
 
                         </div><!-- end of maspik-limit-link-wrap -->
                                     
@@ -1148,11 +1155,42 @@ $spamcounter = maspik_spam_count();
                     
                 <div class="maspik-accordion-content">
                     <div class="maspik-accordion-content-wrap hide-form-title">
+<?php
+echo '<p>' . __("Important: These three new features are operational on <strong>both client-side (browser) and server-side</strong>. However, we may not have identified all potential <strong>cache-related issues</strong> yet. If you choose to implement these features, we recommend <strong>testing them by submitting a form in incognito mode</strong> and <strong>reviewing your spam log</strong> to ensure proper functionality.", 'your-text-domain') . '</p>';
+?>
+                        <div class="maspik-txt-custom-msg-head togglewrap maspik-honeypot-wrap">
+                            <?php echo maspik_toggle_button('maspikHoneypot', 'maspikHoneypot', 'maspikHoneypot', 'maspik-honeypot togglebutton',"",""); ?>
+                                <div>
+                                    <h4> <?php _e('Honeypot Trap', 'contact-forms-anti-spam'); ?>
+                                        <span class="new"><?php _e('New', 'contact-forms-anti-spam'); ?></span> 
+                                    </h4>
+                                    <span><?php _e('Add honeypot field', 'contact-forms-anti-spam'); ?></span>
+                            </div>  
+                        </div><!-- end of maspik-honeypot-wrap -->
+                        <div class="maspik-txt-custom-msg-head togglewrap maspik-honeypot-wrap">
+                            <?php echo maspik_toggle_button('maspikTimeCheck', 'maspikTimeCheck', 'maspikTimeCheck', 'maspik-honeypot togglebutton',"",""); ?>
+                                <div>
+                                    <h4> <?php _e('Time Trap', 'contact-forms-anti-spam'); ?>
+                                        <span class="new"><?php _e('New', 'contact-forms-anti-spam'); ?></span> 
+                                    </h4>
+                                    <span><?php _e('Check time from visiting the site until form submit', 'contact-forms-anti-spam'); ?></span>
+                            </div>  
+                        </div><!-- end of maspik-maspikTimeCheck -->
+                        <div class="maspik-txt-custom-msg-head togglewrap maspik-honeypot-wrap">
+                            <?php echo maspik_toggle_button('maspikYearCheck', 'maspikYearCheck', 'maspikYearCheck', 'maspik-honeypot togglebutton',"",""); ?>
+                                <div>
+                                    <h4> <?php _e('JavaScript Trap', 'contact-forms-anti-spam'); ?> 
+                                        <span class="new"><?php _e('New', 'contact-forms-anti-spam'); ?></span> 
+                                    </h4>
+
+                                    <span><?php _e('Comper the local and server year', 'contact-forms-anti-spam'); ?></span>
+                            </div>  
+                        </div><!-- end of maspik-maspikYearCheck -->
 
                         <div class="maspik-txt-custom-msg-head togglewrap maspik-block-inquiry-wrap">
                             <?php echo maspik_toggle_button('NeedPageurl', 'NeedPageurl', 'NeedPageurl', 'maspik-needpageurl togglebutton',"","",['NeedPageurl']); ?>
                                 <div>
-                                    <h4> <?php _e('Maspik Spam trap (Recommended option!)', 'contact-forms-anti-spam'); ?> </h4>
+                                    <h4> <?php _e('Elementor Bot detector', 'contact-forms-anti-spam'); ?> </h4>
                                     <span><?php _e('In this option we block bots from sending spam automatically, its mostly succeed to catch about 30% of the spam', 'contact-forms-anti-spam'); ?></span>
                             </div>  
                         </div><!-- end of maspik-block-inquiry-wrap -->

@@ -17,9 +17,12 @@ function efas_wpcf7_validate_process ( $result, $tags ) {
   $reason ="";
   // ip
   $ip =  efas_getRealIpAddr();
+
+
+
   
   // Country IP Check 
-    $CountryCheck = CountryCheck($ip,$spam,$reason);
+    $CountryCheck = CountryCheck($ip,$spam,$reason,$_POST);
     $spam = isset($CountryCheck['spam']) ? $CountryCheck['spam'] : false ;
     $reason = isset($CountryCheck['reason']) ? $CountryCheck['reason'] : false ;
     $message = $CountryCheck['message'] ? $CountryCheck['message'] : false ;
@@ -33,7 +36,7 @@ function efas_wpcf7_validate_process ( $result, $tags ) {
             return strpos($key, '_wpcf7') === false;
             }, ARRAY_FILTER_USE_KEY);
 
-      efas_add_to_log($type = "Country/IP",$reason, $post_entrys, "Contact from 7" );
+      efas_add_to_log($type = "General",$reason, $post_entrys, "Contact from 7" );
   	}
 	return $result;
 }
@@ -168,3 +171,37 @@ function maspik_add_text_to_mail_components( $components, $number ) {
 	return $components;
 }
 add_filter( 'wpcf7_mail_components', 'maspik_add_text_to_mail_components', 10, 2 );
+
+
+function add_custom_html_to_cf7_form( $form_content ) {
+
+    if ( maspik_get_settings('maspikHoneypot') || maspik_get_settings('maspikTimeCheck') || maspik_get_settings('maspikYearCheck') ) {
+        $custom_html = "";
+
+        if (maspik_get_settings('maspikHoneypot')) {
+            $custom_html .= '<div class="wpcf7-form-control-wrap maspik-field">
+                <label for="full-name-maspik-hp" class="wpcf7-form-control-label">Leave this field empty</label>
+                <input size="1" type="text" autocomplete="off" autofill="off" aria-hidden="true" tabindex="-1" name="full-name-maspik-hp" id="full-name-maspik-hp" class="wpcf7-form-control wpcf7-text" placeholder="Leave this field empty">
+            </div>';
+        }
+
+        if (maspik_get_settings('maspikYearCheck')) {
+            $custom_html .= '<div class="wpcf7-form-control-wrap maspik-field">
+                <label for="Maspik-currentYear" class="wpcf7-form-control-label">Leave this field empty</label>
+                <input size="1" type="text" autocomplete="off" autofill="off" aria-hidden="true" tabindex="-1" name="Maspik-currentYear" id="Maspik-currentYear" class="wpcf7-form-control wpcf7-text" placeholder="">
+            </div>';
+        }
+
+        if (maspik_get_settings('maspikTimeCheck')) {
+            $custom_html .= '<div class="wpcf7-form-control-wrap maspik-field">
+                <label for="Maspik-exactTime" class="wpcf7-form-control-label">Leave this field empty</label>
+                <input size="1" type="text" autocomplete="off" autofill="off" aria-hidden="true" tabindex="-1" name="Maspik-exactTime" id="Maspik-exactTime" class="wpcf7-form-control wpcf7-text" placeholder="">
+            </div>';
+        }
+
+        $form_content .= $custom_html;
+    }
+
+    return $form_content;
+}
+add_filter( 'wpcf7_form_elements', 'add_custom_html_to_cf7_form' );

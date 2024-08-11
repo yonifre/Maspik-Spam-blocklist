@@ -22,7 +22,7 @@ add_filter( 'gform_field_validation', function ( $result, $value, $form, $field 
     $ip = efas_getRealIpAddr();
     
   	// Country IP Check 
-    $CountryCheck = CountryCheck($ip,$spam,$reason);
+    $CountryCheck = CountryCheck($ip,$spam,$reason,$_POST);
     $spam = isset($CountryCheck['spam']) ? $CountryCheck['spam'] : false ;
     $reason = isset($CountryCheck['reason']) ? $CountryCheck['reason'] : false ;
     $message = isset($CountryCheck['message']) ? $CountryCheck['message'] : false ;

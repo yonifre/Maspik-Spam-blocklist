@@ -1,0 +1,402 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Maspik - Spam blacklist\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-07-22 15:41+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: \n"
+"Language: \n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Loco-Version: 2.5.3; wp-5.6.4\n"
+"X-Domain: contact-forms-anti-spam"
+
+#: admin/class-maspik-admin.php:141
+msgid "Active from Dashboard"
+msgstr ""
+
+#: admin/class-maspik-admin.php:595
+msgid "Add country name to the bottom of email content."
+msgstr ""
+
+#: includes/functions.php:1468
+msgid "Allow"
+msgstr ""
+
+#: admin/partials/maspik-log.php:68
+msgid "and since installing"
+msgstr ""
+
+#: includes/functions.php:716 includes/functions.php:755
+msgid "Arabic"
+msgstr ""
+
+#: includes/functions.php:717 includes/functions.php:756
+msgid "Armenian"
+msgstr ""
+
+#: includes/functions.php:1353
+msgid ""
+"Ask questions, share spam examples, get ideas on how to block them, share "
+"feedback, and suggest new features. Join us at "
+msgstr ""
+
+#: includes/functions.php:718 includes/functions.php:757
+msgid "Bengali"
+msgstr ""
+
+#: includes/functions.php:719 includes/functions.php:758
+msgid "Braille"
+msgstr ""
+
+#: admin/class-maspik-admin.php:619
+msgid "Completely disable comments in wordPress."
+msgstr ""
+
+#: includes/functions.php:781
+msgid "Czech (A-Za-zÁáČčĎďÉéÍíĹĺĽľŇňÓóŔŕŠšŤťÚúÝýŽž)"
+msgstr ""
+
+#: includes/functions.php:742
+msgid "Czech (ÁáČčĎďÉéÍíĹĺĽľŇňÓóŔŕŠšŤťÚúÝýŽž)"
+msgstr ""
+
+#: includes/functions.php:746
+msgid "Danish (ÆæØøÅå)"
+msgstr ""
+
+#: includes/functions.php:785
+msgid "Danish )A-Za-zÆæØøÅå)"
+msgstr ""
+
+#: admin/class-maspik-admin.php:608
+msgid ""
+"Disable comments on *ALL* types of posts and remove/hide any existing "
+"comments from displaying, as well as hiding the comment forms.<br>\n"
+"            If you check this box comments will be disable."
+msgstr ""
+
+#: includes/functions.php:1350
+msgid "DO YOU LIKE MASPIK?"
+msgstr ""
+
+#: includes/functions.php:777
+msgid "Dutch (A-Za-zÀ-ÖØ-öø-ÿ)"
+msgstr ""
+
+#: includes/functions.php:738
+msgid "Dutch (À-ÖØ-öø-ÿ)"
+msgstr ""
+
+#: includes/functions.php:734 includes/functions.php:773
+msgid "English (A-Za-z)"
+msgstr ""
+
+#: includes/functions.php:720 includes/functions.php:759
+msgid "Ethiopic"
+msgstr ""
+
+#: admin/partials/maspik-log.php:62
+msgid "Expand all"
+msgstr ""
+
+#: admin/partials/maspik-import-export.php:41
+#: admin/partials/maspik-import-export.php:48
+msgid "Export Settings"
+msgstr ""
+
+#: includes/functions.php:770
+msgid "French (A-Za-zÀ-ÿ)"
+msgstr ""
+
+#: includes/functions.php:731
+msgid "French (À-ÿ)"
+msgstr ""
+
+#: includes/forms/ninjaforms.php:50
+msgid "General: "
+msgstr ""
+
+#: includes/functions.php:721 includes/functions.php:760
+msgid "Georgian"
+msgstr ""
+
+#: includes/functions.php:771
+msgid "German ([A-Za-zÄäÖöÜüß])"
+msgstr ""
+
+#: includes/functions.php:732
+msgid "German ([ÄäÖöÜüß])"
+msgstr ""
+
+#: contact-forms-anti-spam.php:78 includes/functions.php:1351
+msgid "Give us 5 stars"
+msgstr ""
+
+#: includes/functions.php:722 includes/functions.php:761
+msgid "Greek"
+msgstr ""
+
+#: includes/functions.php:723 includes/functions.php:762
+msgid "Han (Chinese)"
+msgstr ""
+
+#: includes/functions.php:726 includes/functions.php:765
+msgid "Hebrew"
+msgstr ""
+
+#: includes/functions.php:725 includes/functions.php:764
+msgid "Hiragana"
+msgstr ""
+
+#. URI of the plugin
+msgid "https://wpmaspik.com/"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://wpmaspik.com/blog/"
+msgstr ""
+
+#: includes/functions.php:783
+msgid "Hungarian (A-Za-zÁáÉéÍíÓóÚúÜüŐőŰ)"
+msgstr ""
+
+#: includes/functions.php:744
+msgid "Hungarian (ÁáÉéÍíÓóÚúÜüŐőŰ)"
+msgstr ""
+
+#: admin/class-maspik-admin.php:558
+msgid "If disabled, the Log of the blocked spam will not be saved."
+msgstr ""
+
+#: admin/partials/maspik-import-export.php:53
+#: admin/partials/maspik-import-export.php:58
+msgid "Import Settings"
+msgstr ""
+
+#: admin/partials/maspik-import-export.php:35
+msgid ""
+"Imported settings will override existing ones, and there is no option to "
+"undo the imported settings."
+msgstr ""
+
+#: includes/functions.php:774
+msgid "Italian (A-Za-zÀàÉéÈèÌìÍíÒòÓóÙùÚú)"
+msgstr ""
+
+#: includes/functions.php:735
+msgid "Italian (ÀàÉéÈèÌìÍíÒòÓóÙùÚú)"
+msgstr ""
+
+#: includes/functions.php:1352
+msgid "Join Our Facebook Community!"
+msgstr ""
+
+#: includes/functions.php:724 includes/functions.php:763
+msgid "Katakana"
+msgstr ""
+
+#: includes/functions.php:728 includes/functions.php:767
+msgid "Latin"
+msgstr ""
+
+#. Name of the plugin
+msgid "Maspik - Advanced Spam Protection"
+msgstr ""
+
+#: admin/partials/maspik-import-export.php:31
+msgid "Maspik Import/Export Settings"
+msgstr ""
+
+#: includes/functions.php:729 includes/functions.php:768
+msgid "Mongolian"
+msgstr ""
+
+#: includes/functions.php:1354
+msgid "Need support? Do you have ideas on how to improve MASPIK?"
+msgstr ""
+
+#: includes/functions.php:786
+msgid "Norwegian (A-Za-zÆæØøÅå)"
+msgstr ""
+
+#: includes/functions.php:747
+msgid "Norwegian (ÆæØøÅå)"
+msgstr ""
+
+#: admin/class-maspik-admin.php:805
+msgid "Options already added automatically from the API"
+msgstr ""
+
+#. Description of the plugin
+msgid ""
+"Overall Spam block, blacklist words, IP, country, languages, from contact-"
+"forms and more..."
+msgstr ""
+
+#: includes/functions.php:1528
+msgid "Permission error"
+msgstr ""
+
+#: admin/partials/maspik-import-export.php:34
+msgid ""
+"Please note that importing/exporting settings will affect most of the Maspik "
+"configuration."
+msgstr ""
+
+#: includes/functions.php:1351
+msgid "Please, "
+msgstr ""
+
+#: includes/functions.php:779
+msgid "Polish (A-Za-zĄąĆćĘęŁłŃńÓóŚśŹźŻż)"
+msgstr ""
+
+#: includes/functions.php:740
+msgid "Polish (ĄąĆćĘęŁłŃńÓóŚśŹźŻż)"
+msgstr ""
+
+#: admin/partials/maspik-log.php:58
+msgid "Reset Log"
+msgstr ""
+
+#: includes/functions.php:780
+msgid "Romanian (A-Za-zĂăÂâÎîȘșȚț)"
+msgstr ""
+
+#: includes/functions.php:741
+msgid "Romanian (ĂăÂâÎîȘșȚț)"
+msgstr ""
+
+#: includes/functions.php:736 includes/functions.php:775
+msgid "Russian (А-Яа-яЁ)"
+msgstr ""
+
+#: includes/functions.php:788
+msgid "Serbian (A-Za-zА-Яа-яЋћĆć)"
+msgstr ""
+
+#: includes/functions.php:749
+msgid "Serbian (А-Яа-яЋћĆć)"
+msgstr ""
+
+#: contact-forms-anti-spam.php:79
+msgid "Setting page"
+msgstr ""
+
+#: includes/functions.php:787
+msgid "Slovak (A-Za-zÁáÄäČčĎďÉéÍíĹĺĽľŇňÓóÔôŔŕŠšŤťÚúÝýŽž)"
+msgstr ""
+
+#: includes/functions.php:748
+msgid "Slovak (ÁáÄäČčĎďÉéÍíĹĺĽľŇňÓóÔôŔŕŠšŤťÚúÝýŽž)"
+msgstr ""
+
+#: admin/class-maspik-admin.php:572 admin/partials/maspik-log.php:50
+msgid "Spam Log"
+msgstr ""
+
+#: admin/partials/maspik-log.php:65
+msgid "Spams blocked by MASPIK since the last reset"
+msgstr ""
+
+#: includes/functions.php:772
+msgid "Spanish (A-Za-zÁÉÍÓÚáéíóúüÜñÑ)"
+msgstr ""
+
+#: includes/functions.php:733
+msgid "Spanish (ÁÉÍÓÚáéíóúüÜñÑ)"
+msgstr ""
+
+#: includes/functions.php:784
+msgid "Swedish (A-Za-zÄäÅåÖö)"
+msgstr ""
+
+#: includes/functions.php:745
+msgid "Swedish (ÄäÅåÖö)"
+msgstr ""
+
+#: includes/functions.php:727 includes/functions.php:766
+msgid "Syriac"
+msgstr ""
+
+#: includes/functions.php:730 includes/functions.php:769
+msgid "Thai"
+msgstr ""
+
+#: admin/class-maspik-admin.php:457
+msgid ""
+"There was an error adding this setting. Please try again. If this persists, "
+"shoot us an email."
+msgstr ""
+
+#: includes/functions.php:1326 admin/class-maspik-admin.php:157
+msgid ""
+"This looks like spam. Try to rephrase, or contact us in an alternative way."
+msgstr ""
+
+#: admin/class-maspik-admin.php:585
+msgid "To identify countries that send spam, and block them"
+msgstr ""
+
+#: includes/functions.php:778
+msgid "Turkish (A-Za-zÇçĞğİıÖöŞşÜü)"
+msgstr ""
+
+#: includes/functions.php:739
+msgid "Turkish (ÇçĞğİıÖöŞşÜü)"
+msgstr ""
+
+#: includes/functions.php:782
+msgid "Ukrainian (A-Za-zА-ЩЬЮЯЇІЄҐа-щьюяїієґЁё)"
+msgstr ""
+
+#: includes/functions.php:743
+msgid "Ukrainian (А-ЩЬЮЯЇІЄҐа-щьюяїієґЁё)"
+msgstr ""
+
+#: includes/functions.php:737 includes/functions.php:776
+msgid "Unknown language"
+msgstr ""
+
+#: admin/partials/maspik-import-export.php:36
+msgid "Use this feature with caution."
+msgstr ""
+
+#: includes/functions.php:1146
+msgid ""
+"Use this plugin with caution and only if you understand the risk, "
+"blacklisting some words can lead to the termination of valid leads."
+msgstr ""
+
+#: includes/functions.php:1467
+msgid ""
+"We want to keep improving <b>Maspik plugin</b> - please allow us to track "
+"usage, we only collect non-sensitive information."
+msgstr ""
+
+#: includes/functions.php:1355
+msgid "We would love to hear from you at"
+msgstr ""
+
+#: admin/partials/maspik-log.php:52
+msgid ""
+"Whenever a bot/person tries to spam your contact forms and MASPIK blocks the "
+"spam, you will see a new line below showing the details.<br>The log "
+"containing these details resides on your database and you can reset it at "
+"any time.<br>Resetting the log doesn’t change anything – it just removes the "
+"history."
+msgstr ""
+
+#: includes/functions.php:1353
+msgid "WP Maspik Community - Stopping Spam Together"
+msgstr ""
+
+#. Author of the plugin
+msgid "WpMaspik"
+msgstr ""
