@@ -64,7 +64,7 @@ abstract class Base {
 		$this->url             = $url;
 		$this->consumer_key    = $consumer_key;
 		$this->consumer_secret = $consumer_secret;
-		$this->user_agent      = empty( $user_agent ) ? sprintf( 'DLM %s Client v%s', $this->id, $this->version ) : $user_agent;
+		$this->user_agent      = empty( $user_agent ) ? sprintf( 'DLM %s Client v%s (%s)', $this->id, $this->version, $this->id ) : $user_agent;
 	}
 
 

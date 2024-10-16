@@ -8,12 +8,12 @@
  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
 
+ .notice {
+  display: none !important;
+}
 
 tr.hide {
     display: none !important;
-}
-.maspik-settings .notice {
-  display: none !important;
 }
 .limit-api-label{
   font-size:12px;
@@ -27,10 +27,144 @@ tr.hide {
 }
 
 
+/* SPAM LOG POPUP - Start */
+
+
+
+/* Modal background */
+.modal {
+  display: none; 
+  position: fixed;
+  z-index: 1000; 
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0,0,0); 
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal content */
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  border: 1px solid #888;
+  width: 80%; 
+  max-width:450px;
+  border-radius: 20px;
+  border: 3px solid #F48722;
+  
+}
+
+.modal-content-inner {
+  padding:20px;
+}
+
+.modal-content pre{
+  display: inline;
+  background-color:#ddd;
+  text-wrap:wrap;
+}
+
+.modal-content #confirmation-message, .modal-content #filter-type{
+  font-size:18px;
+}
+
+/* Close button */
+.close-button {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close-button:hover,
+.close-button:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.del-spam-button, .del-filter-button {
+  padding: 8px 15px;
+  font-size:12px;
+  letter-spacing: 1px;
+  margin: 5px;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  font-family:'Montserrat', 'Open Sans', sans-serif;
+  text-transform:uppercase;
+  transition:0.3s;
+}
+
+.del-spam-button:hover, .del-filter-button:hover{
+  background-color:#374945;
+  color:#FFF;
+  border-color:#374945 ;
+}
+
+.del-spam-button-primary, .del-filter-button-primary {
+  background-color: #F48722;
+  color: white;
+  border:solid 1px #F48722;
+}
+.del-spam-button-secondary, .del-filter-button-secondary {
+  background-color: #FFF;
+  color: #F48722;
+  border:solid 1px #F48722;
+}
+
+/* Checkbox container styles */
+.checkbox-container {
+  padding:20px;
+  border-radius: 0 0 20px 20px;
+  display: flex;
+  align-items: flex-start; 
+  background-color:#eee;
+}
+
+.checkbox-container input[type="checkbox"] {
+  margin-right: 10px;
+  margin-top:5px;
+  vertical-align: top; 
+}
+
+.checkbox-container label {
+  display: inline-block;
+  vertical-align: top; 
+}
+
+/* SPAM LOG POPUP - End */
+
 /**--SPAM LOG TABLE - START --**/
+
 .spam-log-button-wrapper{
   display:flex;
   gap:15px;
+}
+
+.spam-option-wrap span{
+  color:#F48722;
+  cursor:pointer;
+}
+
+.spam-option-wrap span.not-a-spam-button, .spam-option-wrap .spam-delete-button{
+  color:red;
+}
+
+.spam-option-wrap{
+    font-size: 14px;
+  visibility: hidden;
+  display:flex;
+  justify-content: flex-start;
+  gap:5px;
+}
+
+
+.maspik-accordion-header:hover .spam-option-wrap{
+  visibility: visible;
 }
 
 
@@ -41,15 +175,42 @@ tr.hide {
 .detail-show:after{
   font-size:14px;
   color:#F48722;
-  content:"more details";
-  width:100px;
+  content:"More Details";
   display:block;
-  text-align: right;
+}
+.detail-show:hover{
+  cursor:pointer;
 }
 
-.active .detail-show:after{
-  content:"hide details";
+.detail-show:hover:after, .spam-option-wrap span:hover{
   color:#888;
+}
+
+.active.detail-show:after{
+  content:"Hide Details";
+  color:#888;
+}
+
+.active.detail-show:hover:after{
+  color:#F48722;
+}
+
+.spam-value-text{
+  display:flex;
+  flex-direction: column;
+}
+
+.maspik-log-table .maspik-accordion-content{
+  width:100%;
+  padding: 0;
+  transition: all 0.3s ease;
+}
+
+.column-value .maspik-accordion-header{
+ cursor:default; 
+ display:flex;
+ flex-direction:column;
+ gap:3px;
 }
 
  .column-value{
@@ -65,14 +226,31 @@ tr.hide {
 }
 
 .column-value .maspik-accordion-item .maspik-accordion-content pre{
-  padding: 0 30px;
+  margin: 0;
   max-width:50vw;
   text-wrap: wrap;
+  padding: 10px;
+
+}
+
+.maspik-accordion-item.expanded .log-detail.maspik-accordion-content {
+  box-sizing: border-box;
+  overflow: auto;
+  direction: ltr;
+  text-align: left;
 }
 
 .maspik-log-table{
   width: 100%;
   font-size:16px;
+}
+
+
+.maspik-log-table .span-alt-text{
+  font-size:14px!important;
+  margin-top:4px;
+  color:#888;
+  display: none;
 }
 .maspik-log-table th, .maspik-log-table td{
   padding:18px 20px;
@@ -80,19 +258,49 @@ tr.hide {
 
 }
 
+
+.maspik-log-table td.column-button, .maspik-log-table th.column-not-spam{
+  padding:18px 10px;
+  vertical-align: top;
+  background-color:rgba(255,255,255,0)!important;
+}
+
+.maspik-log-table td.column-button button{
+  background-color: #F48722;
+  color:#FFF;
+  font-family:'Montserrat', 'Open Sans', sans-serif;
+  line-height:1.1em;
+  border:none;
+  border-radius: 50px;
+  padding: 8px;
+  font-size:14px;
+  transition:0.3s;
+}
+
+
+.maspik-log-table td.column-button button:hover{
+  background-color: #374945;
+}
+
+
 .maspik-log-table th{
   background-color:#F48722;
   color:#FFF;
   border-radius:3px;
 }
 
-.maspik-log-table tr.row-odd{
+.maspik-log-table tr.row-odd td{
   background-color:#F6F6F6;
   border-radius:3px;
 }
 
-.maspik-log-table tr.row-even{
+.maspik-log-table tr.row-even td{
   background-color:#FAFAFA;
+  border-radius:3px;
+}
+
+.maspik-log-table tr.not-a-spam td{
+  background-color:#fdf6d0;
   border-radius:3px;
 }
 
@@ -104,11 +312,31 @@ tr.hide {
   text-align: center;
 }
 
+.log-detail th,.log-detail td {
+  padding: 5px;
+  border: 0;
+}
 
+.log-detail.maspik-accordion-content table {
+  background: #dddddd;
+  border: 0;
+  width: 100%;
+}
 
 /**--SPAM LOG TABLE - END --**/
 /**--GENERAL STYLE - START --**/
-
+.main-spam-check.togglewrap.maspik-main-check--wrap {
+    background: #fff;
+    padding: 50px 40px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    margin-top: 0;
+}
+.maspik-save-message-wrap:empty {
+  display: none;
+}
+ 
 .maspik-test-form input, .maspik-test-form textarea, .maspik-accordion-content-wrap input, .maspik-accordion-content-wrap textarea{
   background-color:#E9E9E9;
   border:none;
@@ -116,6 +344,9 @@ tr.hide {
   border-radius: 10px;
 }
 
+.main-spam-check h4 {
+    margin: 0;
+}
 
 #frmContact input.maspik-btn, .maspik-accordion-content-wrap #submit, .copy.maspik-btn, .log-reset.maspik-btn, .maspik-update-db #submit,#exp-imp-settings .export-import-btn{
     color:#FFF;
@@ -147,13 +378,25 @@ h4.maspik-header{
 h3.maspik-header{
     font-size:24px;
     font-weight: 700;
+    margin: 0;
 }
 
 h2.maspik-header{
     font-size:28px;
     font-weight: 700;
 }
-
+h1.maspik-main-title {
+  font-size: 30px;
+  font-weight: 600;
+  text-transform: capitalize;
+  color: #f48623;
+}
+p.up-line {
+  margin: 0;
+  font-size: 19px;
+  color: #f48623;
+  font-weight: 500;
+}
 /**--Toggle style - START --**/
 
 .togglebox {
@@ -490,8 +733,9 @@ div.pro-btn-wrapper.maspik-not-pro{
 /**--GENERAL STYLE - END --**/
 
 
-.maspik-more-options{
+.maspik-more-setting{
   padding-top:30px;
+  text-transform: capitalize;
 }
 .maspik-blacklist-options a{
     color: #F48722;
@@ -560,6 +804,16 @@ h1.maspik-title{
     font-weight:900!important;
     font-size:40px;
 }
+h1.maspik-title {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' version='1.1' viewBox='0 0 2844 854'%3E%3Cdefs%3E%3C/defs%3E%3Crect x='29.5' y='24.5' width='802' height='805' rx='136.54' ry='136.54' style='&%2310; fill: %23f48722;&%2310;'/%3E%3Cpath d='M697.8,687.25h-143.34l-10.19-231.45-4.27-92.38c-1.54,17.75-3.29,34.68-5.26,50.79-1.97,16.11-4.39,31.72-7.23,46.85l-43.07,226.19h-111.78l-36.82-226.52c-2.19-13.15-5.15-35.72-8.88-67.72-.44-4.82-1.43-14.68-2.96-29.59l-3.29,93.7-12.16,230.13h-145.97l59.18-507.61h170.63l28.6,170.96c2.41,14.03,4.55,29.26,6.41,45.7,1.86,16.44,3.56,34.3,5.1,53.59,2.85-32.22,6.79-61.04,11.84-86.46l34.85-183.78h169.31l49.31,507.61Z' style='fill: %23fff;'/%3E%3Cg%3E%3Cpath d='M1357.77,621.99h-108.68l-7.73-175.48-3.24-70.04c-1.17,13.46-2.49,26.3-3.99,38.51-1.5,12.21-3.33,24.05-5.48,35.52l-32.65,171.5h-84.75l-27.92-171.75c-1.67-9.97-3.91-27.08-6.73-51.35-.34-3.65-1.08-11.13-2.24-22.43l-2.49,71.04-9.22,174.49h-110.68l44.87-384.87h129.37l21.69,129.62c1.82,10.64,3.44,22.18,4.86,34.65,1.41,12.46,2.7,26.01,3.86,40.63,2.16-24.43,5.15-46.28,8.97-65.56l26.42-139.34h128.37l37.39,384.87Z' style='&%2310; fill: %23f48623;&%2310;'/%3E%3Cpath d='M1681.07,621.99h-107.44l-7.73-48.86h-70.04l-8.48,48.86h-107.44l92.48-384.87h127.13l81.51,384.87ZM1553.69,490.63l-6.73-44.87c-.17-.16-.5-2.41-1-6.73-.34-3.65-2.08-18.11-5.23-43.37-.34-2.82-.75-6.69-1.25-11.59-.5-4.9-1.17-11.09-1.99-18.57l-3.24-36.39c-.34,3.49-.79,7.4-1.37,11.72-.59,4.32-1.21,9.06-1.87,14.21-1.17,10.31-1.99,17.45-2.49,21.44s-.83,6.4-1,7.23l-7.23,46.61-10.47,60.32h43.87Z' style='&%2310; fill: %23f48623;&%2310;'/%3E%3Cpath d='M1703,612.52v-120.89c20.44,27.92,42.54,41.88,66.31,41.88,8.97,0,16.28-2.37,21.94-7.1,5.65-4.74,8.48-10.68,8.48-17.82,0-10.3-6.15-20.35-18.45-30.16l-16.95-13.21c-11.3-8.48-20.94-16.91-28.92-25.3-7.98-8.39-14.46-17.03-19.44-25.92-4.99-8.89-8.64-18.07-10.97-27.54-2.33-9.47-3.49-19.44-3.49-29.91,0-17.95,4.15-36.72,12.46-56.33,4.15-9.14,8.97-17.49,14.46-25.05,5.48-7.56,11.8-14.25,18.94-20.07,19.61-16.61,43.29-24.93,71.04-24.93,24.76,0,49.68,6.57,74.78,19.69v117.66c-8.48-13.12-18.12-23.47-28.92-31.03-10.81-7.56-21.44-11.34-31.91-11.34-7.98,0-14.54,2.33-19.69,6.98-5.32,4.49-7.98,9.89-7.98,16.2,0,10.31,7.06,20.53,21.19,30.66l16.45,12.21c21.94,15.79,37.64,31.99,47.11,48.61,9.63,16.62,14.46,36.06,14.46,58.33,0,37.89-11.55,69.13-34.65,93.72-23.1,24.6-52.35,36.89-87.74,36.89-24.43,0-50.6-5.4-78.52-16.2Z' style='&%2310; fill: %23f48623;&%2310;'/%3E%3Cpath d='M2048.49,621.99h-103.95V237.12h100.7c50.19,0,87.41,10.22,111.68,30.66,28.58,24.1,42.87,57.58,42.87,100.46,0,46.7-15.21,81.51-45.62,104.44-20.78,15.45-50.6,23.18-89.49,23.18h-16.21v126.13ZM2048.49,409.37l4.74.25c12.62,0,22.68-3.86,30.16-11.59,7.48-7.73,11.22-18.32,11.22-31.78s-3.66-24.09-10.97-32.41c-7.32-8.48-16.62-12.71-27.92-12.71h-7.23v88.24Z' style='&%2310; fill: %23f48623;&%2310;'/%3E%3Cpath d='M2340.14,621.99h-103.95V237.12h103.95v384.87Z' style='&%2310; fill: %23f48623;&%2310;'/%3E%3Cpath d='M2676.4,621.99h-112.17l-69.05-177.48,2.74,177.48h-103.95V237.12h103.95l-2.74,165.02,61.32-165.02h109.68l-83.01,185.71,93.23,199.16Z' style='&%2310; fill: %23f48623;&%2310;'/%3E%3Cpath d='M2814.5,570.64c0,15.62-5.73,29-17.2,40.13-11.13,11.14-24.77,16.7-40.88,16.7s-29.83-5.65-41.63-16.95c-11.47-11.47-17.2-25.34-17.2-41.63s5.64-29.57,16.95-40.88c11.3-11.3,24.93-16.95,40.88-16.95s30.41,5.82,41.88,17.45c11.47,11.47,17.2,25.51,17.2,42.12Z' style='&%2310; fill: %23f48623;&%2310;'/%3E%3C/g%3E%3C/svg%3E");
+      color: transparent;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      margin: 0;
+      height: 55px;
+      margin-bottom: 10px;
+  }
 
 h3.maspik-protag{
     background-color:#F48722;
@@ -629,6 +883,14 @@ h3.maspik-protag.maspik-not-pro{
 .maspik-tooltip:hover{
   cursor:pointer;
 }
+.rtl .maspik-setting-header-wrap {
+  flex-direction: row-reverse;
+}
+
+.rtl .maspik-setting-header {
+  align-self: end;
+  padding-bottom: 0;
+}
 
 /** Affected forms **/
 
@@ -666,7 +928,7 @@ h3.maspik-protag.maspik-not-pro{
 
 .maspik-aform ul.supportforms li.disabled{
   margin:0;
-  background-color:#888!important;
+  background-color:#374945!important;
   color:#FFF;
   padding: 5px 10px;
   border-radius:50px;
@@ -676,7 +938,7 @@ h3.maspik-protag.maspik-not-pro{
 }
 
 .not-connected{
-  background:#8D8E93!important;
+  background:#374945!important;
 }
 
 /**--- HEAD - END ---**/
@@ -710,12 +972,24 @@ h3.maspik-protag.maspik-not-pro{
     font-size: 16px;
     margin-left:20px;
 }
+.maspik-section-head p {
+  font-size: 16px;
+}
+
 
 
 /** Accordion **/
 
-.maspik-accordion {
-    margin: 0 auto;
+  .maspik-main-check--wrap.maspik-accordion-content-wrap .submit {
+    margin-left: auto;
+    margin-top: 0;
+  }
+  h2.maspik-title {
+    margin-top: 0;
+    font-size: 25px;
+  }
+  .maspik-accordion {
+      margin: 0 auto;
   }
 
   .maspik-accordion-item{
@@ -813,6 +1087,7 @@ h3.maspik-protag.maspik-not-pro{
 
   h4.maspik-accordion-header-text{
     margin:0;
+    text-transform: capitalize;
   }
 
   .maspik-accordion-subheader{
@@ -921,7 +1196,7 @@ h3.maspik-protag.maspik-not-pro{
 
 
 .maspik-accordion-item > .active + .maspik-accordion-content {
-    max-height: 1400px!important;
+    max-height: 2200px!important;
     transition: max-height 0.3s ease-in;
   }
 
@@ -946,7 +1221,7 @@ h3.maspik-protag.maspik-not-pro{
 }
 .maspik-api-text-wrap {
     max-width: 100%;
-    overflow: scroll;
+    overflow: hidden;
 }
   .maspik-accordion-subtitle-wrap h3{
     margin:0;
@@ -967,6 +1242,20 @@ h3.maspik-protag.maspik-not-pro{
     margin-inline-end: 8px;
     margin-inline-start: -8px;
   }
+  .maspik-mainpage span.dashicons.dashicons-star-empty, .maspik-get-pro-a span.dashicons.dashicons-star-empty {
+    background-image: url("data:image/svg+xml,%3Csvg aria-hidden='true' viewBox='0 0 320 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M296 160H180.6l42.6-129.8C227.2 15 215.7 0 200 0H56C44 0 33.8 8.9 32.2 20.8l-32 240C-1.7 275.2 9.5 288 24 288h118.7L96.6 482.5c-3.6 15.2 8 29.5 23.3 29.5 8.4 0 16.4-4.4 20.8-12l176-304c9.3-15.9-2.2-36-20.7-36z' style=' fill: %23ffffff;%0A'%3E%3C/path%3E%3C/svg%3E");    background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+        color: transparent;
+    }
+    .maspik-mainpage span.dashicons.dashicons-star-filled {
+        background-image: url("data:image/svg+xml,%3Csvg aria-hidden='true' viewBox='0 0 320 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M296 160H180.6l42.6-129.8C227.2 15 215.7 0 200 0H56C44 0 33.8 8.9 32.2 20.8l-32 240C-1.7 275.2 9.5 288 24 288h118.7L96.6 482.5c-3.6 15.2 8 29.5 23.3 29.5 8.4 0 16.4-4.4 20.8-12l176-304c9.3-15.9-2.2-36-20.7-36z' style=' fill: %23f48623;%0A'%3E%3C/path%3E%3C/svg%3E");
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+        color: transparent;
+    }
+    
   .maspik-not-pro.maspik-accordion-item{
     border:solid 1px #F48722;
   }
@@ -1002,7 +1291,7 @@ h3.maspik-protag.maspik-not-pro{
   }
 
   .upsell-btn .maspik-small-btn.get-pro a{
-    background: #374945;
+    background: #014921;
   }
   .upsell-btn .maspik-small-btn.get-pro a:hover{
     background: #F48722;
@@ -1043,6 +1332,11 @@ h3.maspik-protag.maspik-not-pro{
     background: #FFF;
     padding: 2px 6px;
   }
+
+    .maspik-accordion-phone-field .help-text {
+        margin-inline-end: auto;
+        margin-inline-start: 20px;
+    }
 
   .maspik-main-list-wrap.maspik-select-list .maspik-form-api-list{
     width:100%;
@@ -1117,7 +1411,7 @@ h3.maspik-protag.maspik-not-pro{
     background: #bababa !important;
 }
 td.column-value.column-entries {
-    max-width: 600px;
+    max-width: 500px;
 }
 
 .togglewrap span.new {
@@ -1223,7 +1517,27 @@ td.column-value.column-entries {
   padding: 10px 10px;
 }
 
-
+table.maspik-stats-table {
+  border-collapse: collapse;
+  border: 1px solid black;
+  width: 100%;
+}
+table.maspik-stats-table th{color: white;background-color: #F48722;}
+table.maspik-stats-table td{
+background-color: white;
+}
+table.maspik-stats-table td, table.maspik-stats-table th {
+  border: 1px solid black;
+    text-align:start;
+    padding:3px;
+}
+.maspik-db-check--wrap .maspik-small-btn.btns {
+  display: inline-block;
+  margin: 0;
+}
+.maspik-db-check--wrap h4 {
+  display: inline-block;
+}
 .maspik-btn.copy{
   margin-top: 15px;
   min-height:30px;
@@ -1268,7 +1582,7 @@ body.rtl span.maspik-tooltiptxt {
 }
 
 .togglewrap .maspik-tooltiptxt, .short-tooltip .maspik-tooltiptxt{
-  width:220px;
+  width:150px;
 }
 
 .maspik-accordion-maspik-api-field .active + .maspik-accordion-content .maspik-accordion-content-wrap{
@@ -1421,14 +1735,19 @@ h3.maspik-test-form-head.maspik-header {
     padding:4px 10px;
 }
 
-.maspik-test-form textarea, .maspik-accordion-content-wrap textarea{
+.maspik-accordion-content-wrap textarea{
     padding:10px;
+}
+.maspik-test-form textarea {
+  padding: 10px;
+  margin-top: 5px;
 }
 
 .maspik-test-form input, .maspik-accordion-content-wrap input{
     height:35px;
     margin-top:5px;
 }
+
 
 .maspik-test-form .btn-submit{
     max-width: 180px;
@@ -1474,8 +1793,26 @@ h3.maspik-test-form-head.maspik-header {
 /**--- TEST FORM - END ---**/
 
 .maspik-footer a {
-    color: black;
     text-decoration: underline;
+}
+footer.maspik-footer {
+  background: #f48623;
+  padding: 20px;
+  margin-top: 30px;
+  border-radius: 20px;
+  color: #fff;
+  font-size: 16px;
+}
+
+footer.maspik-footer * {
+  color: #fff;
+}
+footer.maspik-footer h3 {
+  font-size: 23px;
+  text-transform: uppercase;
+}
+footer.maspik-footer h4 {
+  font-size: 18px;
 }
 
 @media only screen and (max-width: 767px) {

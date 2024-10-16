@@ -34,12 +34,18 @@ $statusText = $statusCode === $license::STATUS_MISSING_LICENSE_KEY ? __( 'Not Ac
     <div class="dlm_license_form_content">
 		<?php if ( $license::STATUS_MISSING_TOKEN === $statusCode ): ?><?php
 			$licenseData = $license->queryValidateLicenseExpiration();
+
+            $full_license_key = $license->getLicenseKey(); // Yoni
+            $first_part = substr( $full_license_key, 0, 3 ); // Yoni
+            $last_part = substr( $full_license_key, -3 ); // Yoni
+            $hidden_license_key = $first_part . '************************' . $last_part; // Yoni
+
 			?>
             <form method="POST" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
                 <fieldset id="dlm_activate_plugin">
                     <div class="dlm_license_key ">
                         <p class="label"><?php _e( 'License Key' ); ?></p>
-                        <p class="field"><input id="license_key" name="license_key" readonly type="password" value="<?php echo esc_attr( $license->getLicenseKey() ); ?>"></p>
+                        <p class="field"><input id="license_key" name="license_key" readonly type="text" value="<?php echo esc_attr( $hidden_license_key ); ?>"></p>
                     </div>
                     <div class="dlm_license_email ">
                         <p class="label"><?php _e( 'Select activation token' ); ?></p>
@@ -70,13 +76,19 @@ $statusText = $statusCode === $license::STATUS_MISSING_LICENSE_KEY ? __( 'Not Ac
                     </fieldset>
                 </div>
             </form>
-		<?php elseif ( $license::STATUS_EXPIRED === $statusCode ): ?>
+		<?php elseif ( $license::STATUS_EXPIRED === $statusCode ):
+
+                        $full_license_key = $license->getLicenseKey(); // Yoni
+                        $first_part = substr( $full_license_key, 0, 3 ); // Yoni
+                        $last_part = substr( $full_license_key, -3 ); // Yoni
+                        $hidden_license_key = $first_part . '************************' . $last_part; // Yoni
+             ?>
 
             <form method="POST" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
                 <fieldset id="dlm_activate_plugin">
                     <div class="dlm_license_key ">
                         <p class="label"><?php _e( 'License Key' ); ?></p>
-                        <p class="field"><input id="license_key" name="license_key" readonly type="password" value="<?php echo esc_attr( $license->getLicenseKey() ); ?>"></p>
+                        <p class="field"><input id="license_key" name="license_key" readonly type="text" value="<?php echo esc_attr( $hidden_license_key ); ?>"></p>
                     </div>
                 </fieldset>
                 <div id="dlm_license_actions">
@@ -90,13 +102,20 @@ $statusText = $statusCode === $license::STATUS_MISSING_LICENSE_KEY ? __( 'Not Ac
             </form>
 
 
-		<?php elseif ( $license::STATUS_DISABLED === $statusCode ): ?>
+		<?php elseif ( $license::STATUS_DISABLED === $statusCode ): 
+            
+            $full_license_key = $license->getLicenseKey(); // Yoni
+            $first_part = substr( $full_license_key, 0, 3 ); // Yoni
+            $last_part = substr( $full_license_key, -3 ); // Yoni
+            $hidden_license_key = $first_part . '************************' . $last_part; // Yoni
+
+            ?>
 
             <form method="POST" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
                 <fieldset id="dlm_activate_plugin">
                     <div class="dlm_license_key ">
                         <p class="label"><?php _e( 'License Key' ); ?></p>
-                        <p class="field"><input id="license_key" name="license_key" readonly type="password" value="<?php echo esc_attr( $license->getLicenseKey() ); ?>"></p>
+                        <p class="field"><input id="license_key" name="license_key" readonly type="text" value="<?php echo esc_attr( $hidden_license_key ); ?>"></p>
                     </div>
                 </fieldset>
                 <div id="dlm_license_actions">
@@ -110,13 +129,20 @@ $statusText = $statusCode === $license::STATUS_MISSING_LICENSE_KEY ? __( 'Not Ac
                 </div>
             </form>
 
-		<?php elseif ( $license::STATUS_ACTIVE === $statusCode ): ?>
+		<?php elseif ( $license::STATUS_ACTIVE === $statusCode ): 
+            
+            $full_license_key = $license->getLicenseKey(); // Yoni
+            $first_part = substr( $full_license_key, 0, 3 ); // Yoni
+            $last_part = substr( $full_license_key, -3 ); // Yoni
+            $hidden_license_key = $first_part . '************************' . $last_part; // Yoni
+
+?>
 
             <form method="POST" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
                 <fieldset id="dlm_activate_plugin">
                     <div class="dlm_license_key ">
                         <p class="label"><?php _e( 'License Key' ); ?></p>
-                        <p class="field"><input id="license_key" name="license_key" readonly type="password" value="<?php echo esc_attr( $license->getLicenseKey() ); ?>"></p>
+                        <p class="field"><input id="license_key" name="license_key" readonly type="text" value="<?php echo esc_attr( $hidden_license_key ); ?>"></p>
                     </div>
                 </fieldset>
                 <div id="dlm_license_actions">

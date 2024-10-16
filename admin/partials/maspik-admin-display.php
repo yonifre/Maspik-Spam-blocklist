@@ -298,6 +298,10 @@ $spamcounter = maspik_spam_count();
             //MASPIK API field END --
 
             //General field
+                if( maspik_save_settings( 'maspikDbCheck' , sanitize_text_field(isset( $_POST['maspikDbCheck'] )) ? 1 : 0) != "success" ){ 
+                    $error_message .= $result_check . " ";
+                } //maspikDbCheck
+
                 if( maspik_save_settings( 'maspikHoneypot' , sanitize_text_field(isset( $_POST['maspikHoneypot'] )) ? 1 : 0) != "success" ){ 
                     $error_message .= $result_check . " ";
                 } //honeypot
@@ -391,7 +395,15 @@ $spamcounter = maspik_spam_count();
 
                 if( maspik_save_settings( 'maspik_support_ninjaforms' , sanitize_text_field(isset( $_POST['maspik_support_ninjaforms'] )) ? "yes" : "no") != "success" ){ 
                     $error_message .= $result_check . " ";
-                } //maspik_support_bricks_forms
+                } //maspik_support_ninja_forms
+
+                if( maspik_save_settings( 'maspik_support_jetforms' , sanitize_text_field(isset( $_POST['maspik_support_jetforms'] )) ? "yes" : "no") != "success" ){ 
+                    $error_message .= $result_check . " ";
+                } //maspik_support_jet_forms
+
+                if( maspik_save_settings( 'maspik_support_everestforms' , sanitize_text_field(isset( $_POST['maspik_support_everestforms'] )) ? "yes" : "no") != "success" ){ 
+                    $error_message .= $result_check . " ";
+                } //maspik_support_everest_forms
 
 
             //Form option field END --
@@ -408,15 +420,11 @@ $spamcounter = maspik_spam_count();
                     $error_message .= $result_check . " ";
                 } //spam log entity limit
 
-                if( !update_option( 'add_country_to_emails' , sanitize_text_field(isset( $_POST['add_country_to_emails'] )) ? 'yes' : 'no')){ 
-                    $error_message .= $result_check . " ";
-                } //add country toggle
-
-                if( !update_option( 'disable_comments' , sanitize_text_field(isset( $_POST['disable_comments'] )) ? 'yes' : 'no')){ 
+                if( update_option( 'shere_data' , sanitize_text_field(isset( $_POST['shere_data'] )) ? 1 : 0)){ 
                     $error_message .= $result_check . " ";
                 } //disable comment toggle
 
-                if( !update_option( 'shere_data' , sanitize_text_field(isset( $_POST['shere_data'] )) ? 'yes' : 'no')){ 
+                if( maspik_save_settings( 'shere_data' , sanitize_text_field(isset( $_POST['shere_data'] )) ? 1 : 0)){ 
                     $error_message .= $result_check . " ";
                 } //disable comment toggle
 
@@ -456,7 +464,7 @@ $spamcounter = maspik_spam_count();
                 <div class="notice-pointer"><h2></h2></div>
 
                 <?php 
-                echo "<div class='upsell-btn " . maspik_add_pro_class() . "'>";
+                echo "<div class='upsell-btn " . esc_attr(maspik_add_pro_class()) . "'>";
                 maspik_get_pro();
                 maspik_activate_license();
                 echo "</div>";
@@ -465,7 +473,7 @@ $spamcounter = maspik_spam_count();
                 <div class="maspik-setting-header-wrap">
                     <h1 class="maspik-title">MASPIK.</h1>
                 <?php
-                    echo '<h3 class="maspik-protag '. maspik_add_pro_class() .'">Pro</h3>';
+                    echo '<h3 class="maspik-protag ' . esc_attr(maspik_add_pro_class()) . '">Pro</h3>';
                 ?>
                 </div>          
            
@@ -474,15 +482,17 @@ $spamcounter = maspik_spam_count();
             <?php  
 
              //Update database button command
+             /*
                 if ( isset( $_POST['maspik-update-database-btn'] ) ) {
                     create_maspik_log_table();
                     create_maspik_table();
                     maspik_run_transfer();
                 }
+                */
                         
             
             //Update table banner
-           
+           /*
                 if(!maspik_table_exists()){
             
                     echo "<div class = 'maspik-update-db'>
@@ -490,9 +500,8 @@ $spamcounter = maspik_spam_count();
                     
                     echo "<div class='db-update-text'>";
 
-                        echo __('<h3>We have improved our plugin! Before continuing, please update the database.</h3>', 'contact-forms-anti-spam');
-
-                        echo __('<span> ( We recommend backing up your data first.)</span>', 'contact-forms-anti-spam');
+                        echo '<h3>' . esc_html__('We have improved our plugin! Before continuing, please update the database.', 'contact-forms-anti-spam') . '</h3>';
+                        echo '<span>' . esc_html__('( We recommend backing up your data first.)', 'contact-forms-anti-spam') . '</span>';
 
                     echo "</div>";
         
@@ -500,14 +509,16 @@ $spamcounter = maspik_spam_count();
         
                     echo "</form></div>";
                 }
+            */
             //Update table banner - END
 
             
             ?> 
 
-           
+            <h1 class="maspik-main-title"><?php esc_html_e('Block spam options', 'contact-forms-anti-spam'); ?></h1>
+            <p class="up-line"><?php esc_html_e('Review the settings and adjust options as needed.', 'contact-forms-anti-spam'); ?></p>
             <div class="maspik-aform">
-                <span class="mpk-form-list-lbl"><?php _e('Affected forms:', 'contact-forms-anti-spam'); ?>  </span>
+                <span class="mpk-form-list-lbl"><?php esc_html_e('Affected forms:', 'contact-forms-anti-spam'); ?>  </span>
                 <?php
                     echo "<ul class='supportforms'>";       
                     
@@ -516,10 +527,10 @@ $spamcounter = maspik_spam_count();
                         if(maspik_if_plugin_is_active($key)){
                           $class = $value ? "pro" : "free";
 
-                          $class.= efas_if_plugin_is_affective($key, 0) ? ' enabled' : ' disabled';
+                          $class.= efas_if_plugin_is_affective($key) ? ' enabled' : ' disabled';
 
                           $value = $value ? " <span>($value)</span>" : "";
-                          echo  "<li class='form-opt-toggle $class'>$key $value</li>";
+                          echo  "<li class='form-opt-toggle " . esc_attr($class) . "'>" . esc_html($key) . " " . wp_kses_post($value) . "</li>";
                           }
                     	}
                         echo "</ul>";
@@ -533,23 +544,9 @@ $spamcounter = maspik_spam_count();
     <div class="maspik-setting-body">
     
         
-        <div class="maspik-blacklist-options <?php if( !maspik_table_exists() ) echo ' accordion-disable'; ?>">
+        <div class="maspik-blacklist-options">
 
-            <div class="maspik-blacklist-head">
-                
-                <h2 class='maspik-header maspik-bl-header'><?php _e('Blacklist Options', 'contact-forms-anti-spam'); ?></h2>
-                <p>
-                    <?php _e('Create a list of words or phrases you want to block.', 'contact-forms-anti-spam'); ?><br>
-                    <?php _e('Each term should be on a separate line.', 'contact-forms-anti-spam'); ?><br>
-                    <?php _e('The system is not case-sensitive', 'contact-forms-anti-spam'); ?><br>
-                </p>
-                <p><?php _e('Learn more about those option in our documentation', 'contact-forms-anti-spam'); ?> <a target="_blank" href="https://wpmaspik.com/documentation/?fromplugin"><?php _e('here', 'contact-forms-anti-spam'); ?></a>.</p>
-
-
-            </div>
-
-            <div class="maspik-save-message-wrap"><!--Save message section-->
-                <?php
+            <div class="maspik-save-message-wrap"><?php
                     if($save_notif == "yes"){
                         if($error_message){
                             global $wpdb;
@@ -559,367 +556,101 @@ $spamcounter = maspik_spam_count();
                             echo "<div class='maspik-save-message success'> Successfully Saved! </div>";
                         }
                     }
-                ?>
-            </div>
+                ?></div>
 
-           
+
         <!--accordions here-->
-        <div class="maspik-accordion">
-            <div class="maspik-database-update-overlay <?php if( !maspik_table_exists() ) echo ' accordion-disable'; ?>"><h4>Please update the database first</h4></div>
+        <div class="maspik-accordion">            
             
-        
             <form method="POST" action="" class="maspik-form">
 
-            <!-- Accordion Item - Text Field - Custom -->
-            <div class="maspik-accordion-item maspik-accordion-text-field">
-                <div class="maspik-accordion-header">
-                    <div class="mpk-acc-header-texts">
-                        <h4 class="maspik-header maspik-accordion-header-text"><?php _e('Text Fields', 'contact-forms-anti-spam');?></h4><!--Accordion Title-->
-                        <span class="maspik-accordion-subheader">
-                            <?php _e('(Usually Name/Subject)', 'contact-forms-anti-spam');?></span>
-                    </div>
-                        <span class="maspik-acc-arrow"><span class="dashicons dashicons-arrow-right"></span>
-                </div>
-                    
-                <div class="maspik-accordion-content">
-                    <div class="maspik-accordion-content-wrap hide-form-title">
-                        <div class="maspik-setting-info">
-                            <?php 
-                                maspik_tooltip("If the text value CONTAINS one of the given values, it will be marked as spam and blocked.");
-                                    
-                                maspik_popup("Eric jones|SEO|ranking|currency|click here", "Text field", "See examples" ,"visibility");
-                            ?>
-                        </div> <!--end of maspik-setting-info-->
-                                
-                        <div class="maspik-main-list-wrap maspik-textfield-list">
+            <!--  Main check -->
+            <div class="main-spam-check togglewrap maspik-main-check--wrap maspik-accordion-content-wrap">
+            <h3 class="maspik-header maspik-accordion-subtitle"><?php esc_html_e('Main Options', 'contact-forms-anti-spam'); ?></h3>
+            <p><?php esc_html_e('Our recommendation: Take a few moments to browse through the settings, see what works best for your site, and customize your spam protection accordingly. Most features work automatically, but you can maximize protection by setting custom keywords.', 'contact-forms-anti-spam'); ?></p>
+                <div class="maspik-txt-custom-msg-head togglewrap maspik-db-check--wrap">
+                    <?php echo maspik_toggle_button('maspikDbCheck', 'maspikDbCheck', 'maspikDbCheck', 'maspik-DbCheck togglebutton',"",""); ?>
+                    <div>
+                        <h4> <?php esc_html_e('IP Verification', 'contact-forms-anti-spam'); ?></h4> 
+                        <?php maspik_popup("", "",  "See details" , "visibility"); ?>
 
+                        <span style="display:block;"><?php esc_html_e("Check if the sender's IP address is flagged as spam in the Maspik database.", 'contact-forms-anti-spam'); ?><br>
                             <?php
-                                echo create_maspik_textarea('text_blacklist', 6, 80, 'maspik-textarea');
-                                    
-                                maspik_spam_api_list('text_field');
-                            ?>      
-
-                        </div> <!-- end of maspik-main-list-wrap -->
-                        <span class="maspik-subtext">
-                        <?php _e('Wildcard patterns are accepted. asterisk * symbol is necessary for the recognition of the wildcard.', 'contact-forms-anti-spam'); ?></span>
-                                    
-                        <div class="maspik-limit-char-wrap">
-                            <div class="maspik-limit-char-head togglewrap">
-                                <?php
-                                    echo maspik_toggle_button('text_limit_toggle', 'text_limit_toggle', 'text_limit_toggle', 'maspik-toggle-text-limit togglebutton',"","",['MinCharactersInTextField','MaxCharactersInTextField','custom_error_message_MaxCharactersInTextField']);
-                                            
-                                    echo "<h4> Limit Characters </h4>";
-
-                                    maspik_tooltip("If the text field contains more characters that this value, it will be considered spam and it will be blocked.");                             
-                                ?>
-                            </div>
-
-                            <div class="maspik-limit-char-box togglebox">
-                                <div class = 'maspik-minmax-wrap'>
-                                <?php 
-
-                                echo create_maspik_numbox("text_limit_min", "MinCharactersInTextField", "character-limit" , "Min" ,'' ,1,30);
-                                
-                                echo create_maspik_numbox("text_limit_max", "MaxCharactersInTextField", "character-limit" , "Max",'' ,6,1000);
-
-                                ?>
-                                </div>
-                                        
-                                <span class="maspik-subtext">
-                                        <?php _e("Entries with less than <strong>Min</strong> or more than <strong>Max</strong> characters will be blocked", "contact-forms-anti-spam"); ?>
-                                </span>
-                           
-
-                                <div class="maspik-custom-msg-wrap">
-                                    <div class="maspik-txt-custom-msg-head togglewrap">
-                                        <?php echo maspik_toggle_button('text_custom_message_toggle', 'text_custom_message_toggle', 'text_custom_message_toggle', 'maspik-toggle-custom-message togglebutton',"","",['custom_error_message_MaxCharactersInTextField']); ?>
-                                            
-                                        <h4> <?php _e('Character limit custom validation error message', 'contact-forms-anti-spam'); ?> </h4>
-                                    </div>
-
-                                    <div class="maspik-custom-msg-box togglebox">
-                                        <?php echo create_maspik_textarea('custom_error_message_MaxCharactersInTextField', 2, 80, 'maspik-textarea', 'error-message'); ?>      
-                                    </div>
-                                    
-                                </div><!-- end of maspik-custom-msg-wrap -->
-
-
-                            </div><!-- end of togglebox -->
-                        </div><!-- end of maspik-limit-char-wrap -->
-
-                        <?php maspik_save_button_show() ?>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Accordion Item - Email Field - Custom -->
-            <div class="maspik-accordion-item maspik-accordion-email-field">
-                <div class="maspik-accordion-header">
-                    <div class="mpk-acc-header-texts">
-                        <h4 class="maspik-header maspik-accordion-header-text"><?php _e('Email Fields', 'contact-forms-anti-spam'); ?></h4><!--Accordion Title-->
-                        <span class="maspik-accordion-subheader"></span>
-                    </div>
-                        <span class="maspik-acc-arrow"><span class="dashicons dashicons-arrow-right"></span>
-                </div>
-                    
-                <div class="maspik-accordion-content">
-                    <div class="maspik-accordion-content-wrap hide-form-title">
-                        <div class="maspik-setting-info">
-                            <?php 
-                            maspik_tooltip("If the text value is EQUAL to one of the values above, MASPIK will tag it as spam and it will be blocked.");
-                                
-                            maspik_popup("georginahaynes620@gmail.com|ericjonesonline@outlook.com|*.ru|*+*@*.*|/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.ru\b/|eric*@*.com|xrumer888@outlook.com", "Email field", "See examples" ,"visibility");
-                                ?>
-                        </div> <!--end of maspik-setting-info-->
+                            $api_data = get_option('maspik_api_requests', array('months' => array()));
+                            $current_month = date('Ym');
+                            $actual_calls_current_month = 0;
+                            if (isset($api_data['months'][$current_month])) {
+                                $actual_calls_current_month = intval($api_data['months'][$current_month]['actual_calls']);
+                            }
                             
-                        <div class="maspik-main-list-wrap maspik-textfield-list">
+                            $max_checks = cfes_is_supporting() ? 1000 : 100;
+                            
+                            $over_max_checks = $actual_calls_current_month > $max_checks;
+                            echo $over_max_checks ? '<span class="text-caution">' : '';
+                            printf(
+                                /* translators: %1$d is the number of checks used, %2$d is the total number of checks allowed */
+                                esc_html__('You have used %1$d out of %2$d checks this month', 'contact-forms-anti-spam'),
+                                $actual_calls_current_month,
+                                $max_checks
+                            );
+                            echo $over_max_checks ? '.</span>' : '';
 
-                            <?php 
-                                echo create_maspik_textarea('emails_blacklist', 6, 80, 'maspik-textarea');
-                                 
-                                maspik_spam_api_list('email_field');
-                            ?>      
-
-                        </div> <!-- end of maspik-main-list-wrap -->
-                        <span class="maspik-subtext"><?php _e('Wildcard patterns are accepted. asterisk * Or question mark ? symbol are necessary for the recognition of the wildcard.', 'contact-forms-anti-spam'); ?><br>
-                        <?php _e('Regex must start and end with a slash /', 'contact-forms-anti-spam'); ?>
-
-                        </span>
-                                
-                        <?php maspik_save_button_show() ?>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Accordion Item - Textarea Field - Custom -->
-            <div class="maspik-accordion-item maspik-accordion-textarea-field">
-                <div class="maspik-accordion-header">
-                    <div class="mpk-acc-header-texts">
-                        <h4 class="maspik-header maspik-accordion-header-text"><?php _e('Textarea Fields', 'contact-forms-anti-spam'); ?></h4><!--Accordion Title-->
-                        <span class="maspik-accordion-subheader"><?php _e('(Usually Message/Long text)', 'contact-forms-anti-spam'); ?></span>
-                    </div>
-                        <span class="maspik-acc-arrow"><span class="dashicons dashicons-arrow-right"></span>
-                </div>
-                    
-                <div class="maspik-accordion-content">
-                    <div class="maspik-accordion-content-wrap hide-form-title">
-                        <div class="maspik-setting-info">
-                            <?php 
-                                maspik_tooltip("If the Textarea value CONTAINS one of the given values, it will be marked as spam and blocked.");
-                                    
-                                echo "<div class = 'maspik-small-btn-wrap'>";
-                                    maspik_popup("
-                                    [name] - Title of the website- Maspik Testing |
-                                    [url] - URL of the website- https://maspik.com|
-                                    [description] - Description of the web site- Desc", "Shortcode List",  "Shortcode List" ,"shortcode");
-
-                                    maspik_popup("submit your website|seo|ranking|currency|click here", "Textarea field",  "See examples" ,"visibility");
-                                echo "</div>";
+                            if (!cfes_is_supporting()) {
+                                echo ' ';
+                                esc_html_e('Upgrade to Pro for 1,000 checks/month', 'contact-forms-anti-spam');
+                            }else{
+                                echo ' ';
+                                esc_html_e(', thanks to your Pro subscription.', 'contact-forms-anti-spam');
+                            }
                             ?>
-                        </div> <!--end of maspik-setting-info-->
-                                
-                        <div class="maspik-main-list-wrap maspik-textareafield-list">
-
-                            <?php 
-                                echo create_maspik_textarea('textarea_blacklist', 6, 80, 'maspik-textarea');
-                                    
-                                maspik_spam_api_list('textarea_field');
-                            ?>      
-
-                        </div> <!-- end of maspik-main-list-wrap -->
-                        <span class="maspik-subtext"><?php _e('Try to use full sentences that you typically find in spam emails, rather than single words.', 'contact-forms-anti-spam'); ?></span>
-
-                        <div class="maspik-limit-char-head togglewrap">
-                                <?php
-                                            
-                                    echo maspik_toggle_button('textarea_link_limit_toggle', 'textarea_link_limit_toggle', 'textarea_link_limit_toggle', 'maspik-toggle-text-limit togglebutton',"","",['contain_links']);
-                                            
-                                    echo "<h4> Limit Links </h4>";
-
-                                    maspik_tooltip("Spammers tend to include links.
-                                    <br>If there is no reason for anyone to send links when completing your forms, set this to 0");
-                                    ?>
-                            </div>
-
-                            <div class="maspik-limit-char-box togglebox">
-                                <?php echo create_maspik_numbox("text_limit_link", "contain_links", "link-limit" , "Maximum number of Links", "", "0") ?>
-
-                        </div><!-- end of maspik-limit-link-wrap -->
-                                    
-                        <div class="maspik-limit-char-wrap">
-                            <div class="maspik-limit-char-head togglewrap">
-                                <?php
-                                            
-                                    echo maspik_toggle_button('textarea_limit_toggle', 'textarea_limit_toggle', 'textarea_limit_toggle', 'maspik-toggle-textarea-limit togglebutton',"","",['MinCharactersInTextAreaField','MaxCharactersInTextAreaField']);
-                                            
-                                    echo "<h4> Limit Characters </h4>";
-
-                                    maspik_tooltip("If the text field contains more characters that this value, it will be considered spam and it will be blocked.");                             
-                                ?>
-                            </div>
-
-                            <div class="maspik-limit-char-box togglebox">
-
-                            <div class = 'maspik-minmax-wrap'>
-                                <?php 
-
-                                echo create_maspik_numbox("text_limit_min", "MinCharactersInTextAreaField", "character-limit" , "Min",'' ,1,30);
-                                
-                                echo create_maspik_numbox("textarea_limit_max", "MaxCharactersInTextAreaField", "character-limit" , "Max", '', 6,100000) 
-                                ?>
-                            </div>
-                                        
-                            <span class="maspik-subtext">
-                                        <?php _e("Entries with less than <strong>Min</strong> or more than <strong>Max</strong> characters will be blocked", "contact-forms-anti-spam"); ?>
-                                </span>
-
-                                <div class="maspik-custom-msg-wrap">
-                                    <div class="maspik-txt-custom-msg-head togglewrap">
-                                        <?php echo maspik_toggle_button('textarea_custom_message_toggle', 'textarea_custom_message_toggle', 'textarea_custom_message_toggle', 'maspik-toggle-custom-message togglebutton',"","",['custom_error_message_MaxCharactersInTextField']); ?>
-                                            
-                                        <h4> <?php _e('Character limit custom validation error message', 'contact-forms-anti-spam'); ?> </h4>
-                                    </div>
-
-                                    <div class="maspik-custom-msg-box togglebox">
-                                        <?php echo create_maspik_textarea('custom_error_message_MaxCharactersInTextAreaField', 2, 80, 'maspik-textarea', 'error-message'); ?>
-                                            
-                                    </div>
-                                        
-                                </div><!-- end of maspik-custom-msg-wrap -->
-
-                            </div><!-- end of togglebox -->
-                        </div><!-- end of maspik-limit-char-wrap -->
-
-                        <?php maspik_save_button_show() ?>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Accordion Item - Phone Field - Custom -->
-            <div class="maspik-accordion-item maspik-accordion-phone-field">
-                <div class="maspik-accordion-header">
-                    <div class="mpk-acc-header-texts">
-                        <h4 class="maspik-header maspik-accordion-header-text"><?php _e('Phone Fields', 'contact-forms-anti-spam'); ?></h4><!--Accordion Title-->
-                        <span class="maspik-accordion-subheader"></span>
-                    </div>
-                        <span class="maspik-acc-arrow"><span class="dashicons dashicons-arrow-right"></span>
-                </div>
-                    
-                <div class="maspik-accordion-content">
-                    <div class="maspik-accordion-content-wrap hide-form-title">
-                        <div class="maspik-setting-info">
-                            <?php 
-                                maspik_tooltip("If you want more than one format, use the next line.");
-                                    
-                                maspik_popup("???-???-????|{+*-*,???-???-????}|+[1-9]-*|{+*-*,???-???-????}|[0-9][0-9][0-9]-*|/[0-9]{3}-[0-9]{3}-[0-9]{4}/", "Phone field", "See examples" ,"visibility");
-                            ?>
-                        </div> <!--end of maspik-setting-info-->
-                                
-                        <div class="maspik-main-list-wrap maspik-textfield-list">
-
-                            <?php 
-                                echo create_maspik_textarea('tel_formats', 6, 80, 'maspik-textarea'); 
-                                    
-                                maspik_spam_api_list('phone_format');
-                            ?>   
-
-                        </div> <!-- end of maspik-main-list-wrap -->
-                        <span class="maspik-subtext"><?php _e('Wildcard patterns are accepted. asterisk * Or question mark ? symbol are necessary for the recognition of the wildcard.', 'contact-forms-anti-spam'); ?><br>
-                        <?php _e(' You can get more ideas', 'contact-forms-anti-spam'); ?>
-                        <a href="https://wpmaspik.com/documentation/phone-field/" target="_blank">
-                        <?php _e('HERE', 'contact-forms-anti-spam'); ?></a>    
                         </span>
+                    </div><!-- end of maspik-db-check--wrap -->
+                </div>    
+                <div class="maspik-txt-custom-msg-head togglewrap maspik-honeypot-wrap">
+                    <?php echo maspik_toggle_button('maspikHoneypot', 'maspikHoneypot', 'maspikHoneypot', 'maspik-honeypot togglebutton',"",""); ?>
+                    <div>
+                        <h4> <?php esc_html_e('Honeypot Trap', 'contact-forms-anti-spam'); ?>
+                        </h4>
+                        <span><?php esc_html_e('Adds an invisible field to your form. Humans can\'t see it, but bots often fill it. If this hidden field has data, the submission is blocked as spam. This traps bots without affecting real users.', 'contact-forms-anti-spam'); ?></span>
+                    </div>  
+                </div><!-- end of maspik-honeypot-wrap -->
 
-                        <div class="maspik-limit-char-wrap">
-                            <div class="maspik-limit-char-head togglewrap">
-                                <?php
-                                            
-                                    echo maspik_toggle_button('tel_limit_toggle', 'tel_limit_toggle', 'tel_limit_toggle', 'maspik-toggle-tel-limit togglebutton',"","",['MinCharactersInPhoneField',"MaxCharactersInPhoneField","custom_error_message_MaxCharactersInPhoneField"]);
-                                            
-                                    _e("<h4> Limit Characters </h4>",'contact-forms-anti-spam' );
+                <?php if( efas_if_plugin_is_active('elementor-pro') ) {  ?>
+                    <div class="maspik-txt-custom-msg-head togglewrap maspik-block-inquiry-wrap">
+                        <?php echo maspik_toggle_button('NeedPageurl', 'NeedPageurl', 'NeedPageurl', 'maspik-needpageurl togglebutton',"","",['NeedPageurl']); ?>
+                            <div>
+                                <h4> <?php esc_html_e('Elementor Bot detector', 'contact-forms-anti-spam'); ?> </h4>
+                                <span><?php esc_html_e('In this option we block bots from sending spam automatically, its mostly succeed to catch about 30% of the spam', 'contact-forms-anti-spam'); ?></span>
+                        </div>  
+                    </div><!-- end of maspik-block-inquiry-wrap -->
+                <?php  } 
 
-                                    maspik_tooltip("If the text field contains more characters that this value, it will be considered spam and it will be blocked.");                             
-                                ?>
-                            </div>
-
-                        <div class="maspik-limit-char-box togglebox">
-                                <div class = 'maspik-minmax-wrap'>
-                                <?php 
-
-                                echo create_maspik_numbox("phone_limit_min", "MinCharactersInPhoneField", "character-limit" , "Min");
-                                
-                                echo create_maspik_numbox("phone_limit_max", "MaxCharactersInPhoneField", "character-limit" , "Max");
-
-                                ?>
-                                </div>
-                                        
-                                <span class="maspik-subtext">
-                                        <?php _e("Entries with less than <strong>Min</strong> or more than <strong>Max</strong> characters will be blocked", "contact-forms-anti-spam"); ?>
-                                </span>
-                           
-
-                                <div class="maspik-custom-msg-wrap">
-                                    <div class="maspik-txt-custom-msg-head togglewrap">
-                                        <?php echo maspik_toggle_button('phone_limit_custom_message_toggle', 'phone_limit_custom_message_toggle', 'phone_limit_custom_message_toggle', 'maspik-toggle-custom-message togglebutton',"","",["custom_error_message_MaxCharactersInPhoneField"]); 
-                                    
-                                    _e('<h4> Character limit custom validation error message </h4>' , "contact-forms-anti-spam");
-                                    ?>
-                                </div>
-
-                                <div class="maspik-custom-msg-box togglebox">
-                                    <?php echo create_maspik_textarea('custom_error_message_MaxCharactersInPhoneField', 2, 80, 'maspik-textarea', 'error-message'); ?>
-                                    
-                                </div>
-                                    
-                                </div><!-- end of maspik-custom-msg-wrap -->
+                 maspik_save_button_show() 
+                 ?>
 
 
-                            </div><!-- end of togglebox -->
-                        </div><!-- end of maspik-limit-char-wrap -->
-
-
-
-
-
-                        <div class="maspik-custom-msg-wrap">
-                            <div class="maspik-txt-custom-msg-head togglewrap">
-                                <?php echo maspik_toggle_button('phone_custom_message_toggle', 'phone_custom_message_toggle', 'phone_custom_message_toggle', 'maspik-toggle-custom-message togglebutton',"","",['custom_error_message_tel_formats']); ?>
-                                    
-                                <h4> Custom validation error message </h4>
-                            </div>
-
-                            <div class="maspik-custom-msg-box togglebox">
-                                <?php echo create_maspik_textarea('custom_error_message_tel_formats', 2, 80, 'maspik-textarea', 'error-message'); ?>
-                                    
-                             </div>
-                                    
-                        </div><!-- end of maspik-custom-msg-wrap -->
-                                    
-
-                        <?php maspik_save_button_show() ?>
-                    </div>
-                </div>
             </div>
 
+            <!-- Accordion Item - End main check -->
             <!-- Accordion Item - Language Field - Custom -->
             <div class="maspik-accordion-item maspik-accordion-lang-field <?php echo maspik_add_pro_class() ?> ">
                 <div class="maspik-accordion-header">
                     <div class="mpk-acc-header-texts">
-                        <h4 class="maspik-header maspik-accordion-header-text"><span class="dashicons dashicons-star-filled"></span><?php _e('Language restrictions', 'contact-forms-anti-spam'); ?></h4><!--Accordion Title-->
+                        <h4 class="maspik-header maspik-accordion-header-text"><span class="dashicons dashicons-star-filled"></span><?php esc_html_e('Language restrictions', 'contact-forms-anti-spam'); ?></h4><!--Accordion Title-->
                         <span class="maspik-accordion-subheader"></span>
                     </div>
                     <div class = "maspik-pro-button-wrap">
                         <?php maspik_get_pro() ?>
-                        <span class="maspik-acc-arrow"><span class="dashicons dashicons-arrow-right"></span>
+                        <span class="maspik-acc-arrow"><span class="dashicons dashicons-arrow-right"></span></span>
                     </div>
                 </div>
                     
                 <div class="maspik-accordion-content">
                     <div class="maspik-accordion-content-wrap hide-form-title">
                         <div class="maspik-accordion-subtitle-wrap">
-                            <h3 class="maspik-accordion-subtitle"><?php _e('Language Required', 'contact-forms-anti-spam'); ?></h3>
+                            <h3 class="maspik-accordion-subtitle"><?php esc_html_e('Language Required', 'contact-forms-anti-spam'); ?></h3>
                             <?php 
-                                maspik_tooltip("If you use this field, it will ONLY accept form submissions that contain at least one character of the chosen language. Leave blank if you prefer to forbid certain languages.");
+                                maspik_tooltip("ONLY accepts form submissions containing at least one character in one of your selected languages.");
                             ?>
                         </div> <!--end of maspik-accordion-subtitle-wrap-->
                                 
@@ -931,15 +662,18 @@ $spamcounter = maspik_spam_count();
                             ?>    
 
                         </div> <!-- end of maspik-main-list-wrap -->
-                        <span class="maspik-subtext"><span class="text-caution">
-                            <?php _e('Beware:</span> Requiring Latin languages as an individual (Like: Dutch, French), the check is in the language punctuation letters and letters A to Z (So including English) because sometimes the punctuation letters as not used, Its to prevent false positive.', 'contact-forms-anti-spam'); ?>
+                        <span class="maspik-subtext">
+                            <span class="text-caution">
+                                <?php esc_html_e('Caution:', 'contact-forms-anti-spam'); ?>
+                            </span>
+                        <?php esc_html_e('When specifying Latin-based languages (e.g., Dutch, French), the check includes language-specific punctuation and letters A to Z (including English). This is to avoid false positives when certain punctuation marks are not used.', 'contact-forms-anti-spam'); ?>
                         </span>
                                     
                         <div class="maspik-custom-msg-wrap">
                             <div class="maspik-txt-custom-msg-head togglewrap">
                                 <?php echo maspik_toggle_button('lang_need_custom_message_toggle', 'lang_need_custom_message_toggle', 'lang_need_custom_message_toggle', 'maspik-toggle-custom-message togglebutton',"","",['custom_error_message_lang_needed']); ?>
                                     
-                                <h4> <?php _e('Custom validation error message', 'contact-forms-anti-spam'); ?> </h4>
+                                <h4> <?php esc_html_e('Custom validation error message', 'contact-forms-anti-spam'); ?> </h4>
                             </div>
 
                             <div class="maspik-custom-msg-box togglebox">
@@ -957,7 +691,7 @@ $spamcounter = maspik_spam_count();
 
 
                         <div class="maspik-accordion-subtitle-wrap">
-                            <h3 class="maspik-accordion-subtitle"><?php _e('Language Forbidden', 'contact-forms-anti-spam'); ?></h3>
+                            <h3 class="maspik-accordion-subtitle"><?php esc_html_e('Language Forbidden', 'contact-forms-anti-spam'); ?></h3>
                             <?php 
                                 maspik_tooltip("Select the languages you wish to block from filling out your forms.");
                             ?>
@@ -971,15 +705,21 @@ $spamcounter = maspik_spam_count();
                             ?>      
 
                         </div> <!-- end of maspik-main-list-wrap -->
-                        <span class="maspik-subtext"><?php _e('Note that when blocking Latin languages in an individual (such as: Dutch, French), the chack is in the punctuation letters (But they are not always in use). Its to prevent false positive.', 'contact-forms-anti-spam'); ?><br>
-                        <?php _e('Even one character in the text field from any of these languages will be caught by MASPIK, tagged as spam, and blocked. ', 'contact-forms-anti-spam'); ?>
+                        <span class="maspik-subtext"><?php 
+                                        esc_html_e('If there is even one character from one of these languages in the text fields, it will be marked as spam and blocked.', 'contact-forms-anti-spam'); 
+                                        echo "<br>";
+                                        echo "<span class='text-caution'>";
+                                        esc_html_e('Caution:', 'contact-forms-anti-spam');
+                                        echo " </span>";
+                                        esc_html_e('When blocking Latin languages in an individual (such as: Dutch, French), the chack is in the punctuation letters (But they are not always in use). Its to prevent false positive.', 'contact-forms-anti-spam'); ?>
+                                        
                         </span>
                                     
                         <div class="maspik-custom-msg-wrap">
                             <div class="maspik-txt-custom-msg-head togglewrap">
                                 <?php echo maspik_toggle_button('lang_forbidden_custom_message_toggle', 'lang_forbidden_custom_message_toggle', 'lang_forbidden_custom_message_toggle', 'maspik-toggle-custom-message togglebutton',"","",['custom_error_message_lang_forbidden']); ?>
                                     
-                                <h4> <?php _e('Custom validation error message', 'contact-forms-anti-spam'); ?> </h4>
+                                <h4> <?php esc_html_e('Custom validation error message', 'contact-forms-anti-spam'); ?> </h4>
                             </div>
 
                             <div class="maspik-custom-msg-box togglebox">
@@ -1000,7 +740,7 @@ $spamcounter = maspik_spam_count();
                     <div class="mpk-acc-header-texts">
                         <h4 class="maspik-header maspik-accordion-header-text">
                             <span class="dashicons dashicons-star-filled"></span>
-                            <?php _e('Geolocation restrictions', 'contact-forms-anti-spam'); ?>
+                            <?php esc_html_e('Geolocation restrictions', 'contact-forms-anti-spam'); ?>
                         </h4><!--Accordion Title-->
                         <?php 
                                 maspik_tooltip("Choose either to allow or to block and enter the countries in the next field.
@@ -1048,7 +788,7 @@ $spamcounter = maspik_spam_count();
                             <div class="maspik-txt-custom-msg-head togglewrap">
                                 <?php echo maspik_toggle_button('country_custom_message_toggle', 'country_custom_message_toggle', 'country_custom_message_toggle', 'maspik-toggle-custom-message togglebutton',"","",["custom_error_message_country_blacklist"]); ?>
                                     
-                                <h4> <?php _e('Custom validation error message', 'contact-forms-anti-spam'); ?> </h4>
+                                <h4> <?php esc_html_e('Custom validation error message', 'contact-forms-anti-spam'); ?> </h4>
                             </div>
 
                             <div class="maspik-custom-msg-box togglebox">
@@ -1068,7 +808,7 @@ $spamcounter = maspik_spam_count();
                     <div class="mpk-acc-header-texts">
                         <h4 class="maspik-header maspik-accordion-header-text">
                             <span class="dashicons dashicons-star-filled"></span>
-                            <?php _e('MASPIK Dashboard', 'contact-forms-anti-spam'); ?>
+                            <?php esc_html_e('MASPIK Dashboard', 'contact-forms-anti-spam'); ?>
                         </h4><!--Accordion Title-->
                         <?php 
                                 maspik_tooltip("Every day, the API file downloads new data from the API server.
@@ -1088,9 +828,9 @@ $spamcounter = maspik_spam_count();
                             <div class="maspik-txt-custom-msg-head togglewrap">
                                 <?php echo maspik_toggle_button('popular_spam', 'popular_spam', 'popular_spam', 'maspik-toggle-custom-message'); ?>
                                  <div>
-                                    <h4> <?php _e('Auto-populate spam phrases', 'contact-forms-anti-spam'); ?> </h4>
-                                    <span><?php _e('Popular spam words from', 'contact-forms-anti-spam'); ?> <a target = "_blank" href="https://wpmaspik.com/public-api/">
-                                        <?php _e('Maspik spam blacklist', 'contact-forms-anti-spam'); ?></a></span>
+                                    <h4> <?php esc_html_e('Auto-populate spam phrases', 'contact-forms-anti-spam'); ?> </h4>
+                                    <span><?php esc_html_e('Popular spam words from', 'contact-forms-anti-spam'); ?> <a target = "_blank" href="https://wpmaspik.com/public-api/">
+                                        <?php esc_html_e('Maspik spam blacklist', 'contact-forms-anti-spam'); ?></a></span>
                                 </div>   
                             </div>
                             
@@ -1102,18 +842,18 @@ $spamcounter = maspik_spam_count();
                         <!---- Language section divider E---------->
 
                         <div class="maspik-setting-info">
-                            <h4><?php _e('Maspik Dashboard ID', 'contact-forms-anti-spam'); ?></h4>
+                            <h4><?php esc_html_e('Maspik Dashboard ID', 'contact-forms-anti-spam'); ?></h4>
                             <div class = 'maspik-status-wrap'>
                                 
                                 
                                     <?php
                                     
-                                        echo "<span>Status</span>";
+                                        echo "<span>" . esc_html__('Status', 'contact-forms-anti-spam') . "</span>";
                                         echo "<span class='maspik-api-status ";
                                         if( check_maspik_api_values() ){
-                                            echo "connected'> Connected";
+                                            echo "connected'> " . esc_html__('Connected', 'contact-forms-anti-spam');
                                         }else{
-                                            echo "not-connected'> Not Connected";
+                                            echo "not-connected'> " . esc_html__('Not Connected', 'contact-forms-anti-spam');
                                         }
                                     
                                     ?>
@@ -1122,8 +862,8 @@ $spamcounter = maspik_spam_count();
                             </div>
 
                         </div> <!--end of maspik-setting-info-->
-                        <span><?php _e('Creat your own single Dashboard for managing multiple websites, at', 'contact-forms-anti-spam'); ?> <a target = "_blank" href="https://wpmaspik.com/add-your-private-api/?inplugin">
-                        <?php _e('WpMaspik', 'contact-forms-anti-spam'); ?></a> <?php _e('website', 'contact-forms-anti-spam'); ?></span>
+                        <span><?php esc_html_e('Creat your own single Dashboard for managing multiple websites, at', 'contact-forms-anti-spam'); ?> <a target = "_blank" href="https://wpmaspik.com/add-your-private-api/?inplugin">
+                        <?php esc_html_e('WpMaspik', 'contact-forms-anti-spam'); ?></a> <?php esc_html_e('website', 'contact-forms-anti-spam'); ?></span>
 
                         <div class="maspik-main-list-wrap">
                             <?php 
@@ -1142,85 +882,636 @@ $spamcounter = maspik_spam_count();
                 </div>
             </div>
 
-            <!-- Accordion Item - General Field - Custom -->
+
+
+
+            <div class="maspik-section-head maspik-more-setting">
+                
+                <h2 class='maspik-title maspik-bl-title'><?php esc_html_e('By Field Options', 'contact-forms-anti-spam'); ?></h2>
+                <p>
+                    <?php esc_html_e('Create a list of words or phrases you want to block.', 'contact-forms-anti-spam'); ?><br>
+                    <?php esc_html_e('Each term should be on a separate line.', 'contact-forms-anti-spam'); ?><br>
+                    <?php esc_html_e('The system is not case-sensitive', 'contact-forms-anti-spam'); ?><br>
+                </p>
+                <p><?php esc_html_e('Learn more about those option in our documentation', 'contact-forms-anti-spam'); ?> <a target="_blank" href="https://wpmaspik.com/documentation/?fromplugin"><?php esc_html_e('here', 'contact-forms-anti-spam'); ?></a>.</p>
+
+
+            </div>
+
+            <!-- Accordion Item - Text Field - Custom -->
+            <div class="maspik-accordion-item maspik-accordion-text-field">
+                <div class="maspik-accordion-header">
+                    <div class="mpk-acc-header-texts">
+                        <h4 class="maspik-header maspik-accordion-header-text"><?php esc_html_e('Text Fields', 'contact-forms-anti-spam');?></h4><!--Accordion Title-->
+                        <span class="maspik-accordion-subheader">
+                            <?php esc_html_e('(Usually Name/Subject)', 'contact-forms-anti-spam');?></span>
+                    </div>
+                        <span class="maspik-acc-arrow"><span class="dashicons dashicons-arrow-right"></span></span>
+                </div>
+                    
+                <div class="maspik-accordion-content">
+                    <div class="maspik-accordion-content-wrap hide-form-title">
+                        <div class="maspik-setting-info">
+                            <?php 
+                                maspik_tooltip("If the text value CONTAINS one of the given values, it will be marked as spam and blocked.");
+                                    
+                                maspik_popup("Eric jones|SEO|ranking|currency|click here", "Text field", "See examples" ,"visibility");
+                            ?>
+                        </div> <!--end of maspik-setting-info-->
+                                
+                        <div class="maspik-main-list-wrap maspik-textfield-list">
+
+                            <?php
+                                echo create_maspik_textarea('text_blacklist', 6, 80, 'maspik-textarea' , 'Seo&#10;Eric jones&#10;Crypto&#10;...');
+                                    
+                                maspik_spam_api_list('text_field');
+                            ?>      
+
+                        </div> <!-- end of maspik-main-list-wrap -->
+                        <span class="maspik-subtext">
+                        <?php esc_html_e('Wildcard patterns are accepted. asterisk * symbol is necessary for the recognition of the wildcard.', 'contact-forms-anti-spam'); ?></span>
+                                    
+                        <div class="maspik-limit-char-wrap">
+                            <div class="maspik-limit-char-head togglewrap">
+                                <?php
+                                    echo maspik_toggle_button('text_limit_toggle', 'text_limit_toggle', 'text_limit_toggle', 'maspik-toggle-text-limit togglebutton',"","",['MinCharactersInTextField','MaxCharactersInTextField','custom_error_message_MaxCharactersInTextField']);
+                                            
+                                    echo "<h4>" . esc_html__('Limit Characters', 'contact-forms-anti-spam') . "</h4>";
+
+                                    maspik_tooltip("If the text field contains more characters that this value, it will be considered spam and it will be blocked.");                             
+                                ?>
+                            </div>
+
+                            <div class="maspik-limit-char-box togglebox">
+                                <div class = 'maspik-minmax-wrap'>
+                                <?php 
+
+                                echo create_maspik_numbox("text_limit_min", "MinCharactersInTextField", "character-limit" , "Min" ,'' ,1,30);
+                                
+                                echo create_maspik_numbox("text_limit_max", "MaxCharactersInTextField", "character-limit" , "Max",'' ,6,1000);
+
+                                ?>
+                                </div>
+                                        
+                                <span class="maspik-subtext">
+                                        <?php 
+                                        esc_html_e('Entries with less than Min or more than Max characters will be blocked', 'contact-forms-anti-spam');
+                                        ?>
+                                </span>
+                           
+
+                                <div class="maspik-custom-msg-wrap">
+                                    <div class="maspik-txt-custom-msg-head togglewrap">
+                                        <?php echo maspik_toggle_button('text_custom_message_toggle', 'text_custom_message_toggle', 'text_custom_message_toggle', 'maspik-toggle-custom-message togglebutton',"","",['custom_error_message_MaxCharactersInTextField']); ?>
+                                            
+                                        <h4> <?php esc_html_e('Character limit custom validation error message', 'contact-forms-anti-spam'); ?> </h4>
+                                    </div>
+
+                                    <div class="maspik-custom-msg-box togglebox">
+                                        <?php echo create_maspik_textarea('custom_error_message_MaxCharactersInTextField', 2, 80, 'maspik-textarea', 'error-message'); ?>      
+                                    </div>
+                                    
+                                </div><!-- end of maspik-custom-msg-wrap -->
+
+
+                            </div><!-- end of togglebox -->
+                        </div><!-- end of maspik-limit-char-wrap -->
+
+                        <?php maspik_save_button_show() ?>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Accordion Item - Email Field - Custom -->
+            <div class="maspik-accordion-item maspik-accordion-email-field">
+                <div class="maspik-accordion-header">
+                    <div class="mpk-acc-header-texts">
+                        <h4 class="maspik-header maspik-accordion-header-text"><?php esc_html_e('Email Fields', 'contact-forms-anti-spam'); ?></h4><!--Accordion Title-->
+                        <span class="maspik-accordion-subheader"></span>
+                    </div>
+                        <span class="maspik-acc-arrow"><span class="dashicons dashicons-arrow-right"></span></span>
+                </div>
+                    
+                <div class="maspik-accordion-content">
+                    <div class="maspik-accordion-content-wrap hide-form-title">
+                        <div class="maspik-setting-info">
+                            <?php 
+                            maspik_tooltip("If the text value is EQUAL to one of the values above, MASPIK will tag it as spam and it will be blocked.");
+                                
+                            maspik_popup("georginahaynes620@gmail.com|ericjonesonline@outlook.com|*.ru|*+*@*.*|/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.ru\b/|eric*@*.com|xrumer888@outlook.com", "Email field", "See examples" ,"visibility");
+                                ?>
+                        </div> <!--end of maspik-setting-info-->
+                            
+                        <div class="maspik-main-list-wrap maspik-textfield-list">
+
+                            <?php 
+                                echo create_maspik_textarea('emails_blacklist', 6, 80, 'maspik-textarea');
+                                 
+                                maspik_spam_api_list('email_field');
+                            ?>      
+
+                        </div> <!-- end of maspik-main-list-wrap -->
+                        <span class="maspik-subtext"><?php esc_html_e('Wildcard patterns are accepted. asterisk * Or question mark ? symbol are necessary for the recognition of the wildcard.', 'contact-forms-anti-spam'); ?><br>
+                        <?php esc_html_e('Regex must start and end with a slash /', 'contact-forms-anti-spam'); ?>
+
+                        </span>
+                                
+                        <?php maspik_save_button_show() ?>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Accordion Item - Textarea Field - Custom -->
+            <div class="maspik-accordion-item maspik-accordion-textarea-field">
+                <div class="maspik-accordion-header">
+                    <div class="mpk-acc-header-texts">
+                        <h4 class="maspik-header maspik-accordion-header-text"><?php esc_html_e('Textarea Fields', 'contact-forms-anti-spam'); ?></h4><!--Accordion Title-->
+                        <span class="maspik-accordion-subheader"><?php esc_html_e('(Usually Message/Long text)', 'contact-forms-anti-spam'); ?></span>
+                    </div>
+                        <span class="maspik-acc-arrow"><span class="dashicons dashicons-arrow-right"></span></span>
+                </div>
+                    
+                <div class="maspik-accordion-content">
+                    <div class="maspik-accordion-content-wrap hide-form-title">
+                        <div class="maspik-setting-info">
+                            <?php 
+                                maspik_tooltip("If the Textarea value CONTAINS one of the given values, it will be marked as spam and blocked.");
+                                    
+                                echo "<div class = 'maspik-small-btn-wrap'>";
+                                    maspik_popup("submit your website|seo|ranking|currency|click here", "Textarea field",  "See examples" ,"visibility");
+                                echo "</div>";
+                            ?>
+                        </div> <!--end of maspik-setting-info-->
+                                
+                        <div class="maspik-main-list-wrap maspik-textareafield-list">
+
+                            <?php 
+                                echo create_maspik_textarea('textarea_blacklist', 6, 80, 'maspik-textarea' , 'Seo&#10;Ranking&#10;Click here&#10;Google&#10;Crypto&#10;...');
+                                    
+                                maspik_spam_api_list('textarea_field');
+                            ?>      
+
+                        </div> <!-- end of maspik-main-list-wrap -->
+                        <span class="maspik-subtext"><?php esc_html_e('Try to use full sentences that you typically find in spam emails, rather than single words.', 'contact-forms-anti-spam'); ?></span>
+
+                        <div class="maspik-limit-char-head togglewrap">
+                                <?php
+                                            
+                                    echo maspik_toggle_button('textarea_link_limit_toggle', 'textarea_link_limit_toggle', 'textarea_link_limit_toggle', 'maspik-toggle-text-limit togglebutton',"","",['contain_links']);
+                                            
+                                    echo "<h4> Limit Links </h4>";
+
+                                    maspik_tooltip("Spammers tend to include links.
+                                    <br>If there is no reason for anyone to send links when completing your forms, set this to 0");
+                                    ?>
+                            </div>
+
+                            <div class="maspik-limit-char-box togglebox">
+                                <?php echo create_maspik_numbox("text_limit_link", "contain_links", "link-limit" , "Maximum number of Links", "", "0") ?>
+
+                        </div><!-- end of maspik-limit-link-wrap -->
+                                    
+                        <div class="maspik-limit-char-wrap">
+                            <div class="maspik-limit-char-head togglewrap">
+                                <?php
+                                            
+                                    echo maspik_toggle_button('textarea_limit_toggle', 'textarea_limit_toggle', 'textarea_limit_toggle', 'maspik-toggle-textarea-limit togglebutton',"","",['MinCharactersInTextAreaField','MaxCharactersInTextAreaField']);
+                                            
+                                    echo "<h4> Limit Characters </h4>";
+
+                                    maspik_tooltip("If the text field contains more characters that this value, it will be considered spam and it will be blocked.");                             
+                                ?>
+                            </div>
+
+                            <div class="maspik-limit-char-box togglebox">
+
+                            <div class = 'maspik-minmax-wrap'>
+                                <?php 
+
+                                echo create_maspik_numbox("text_limit_min", "MinCharactersInTextAreaField", "character-limit" , "Min",'' ,1,30);
+                                
+                                echo create_maspik_numbox("textarea_limit_max", "MaxCharactersInTextAreaField", "character-limit" , "Max", '', 6,100000) 
+                                ?>
+                            </div>
+                                        
+                            <span class="maspik-subtext">
+                                        <?php esc_html_e("Entries with less than <strong>Min</strong> or more than <strong>Max</strong> characters will be blocked", "contact-forms-anti-spam"); ?>
+                                </span>
+
+                                <div class="maspik-custom-msg-wrap">
+                                    <div class="maspik-txt-custom-msg-head togglewrap">
+                                        <?php echo maspik_toggle_button('textarea_custom_message_toggle', 'textarea_custom_message_toggle', 'textarea_custom_message_toggle', 'maspik-toggle-custom-message togglebutton',"","",['custom_error_message_MaxCharactersInTextField']); ?>
+                                            
+                                        <h4> <?php esc_html_e('Character limit custom validation error message', 'contact-forms-anti-spam'); ?> </h4>
+                                    </div>
+
+                                    <div class="maspik-custom-msg-box togglebox">
+                                        <?php echo create_maspik_textarea('custom_error_message_MaxCharactersInTextAreaField', 2, 80, 'maspik-textarea', 'error-message'); ?>
+                                            
+                                    </div>
+                                        
+                                </div><!-- end of maspik-custom-msg-wrap -->
+
+                            </div><!-- end of togglebox -->
+                        </div><!-- end of maspik-limit-char-wrap -->
+
+                        <?php maspik_save_button_show() ?>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Accordion Item - Phone Field - Custom -->
+            <div class="maspik-accordion-item maspik-accordion-phone-field">
+                <div class="maspik-accordion-header">
+                    <div class="mpk-acc-header-texts">
+                        <h4 class="maspik-header maspik-accordion-header-text"><?php esc_html_e('Whitelist Phone Fields formts', 'contact-forms-anti-spam'); ?></h4><!--Accordion Title-->
+                    </div>
+                        <span class="maspik-acc-arrow"><span class="dashicons dashicons-arrow-right"></span></span>
+                </div>
+                    
+                <div class="maspik-accordion-content">
+                    <div class="maspik-accordion-content-wrap hide-form-title">
+                        <div class="maspik-setting-info">
+                            <?php 
+                                maspik_tooltip("List of accepted phone formats, one per line; if the phone field contains a phone number that does not fit into one of the following formats, it will be marked as spam.");
+                                echo '<span class="help-text">'.esc_html__("Only the following phone formats will be allowed.", 'contact-forms-anti-spam');
+                                echo "<br>".esc_html__("leave empty to disable this option.", 'contact-forms-anti-spam');
+                                echo "</span>";  
+                                maspik_popup("???-???-????|+*|+[1-9]-*|{+*-*,???-???-????}|[0-9][0-9][0-9]-*|/[0-9]{3}-[0-9]{3}-[0-9]{4}/|0*", "Phone field", "See examples" ,"visibility");
+                            ?>
+                        </div> <!--end of maspik-setting-info-->
+                                
+                        <div class="maspik-main-list-wrap maspik-textfield-list">
+
+                            <?php 
+                                echo create_maspik_textarea('tel_formats', 6, 80, 'maspik-textarea'); 
+                                    
+                                maspik_spam_api_list('phone_format');
+                            ?>   
+
+                        </div> <!-- end of maspik-main-list-wrap -->
+                        <span class="maspik-subtext">
+                        <?php esc_html_e('? represents any single digit.', 'contact-forms-anti-spam'); ?><br>
+                        <?php esc_html_e('* represents any sequence of digits.', 'contact-forms-anti-spam'); ?><br>
+                            <?php esc_html_e(' You can get more information', 'contact-forms-anti-spam'); ?>
+                            <a href="https://wpmaspik.com/documentation/phone-field/" target="_blank">
+                            <?php esc_html_e('HERE', 'contact-forms-anti-spam'); ?></a>    
+                        </span>
+
+                        <div class="maspik-custom-msg-wrap">
+                            <div class="maspik-txt-custom-msg-head togglewrap">
+                                <?php echo maspik_toggle_button('phone_custom_message_toggle', 'phone_custom_message_toggle', 'phone_custom_message_toggle', 'maspik-toggle-custom-message togglebutton',"","",['custom_error_message_tel_formats']); ?>
+                                    
+                                <h4> Custom validation error message </h4>
+                            </div>
+
+                            <div class="maspik-custom-msg-box togglebox">
+                                <?php echo create_maspik_textarea('custom_error_message_tel_formats', 2, 80, 'maspik-textarea', 'error-message'); ?>
+                                    
+                             </div>
+                                    
+                        </div><!-- end of maspik-custom-msg-wrap -->
+
+                        <div class="maspik-limit-char-wrap">
+                            <div class="maspik-limit-char-head togglewrap">
+                                <?php
+                                            
+                                    echo maspik_toggle_button('tel_limit_toggle', 'tel_limit_toggle', 'tel_limit_toggle', 'maspik-toggle-tel-limit togglebutton',"","",['MinCharactersInPhoneField',"MaxCharactersInPhoneField","custom_error_message_MaxCharactersInPhoneField"]);
+                                            
+                                    echo '<h4>' . esc_html__('Limit Characters', 'contact-forms-anti-spam') . '</h4>';
+
+                                    maspik_tooltip("If the text field contains more characters that this value, it will be considered spam and it will be blocked.");                             
+                                ?>
+                            </div>
+
+                            <div class="maspik-limit-char-box togglebox">
+                                <div class = 'maspik-minmax-wrap'>
+                                    <?php 
+
+                                    echo create_maspik_numbox("phone_limit_min", "MinCharactersInPhoneField", "character-limit" , "Min");
+                                    
+                                    echo create_maspik_numbox("phone_limit_max", "MaxCharactersInPhoneField", "character-limit" , "Max");
+
+                                    ?>
+                                </div>
+                                            
+                                <span class="maspik-subtext">
+                                        <?php esc_html_e("Entries with less than <strong>Min</strong> or more than <strong>Max</strong> characters will be blocked", "contact-forms-anti-spam"); ?>
+                                </span>
+                            
+                                <div class="maspik-custom-msg-wrap">
+                                    <div class="maspik-txt-custom-msg-head togglewrap">
+                                            <?php echo maspik_toggle_button('phone_limit_custom_message_toggle', 'phone_limit_custom_message_toggle', 'phone_limit_custom_message_toggle', 'maspik-toggle-custom-message togglebutton',"","",["custom_error_message_MaxCharactersInPhoneField"]); ?>
+                                        
+                                        <h4><?php esc_html_e('Character limit custom validation error message', 'contact-forms-anti-spam'); ?></h4>
+                                        
+                                    </div>
+
+                                    <div class="maspik-custom-msg-box togglebox">
+                                        <?php echo create_maspik_textarea('custom_error_message_MaxCharactersInPhoneField', 2, 80, 'maspik-textarea', 'error-message'); ?>
+                                        
+                                    </div>
+                                        
+                                </div><!-- end of maspik-custom-msg-wrap -->
+
+
+                            </div><!-- end of togglebox -->
+                        </div><!-- end of maspik-limit-char-wrap -->                                    
+
+                        <?php maspik_save_button_show() ?>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- MORE OPTIONS HEADER -->
+            <div class="maspik-section-headhead maspik-more-setting"> 
+                <h2 class='maspik-title maspik-bl-header'><?php esc_html_e('More Options', 'contact-forms-anti-spam'); ?></h2>
+            </div>
+            <!-- MORE OPTIONS HEADER - END -->
+
+            <!-- Accordion Item - Ongoing Experiments Field - Custom -->
             <div class="maspik-accordion-item maspik-accordion-general-field">
                 <div class="maspik-accordion-header">
                     <div class="mpk-acc-header-texts">
-                        <h4 class="maspik-header maspik-accordion-header-text"><?php _e('General', 'contact-forms-anti-spam'); ?></h4><!--Accordion Title-->
+                        <h4 class="maspik-header maspik-accordion-header-text"><?php esc_html_e('Ongoing Experiments', 'contact-forms-anti-spam'); ?></h4>
+                    </div>
+                    <div class = "maspik-pro-button-wrap">
+                        <span class="maspik-acc-arrow"><span class="dashicons dashicons-arrow-right"></span></span>
+                    </div>
+                </div>
+                    
+                <div class="maspik-accordion-content">
+                    <div class="maspik-accordion-content-wrap hide-form-title">
+                        <div class="maspik-txt-custom-msg-head togglewrap maspik-honeypot-wrap">
+                            <?php echo maspik_toggle_button('maspikTimeCheck', 'maspikTimeCheck', 'maspikTimeCheck', 'maspik-honeypot togglebutton',"",""); ?>
+                                <div>
+                                    <h4> <?php esc_html_e('Time Trap', 'contact-forms-anti-spam'); ?>
+                                    </h4>
+                                    <span><?php esc_html_e('This feature checks the time elapsed between a user first visiting the site and submitting the form. If the submission happens too quickly (within 4 seconds), it\'s likely automated and will be blocked. This helps prevent rapid-fire spam submissions from bots.', 'contact-forms-anti-spam'); ?></span>
+                            </div>  
+                        </div><!-- end of maspik-maspikTimeCheck -->
+                        <div class="maspik-txt-custom-msg-head togglewrap maspik-honeypot-wrap">
+                            <?php echo maspik_toggle_button('maspikYearCheck', 'maspikYearCheck', 'maspikYearCheck', 'maspik-honeypot togglebutton',"",""); ?>
+                                <div>
+                                    <h4> <?php esc_html_e('JavaScript check', 'contact-forms-anti-spam'); ?> 
+                                    </h4>
+                                    <span><?php esc_html_e('JavaScript check - This feature adds a hidden field that is automatically filled with the current year using JavaScript. If the submitted year does not match the server\'s current year, it likely means JavaScript is disabled or the form was submitted by a bot. In either case, the submission will be blocked as a security measure.', 'contact-forms-anti-spam'); ?></span>
+                            </div>  
+                        </div><!-- end of maspik-maspikYearCheck -->
+
+                        <?php 
+                            maspik_save_button_show() ?>
+                        
+                    </div>
+                </div>
+            </div>
+
+            <!-- Accordion Item - Other Options Field - Custom -->
+            <div class="maspik-accordion-item maspik-accordion-other-option-field" >
+                <div class="maspik-accordion-header" id="ip-blacklist-accordion">
+                    <div class="mpk-acc-header-texts">
+                        <h4 class="maspik-header maspik-accordion-header-text"><?php esc_html_e('IP Blacklist and 3rd Party APIs', 'contact-forms-anti-spam'); ?></h4><!--Accordion Title-->
                     </div>
                     <div class = "maspik-pro-button-wrap">
                         <span class="maspik-acc-arrow"><span class="dashicons dashicons-arrow-right"></span>
                     </div>
                 </div>
                     
-                <div class="maspik-accordion-content">
+                <div class="maspik-accordion-content" id="maspik-form-options">
                     <div class="maspik-accordion-content-wrap hide-form-title">
-<?php
-echo '<p>' . __("Important: These three new features are operational on <strong>both client-side (browser) and server-side</strong>. However, we may not have identified all potential <strong>cache-related issues</strong> yet. If you choose to implement these features, we recommend <strong>testing them by submitting a form in incognito mode</strong> and <strong>reviewing your spam log</strong> to ensure proper functionality.", 'your-text-domain') . '</p>';
-?>
-                        <div class="maspik-txt-custom-msg-head togglewrap maspik-honeypot-wrap">
-                            <?php echo maspik_toggle_button('maspikHoneypot', 'maspikHoneypot', 'maspikHoneypot', 'maspik-honeypot togglebutton',"",""); ?>
-                                <div>
-                                    <h4> <?php _e('Honeypot Trap', 'contact-forms-anti-spam'); ?>
-                                        <span class="new"><?php _e('New', 'contact-forms-anti-spam'); ?></span> 
-                                    </h4>
-                                    <span><?php _e('Add honeypot field', 'contact-forms-anti-spam'); ?></span>
-                            </div>  
-                        </div><!-- end of maspik-honeypot-wrap -->
-                        <div class="maspik-txt-custom-msg-head togglewrap maspik-honeypot-wrap">
-                            <?php echo maspik_toggle_button('maspikTimeCheck', 'maspikTimeCheck', 'maspikTimeCheck', 'maspik-honeypot togglebutton',"",""); ?>
-                                <div>
-                                    <h4> <?php _e('Time Trap', 'contact-forms-anti-spam'); ?>
-                                        <span class="new"><?php _e('New', 'contact-forms-anti-spam'); ?></span> 
-                                    </h4>
-                                    <span><?php _e('Check time from visiting the site until form submit', 'contact-forms-anti-spam'); ?></span>
-                            </div>  
-                        </div><!-- end of maspik-maspikTimeCheck -->
-                        <div class="maspik-txt-custom-msg-head togglewrap maspik-honeypot-wrap">
-                            <?php echo maspik_toggle_button('maspikYearCheck', 'maspikYearCheck', 'maspikYearCheck', 'maspik-honeypot togglebutton',"",""); ?>
-                                <div>
-                                    <h4> <?php _e('JavaScript Trap', 'contact-forms-anti-spam'); ?> 
-                                        <span class="new"><?php _e('New', 'contact-forms-anti-spam'); ?></span> 
-                                    </h4>
-
-                                    <span><?php _e('Comper the local and server year', 'contact-forms-anti-spam'); ?></span>
-                            </div>  
-                        </div><!-- end of maspik-maspikYearCheck -->
-
-                        <div class="maspik-txt-custom-msg-head togglewrap maspik-block-inquiry-wrap">
-                            <?php echo maspik_toggle_button('NeedPageurl', 'NeedPageurl', 'NeedPageurl', 'maspik-needpageurl togglebutton',"","",['NeedPageurl']); ?>
-                                <div>
-                                    <h4> <?php _e('Elementor Bot detector', 'contact-forms-anti-spam'); ?> </h4>
-                                    <span><?php _e('In this option we block bots from sending spam automatically, its mostly succeed to catch about 30% of the spam', 'contact-forms-anti-spam'); ?></span>
-                            </div>  
-                        </div><!-- end of maspik-block-inquiry-wrap -->
-
+                            
                         <div class="maspik-accordion-subtitle-wrap short-tooltip">
-                            <h3 class="maspik-accordion-subtitle"><?php _e('IP Blocking', 'contact-forms-anti-spam'); ?></h3>
+                            <h3 class="maspik-accordion-subtitle"><?php esc_html_e("List of block IPs", 'contact-forms-anti-spam'); ?></h3>
                             <?php 
                                 maspik_tooltip("Any IP you enter above will be blocked.
                                 One IP per line.");
                             ?>
                         </div> <!--end of maspik-accordion-subtitle-wrap-->
-
                         <div class="maspik-ip-wrap maspik-main-list-wrap maspik-textfield-list">
-
                             <?php
-                                echo create_maspik_textarea('ip_blacklist', 6, 80, 'maspik-textarea');
-                                    
+                                echo create_maspik_textarea('ip_blacklist', 6, 80, 'maspik-textarea');   
                                 maspik_spam_api_list('ip');
                             ?> 
-                             
-
                         </div> <!-- end of maspik-ip-wrap  -->
-                        <span class="maspik-subtext"><?php _e('You can also filter entire CIDR range such as 134.209.0.0/16', 'contact-forms-anti-spam'); ?></span>
-                        
-                        <!---- Language section divider S---------->
-                        <div class = 'maspik-simple-divider'></div>
-                        <!---- Language section divider E---------->
+                        <span class="maspik-subtext"><?php esc_html_e('You can also filter entire CIDR range such as 134.209.0.0/16', 'contact-forms-anti-spam'); ?></span>
 
+                        <!---- 3rd party API divider S---------->
+                        <div class = 'maspik-simple-divider'></div>
+                        <!---- 3rd party API divider E---------->
+
+                        <div class="maspik-accordion-subtitle-wrap short-tooltip">
+                            <h3 class="maspik-accordion-subtitle"><?php esc_html_e('AbuseIPDB API', 'contact-forms-anti-spam'); ?></h3>
+                            <?php 
+                                maspik_tooltip("AbuseIPDB.com API<br>
+                                <em>Recommend not lower than 25 for less false positives.</em>");
+                            ?>
+                        </div> <!--end of maspik-accordion-subtitle-wrap-->
+                        
+
+                        <div class="maspik-abuse-api-wrap maspik-main-list-wrap maspik-textfield-list">
+
+                            <?php echo create_maspik_input('abuseipdb_api', 'maspik-inputbox'); ?>
+                            <div class="maspik-threshold-wrap">
+                            <?php echo create_maspik_numbox("abuseipdb_score", "abuseipdb_score", "threshold-limit" , "Risk Threshold", "") ?>
+                            </div>
+
+                        </div> <!-- end of maspik-abuse-api-wrap  -->
+                        <span class="maspik-subtext"><?php esc_html_e('For more infromation', 'contact-forms-anti-spam'); ?> <a target = "_blank" href="https://www.abuseipdb.com/?Maspik-plugin">
+                        <?php esc_html_e('AbuseIPDB', 'contact-forms-anti-spam'); ?></a></span>
+                        <span class="maspik-subtext"><?php esc_html_e('Leave blank to disable', 'contact-forms-anti-spam'); ?>.</span>
+                               <?php maspik_spam_api_list('abuseipdb_api');?>
+                        <div class="maspik-accordion-subtitle-wrap short-tooltip add-space-top">
+                            <h3 class="maspik-accordion-subtitle"><?php esc_html_e('Proxycheck.io API', 'contact-forms-anti-spam'); ?></h3>
+                            <?php 
+                                maspik_tooltip("Proxycheck.io API<br>
+                                <em>Low risk 0-33, MidHigh risk = 33-66, Dangerous = 66 Above</em>");
+                            ?>
+                        </div> <!--end of maspik-accordion-subtitle-wrap-->
+
+
+                         <div class="maspik-abuse-api-wrap maspik-main-list-wrap maspik-textfield-list">
+
+                            <?php echo create_maspik_input('proxycheck_io_api', 'maspik-inputbox'); ?>
+                            <div class="maspik-threshold-wrap">
+                            <?php echo create_maspik_numbox("proxycheck_io_risk", "proxycheck_io_risk", "threshold-limit" , "Risk Threshold", "") ?>
+                            </div>
+
+                        </div> <!-- end of maspik-abuse-api-wrap  -->
+                        <span class="maspik-subtext"><?php esc_html_e('For more infromation', 'contact-forms-anti-spam'); ?> <a target = "_blank" href="https://proxycheck.io/?Maspik-plugin">
+                        <?php esc_html_e('ProxyCheck', 'contact-forms-anti-spam'); ?></a></span>
+
+                        <span class="maspik-subtext"><?php esc_html_e('Leave blank to disable.', 'contact-forms-anti-spam'); ?></span>
+                           
+                        <?php maspik_spam_api_list('proxycheck_io_api');?>          
+
+                            <?php  maspik_save_button_show() ?>
+                        
+                    </div>
+                </div>
+            </div>
+
+            <!-- Accordion Item - Form Options Field - Custom -->
+            <div class="maspik-accordion-item maspik-accordion-form-option-field" >
+                <div class="maspik-accordion-header" id="form-option-accordion">
+                    <div class="mpk-acc-header-texts">
+                        <h4 class="maspik-header maspik-accordion-header-text"><?php esc_html_e('Supported forms', 'contact-forms-anti-spam'); ?></h4><!--Accordion Title-->
+                    </div>
+                    <div class = "maspik-pro-button-wrap">
+                        <span class="maspik-acc-arrow"><span class="dashicons dashicons-arrow-right"></span>
+                    </div>
+                </div>
+                    
+                <div class="maspik-accordion-content" id="maspik-form-options">
+                    <div class="maspik-accordion-content-wrap hide-form-title">
+
+                        <div class="maspik-cf7-switch-wrap togglewrap maspik-form-switch-wrap <?php echo efas_if_plugin_is_active('contact-form-7') == 1 ? 'enabled':'disabled' ?>">
+                            <?php echo maspik_toggle_button('maspik_support_cf7', 'maspik_support_cf7', 'maspik_support_cf7', 'maspik-form-switch togglebutton', "form-toggle",efas_if_plugin_is_active('contact-form-7')); 
+                            
+                            ?>
+                                <div>
+                                    <h4> <?php esc_html_e('Support Contact from 7', 'contact-forms-anti-spam'); ?> </h4>
+                            </div>  
+                        </div><!-- end of maspik-cf7-switch-wrap -->
+
+                        <div class="maspik-wp-comment-switch-wrap togglewrap maspik-form-switch-wrap">
+                            <?php echo maspik_toggle_button('maspik_support_wp_comment', 'maspik_support_wp_comment', 'maspik_support_wp_comment', 'maspik-form-switch togglebutton', "form-toggle", maspik_get_settings( "maspik_support_wp_comment", 'form-toggle' )); ?>
+                                <div>
+                                    <h4> <?php esc_html_e('Support wp comment', 'contact-forms-anti-spam'); ?> </h4>
+                            </div>  
+                        </div><!-- end of maspik-wp-comment-switch-wrap -->
+
+                        <div class="maspik-formidable-switch-wrap togglewrap maspik-form-switch-wrap  <?php echo efas_if_plugin_is_active('formidable') == 1 ? 'enabled':'disabled' ?>">
+                            <?php echo maspik_toggle_button('maspik_support_formidable_forms', 'maspik_support_formidable_forms', 'maspik_support_formidable_forms', 'maspik-form-switch togglebutton', "form-toggle", efas_if_plugin_is_active('formidable')); ?>
+                                <div>
+                                    <h4> <?php esc_html_e('Support Formidable', 'contact-forms-anti-spam'); ?> </h4>
+                            </div>  
+                        </div><!-- end of maspik-formidable-switch-wrap -->
+
+                        <div class="maspik-forminator-switch-wrap togglewrap maspik-form-switch-wrap  <?php echo efas_if_plugin_is_active('forminator') == 1 ? 'enabled':'disabled' ?>">
+                            <?php echo maspik_toggle_button('maspik_support_forminator_forms', 'maspik_support_forminator_forms', 'maspik_support_forminator_forms', 'maspik-form-switch togglebutton', "form-toggle", efas_if_plugin_is_active('forminator')); ?>
+                                <div>
+                                    <h4> <?php esc_html_e('Support Forminator', 'contact-forms-anti-spam'); ?> </h4>
+                            </div>  
+                        </div><!-- end of maspik-forminator-switch-wrap -->
+                        
+                        <div class="maspik-fluentform-switch-wrap togglewrap maspik-form-switch-wrap <?php echo efas_if_plugin_is_active('fluentforms') == 1 ? 'enabled':'disabled' ?>">
+                            <?php echo maspik_toggle_button('maspik_support_fluentforms_forms', 'maspik_support_fluentforms_forms', 'maspik_support_fluentforms_forms', 'maspik-form-switch togglebutton', "form-toggle", efas_if_plugin_is_active('fluentforms')); ?>
+                                <div>
+                                    <h4> <?php esc_html_e('Support Fluentforms', 'contact-forms-anti-spam'); ?> </h4>
+                            </div>  
+                        </div><!-- end of maspik-fluentform-switch-wrap -->
+
+                        <div class="maspik-bricks-switch-wrap togglewrap maspik-form-switch-wrap <?php echo efas_if_plugin_is_active('bricks') == 1 ? 'enabled':'disabled' ?>">
+                            <?php echo maspik_toggle_button('maspik_support_bricks_forms', 'maspik_support_bricks_forms', 'maspik_support_bricks_forms', 'maspik-form-switch togglebutton', "form-toggle", efas_if_plugin_is_active('bricks')); ?>
+                                <div>
+                                    <h4> <?php esc_html_e('Support Bricks forms', 'contact-forms-anti-spam'); ?> </h4>
+                            </div>  
+                        </div><!-- end of maspik-bricks-switch-wrap -->
+
+                        <div class="maspik-wp-registration-switch-wrap togglewrap maspik-form-switch-wrap <?php echo efas_if_plugin_is_active('Wordpress Registration') == 1 ? 'enabled':'disabled' ?>">
+                            <?php echo maspik_toggle_button('maspik_support_registration', 'maspik_support_registration', 'maspik_support_registration', 'maspik-form-switch togglebutton', "form-toggle", efas_if_plugin_is_active('Wordpress Registration')); ?>
+                                <div class="wp-reg">
+                                        <h4> <?php esc_html_e('Support WP Registration', 'contact-forms-anti-spam'); ?></h4>
+                                        <?php maspik_tooltip('If Anyone can register is checked <br><em>(At WP Options => General).</em>') ?>
+                                        
+                                </div>  
+                        </div><!-- end of maspik-wp-registration-switch-wrap -->
+
+                        <div class="maspik-elementor-switch-wrap togglewrap maspik-form-switch-wrap <?php echo efas_if_plugin_is_active('elementor-pro') == 1 ? 'enabled':'disabled' ?>">
+                            <?php echo maspik_toggle_button('maspik_support_Elementor_forms', 'maspik_support_Elementor_forms', 'maspik_support_Elementor_forms', 'maspik-form-switch togglebutton', "form-toggle", efas_if_plugin_is_active('elementor-pro')); ?>
+                                <div>
+                                    <h4> <?php esc_html_e('Support Elementor forms', 'contact-forms-anti-spam'); ?> </h4>
+                                </div>  
+                        </div><!-- end of maspik-elementor-switch-wrap -->
+
+                        <div class="maspik-wp-ninjaform-switch-wrap togglewrap maspik-form-switch-wrap <?php echo efas_if_plugin_is_active('ninjaforms') == 1 ? 'enabled':'disabled' ?>">
+                            <?php echo maspik_toggle_button('maspik_support_ninjaforms', 'maspik_support_ninjaforms', 'maspik_support_ninjaforms', 'maspik-form-switch togglebutton', "form-toggle", efas_if_plugin_is_active('ninjaforms')); ?>
+                                <div class="wp-reg">
+                                        <h4> <?php esc_html_e('Support Ninja Forms', 'contact-forms-anti-spam'); ?></h4>
+                                        
+                                </div>  
+                        </div><!-- end of maspik-wp-ninjaform-switch-wrap-->
+
+                        <div class="maspik-wp-jetform-switch-wrap togglewrap maspik-form-switch-wrap <?php echo efas_if_plugin_is_active('jetforms') == 1 ? 'enabled':'disabled' ?>">
+                            <?php echo maspik_toggle_button('maspik_support_jetforms', 'maspik_support_jetforms', 'maspik_support_jetforms', 'maspik-form-switch togglebutton', "form-toggle", efas_if_plugin_is_active('jetforms')); ?>
+                                <div class="wp-reg">
+                                        <h4> <?php esc_html_e('Support Jet Form', 'contact-forms-anti-spam'); ?></h4>
+                                        
+                                </div>  
+                        </div><!-- end of maspik-wp-jetform-switch-wrap-->
+
+                        <div class="maspik-wp-jetform-switch-wrap togglewrap maspik-form-switch-wrap <?php echo efas_if_plugin_is_active('everestforms') == 1 ? 'enabled':'disabled' ?>">
+                            <?php echo maspik_toggle_button('maspik_support_everestforms', 'maspik_support_everestforms', 'maspik_support_everestforms', 'maspik-form-switch togglebutton', "form-toggle", efas_if_plugin_is_active('everestforms')); ?>
+                                <div class="wp-reg">
+                                        <h4> <?php esc_html_e('Support Everest Forms', 'contact-forms-anti-spam'); ?></h4>
+                                        
+                                </div>  
+                        </div><!-- end of maspik-wp-jetform-switch-wrap-->
+
+                        <div class="pro-btn-wrapper <?php echo maspik_add_pro_class() ?>"><?php maspik_get_pro() ?></div>
+                        <div class="forms-pro-block <?php echo maspik_add_pro_class() ?>" >
+                            
+
+                            <div class="maspik-gravity-form-switch-wrap togglewrap maspik-form-switch-wrap <?php echo efas_if_plugin_is_active('gravityforms') == 1 ? 'enabled':'disabled' ?>">
+                                <?php echo maspik_toggle_button('maspik_support_gravity_forms', 'maspik_support_gravity_forms', 'maspik_support_gravity_forms', 'maspik-form-switch togglebutton', "form-toggle", 
+                                (efas_if_plugin_is_active('gravityforms') && maspik_proform_togglecheck('Gravityforms')) == 1 ); ?>
+                                    <div>
+                                        <h4> <?php esc_html_e('Support Gravity Forms', 'contact-forms-anti-spam'); ?> </h4>
+                                </div>  
+                            </div><!-- end of maspik-gravity-form-switch-wrap -->
+
+                            <div class="maspik-wpforms-switch-wrap togglewrap maspik-form-switch-wrap <?php echo efas_if_plugin_is_active('wpforms') == 1 ? 'enabled':'disabled' ?>">
+                                <?php echo maspik_toggle_button('maspik_support_Wpforms', 'maspik_support_Wpforms', 'maspik_support_Wpforms', 'maspik-form-switch togglebutton', "form-toggle", (efas_if_plugin_is_active('Wpforms') && maspik_proform_togglecheck('Wpforms')) == 1 ); 
+                                
+                                ?>
+                                    <div>
+                                        <h4> <?php esc_html_e('Support WPforms', 'contact-forms-anti-spam'); ?> </h4>
+                                </div>  
+                            </div><!-- end of maspik-wpforms-switch-wrap -->
+
+                            <div class="maspik-woo-review-switch-wrap togglewrap maspik-form-switch-wrap <?php echo efas_if_plugin_is_active('woocommerce') == 1 ? 'enabled':'disabled' ?>">
+                                <?php echo maspik_toggle_button('maspik_support_woocommerce_review', 'maspik_support_woocommerce_review', 'maspik_support_woocommerce_review', 'maspik-form-switch togglebutton', "form-toggle", 
+                                 (efas_if_plugin_is_active('woocommerce') && maspik_proform_togglecheck('Woocommerce Review')) == 1 ); 
+                                 ?>
+                                    <div>
+                                        <h4> <?php esc_html_e('Support Woocommerce Review', 'contact-forms-anti-spam'); ?> </h4>
+                                </div>  
+                            </div><!-- end of maspik-woo-review-switch-wrap -->
+
+                            <div class="maspik-woo-registration-switch-wrap togglewrap maspik-form-switch-wrap <?php echo efas_if_plugin_is_active('woocommerce') == 1 ? 'enabled':'disabled' ?>">
+                                <?php echo maspik_toggle_button('maspik_support_Woocommerce_registration', 'maspik_support_Woocommerce_registration', 'maspik_support_Woocommerce_registration', 'maspik-form-switch togglebutton', "form-toggle", 
+                                (efas_if_plugin_is_active('woocommerce') && maspik_proform_togglecheck('Woocommerce Registration')) == 1 ); ?>
+                                    <div>
+                                        <h4> <?php esc_html_e('Support Woocommerce Registration', 'contact-forms-anti-spam'); ?> </h4>
+                                </div>  
+                            </div><!-- end of maspik-woo-registration-switch-wrap -->
+
+                        </div>
+                    
+                        <?php 
+                            maspik_save_button_show() ?>
+                        
+                    </div>
+                </div>
+            </div>
+
+            <!-- Accordion Item - Other Options Field - Custom -->
+            <div class="maspik-accordion-item maspik-accordion-other-option-field" >
+                <div class="maspik-accordion-header" id="spam-log-accordion">
+                    <div class="mpk-acc-header-texts">
+                        <h4 class="maspik-header maspik-accordion-header-text"><?php esc_html_e('Spam Log and Validation message', 'contact-forms-anti-spam'); ?></h4><!--Accordion Title-->
+                    </div>
+                    <div class = "maspik-pro-button-wrap">
+                        <span class="maspik-acc-arrow"><span class="dashicons dashicons-arrow-right"></span>
+                    </div>
+                </div>
+                    
+                <div class="maspik-accordion-content" id="maspik-form-options">
+                    <div class="maspik-accordion-content-wrap hide-form-title">
+                            
                         <div class="maspik-accordion-subtitle-wrap add-space-top short-tooltip">
-                            <h3 class="maspik-accordion-subtitle"><?php _e('Default validation error message', 'contact-forms-anti-spam'); ?></h3>
+                            <h3 class="maspik-accordion-subtitle"><?php esc_html_e('Default validation error message', 'contact-forms-anti-spam'); ?></h3>
                             <?php 
                                 maspik_tooltip("This is the error message that the user/spammer will receive.");
                             ?>
@@ -1238,220 +1529,12 @@ echo '<p>' . __("Important: These three new features are operational on <strong>
                         <!---- Language section divider S---------->
                         <div class = 'maspik-simple-divider'></div>
                         <!---- Language section divider E---------->
-
-                        <div class="maspik-accordion-subtitle-wrap short-tooltip">
-                            <h3 class="maspik-accordion-subtitle"><?php _e('AbuseIPDB API', 'contact-forms-anti-spam'); ?></h3>
-                            <?php 
-                                maspik_tooltip("AbuseIPDB.com API<br>
-                                <em>Recommend not lower than 25 for less false positives.</em>");
-                            ?>
-                        </div> <!--end of maspik-accordion-subtitle-wrap-->
-                        
-
-                        <div class="maspik-abuse-api-wrap maspik-main-list-wrap maspik-textfield-list">
-
-                            <?php echo create_maspik_input('abuseipdb_api', 'maspik-inputbox'); ?>
-                            <div class="maspik-threshold-wrap">
-                            <?php echo create_maspik_numbox("abuseipdb_score", "abuseipdb_score", "threshold-limit" , "Risk Threshold", "") ?>
-                            </div>
-
-                        </div> <!-- end of maspik-abuse-api-wrap  -->
-                        <span class="maspik-subtext"><?php _e('For more infromation', 'contact-forms-anti-spam'); ?> <a target = "_blank" href="https://www.abuseipdb.com/?Maspik-plugin">
-                        <?php _e('AbuseIPDB', 'contact-forms-anti-spam'); ?></a></span>
-                        <span class="maspik-subtext"><?php _e('Leave blank to disable', 'contact-forms-anti-spam'); ?>.</span>
-                               <?php maspik_spam_api_list('abuseipdb_api');?>
-                        <div class="maspik-accordion-subtitle-wrap short-tooltip add-space-top">
-                            <h3 class="maspik-accordion-subtitle"><?php _e('Proxycheck.io API', 'contact-forms-anti-spam'); ?></h3>
-                            <?php 
-                                maspik_tooltip("Proxycheck.io API<br>
-                                <em>Low risk 0-33, MidHigh risk = 33-66, Dangerous = 66 Above</em>");
-                            ?>
-                        </div> <!--end of maspik-accordion-subtitle-wrap-->
-
-
-                         <div class="maspik-abuse-api-wrap maspik-main-list-wrap maspik-textfield-list">
-
-                            <?php echo create_maspik_input('proxycheck_io_api', 'maspik-inputbox'); ?>
-                            <div class="maspik-threshold-wrap">
-                            <?php echo create_maspik_numbox("proxycheck_io_risk", "proxycheck_io_risk", "threshold-limit" , "Risk Threshold", "") ?>
-                            </div>
-
-                        </div> <!-- end of maspik-abuse-api-wrap  -->
-                        <span class="maspik-subtext"><?php _e('For more infromation', 'contact-forms-anti-spam'); ?> <a target = "_blank" href="https://proxycheck.io/?Maspik-plugin">
-                        <?php _e('ProxyCheck', 'contact-forms-anti-spam'); ?></a></span>
-
-                        <span class="maspik-subtext"><?php _e('Leave blank to disable.', 'contact-forms-anti-spam'); ?></span>
-                           
-                        <?php maspik_spam_api_list('proxycheck_io_api');?>          
-                    
-                        <?php 
-                            maspik_save_button_show() ?>
-                        
-                    </div>
-                </div>
-            </div>
-
-
-             <!-- MORE OPTIONS HEADER -->
-                <div class="maspik-blacklist-head maspik-more-options">
-                    
-                    <h2 class='maspik-header maspik-bl-header'><?php _e('More Options', 'contact-forms-anti-spam'); ?></h2>
-
-                </div>
-             <!-- MORE OPTIONS HEADER - END -->
-
-
-            <!-- Accordion Item - Form Options Field - Custom -->
-            <div class="maspik-accordion-item maspik-accordion-form-option-field" >
-                <div class="maspik-accordion-header" id="form-option-accordion">
-                    <div class="mpk-acc-header-texts">
-                        <h4 class="maspik-header maspik-accordion-header-text"><?php _e('Forms Options', 'contact-forms-anti-spam'); ?></h4><!--Accordion Title-->
-                    </div>
-                    <div class = "maspik-pro-button-wrap">
-                        <span class="maspik-acc-arrow"><span class="dashicons dashicons-arrow-right"></span>
-                    </div>
-                </div>
-                    
-                <div class="maspik-accordion-content" id="maspik-form-options">
-                    <div class="maspik-accordion-content-wrap hide-form-title">
-
-                        <div class="maspik-cf7-switch-wrap togglewrap maspik-form-switch-wrap <?php echo efas_if_plugin_is_active('contact-form-7') == 1 ? 'enabled':'disabled' ?>">
-                            <?php echo maspik_toggle_button('maspik_support_cf7', 'maspik_support_cf7', 'maspik_support_cf7', 'maspik-form-switch togglebutton', "form-toggle",efas_if_plugin_is_active('contact-form-7')); 
-                            
-                            ?>
-                                <div>
-                                    <h4> <?php _e('Support Contact from 7', 'contact-forms-anti-spam'); ?> </h4>
-                            </div>  
-                        </div><!-- end of maspik-cf7-switch-wrap -->
-
-                        <div class="maspik-wp-comment-switch-wrap togglewrap maspik-form-switch-wrap">
-                            <?php echo maspik_toggle_button('maspik_support_wp_comment', 'maspik_support_wp_comment', 'maspik_support_wp_comment', 'maspik-form-switch togglebutton', "form-toggle", maspik_get_settings( "maspik_support_wp_comment", 'form-toggle' )); ?>
-                                <div>
-                                    <h4> <?php _e('Support wp comment', 'contact-forms-anti-spam'); ?> </h4>
-                            </div>  
-                        </div><!-- end of maspik-wp-comment-switch-wrap -->
-
-                        <div class="maspik-formidable-switch-wrap togglewrap maspik-form-switch-wrap  <?php echo efas_if_plugin_is_active('formidable') == 1 ? 'enabled':'disabled' ?>">
-                            <?php echo maspik_toggle_button('maspik_support_formidable_forms', 'maspik_support_formidable_forms', 'maspik_support_formidable_forms', 'maspik-form-switch togglebutton', "form-toggle", efas_if_plugin_is_active('formidable')); ?>
-                                <div>
-                                    <h4> <?php _e('Support Formidable', 'contact-forms-anti-spam'); ?> </h4>
-                            </div>  
-                        </div><!-- end of maspik-formidable-switch-wrap -->
-
-                        <div class="maspik-forminator-switch-wrap togglewrap maspik-form-switch-wrap  <?php echo efas_if_plugin_is_active('forminator') == 1 ? 'enabled':'disabled' ?>">
-                            <?php echo maspik_toggle_button('maspik_support_forminator_forms', 'maspik_support_forminator_forms', 'maspik_support_forminator_forms', 'maspik-form-switch togglebutton', "form-toggle", efas_if_plugin_is_active('forminator')); ?>
-                                <div>
-                                    <h4> <?php _e('Support Forminator', 'contact-forms-anti-spam'); ?> </h4>
-                            </div>  
-                        </div><!-- end of maspik-forminator-switch-wrap -->
-                        
-                        <div class="maspik-fluentform-switch-wrap togglewrap maspik-form-switch-wrap <?php echo efas_if_plugin_is_active('fluentforms') == 1 ? 'enabled':'disabled' ?>">
-                            <?php echo maspik_toggle_button('maspik_support_fluentforms_forms', 'maspik_support_fluentforms_forms', 'maspik_support_fluentforms_forms', 'maspik-form-switch togglebutton', "form-toggle", efas_if_plugin_is_active('fluentforms')); ?>
-                                <div>
-                                    <h4> <?php _e('Support Fluentforms', 'contact-forms-anti-spam'); ?> </h4>
-                            </div>  
-                        </div><!-- end of maspik-fluentform-switch-wrap -->
-
-                        <div class="maspik-bricks-switch-wrap togglewrap maspik-form-switch-wrap <?php echo efas_if_plugin_is_active('bricks') == 1 ? 'enabled':'disabled' ?>">
-                            <?php echo maspik_toggle_button('maspik_support_bricks_forms', 'maspik_support_bricks_forms', 'maspik_support_bricks_forms', 'maspik-form-switch togglebutton', "form-toggle", efas_if_plugin_is_active('bricks')); ?>
-                                <div>
-                                    <h4> <?php _e('Support Bricks forms', 'contact-forms-anti-spam'); ?> </h4>
-                            </div>  
-                        </div><!-- end of maspik-bricks-switch-wrap -->
-
-                        <div class="maspik-elementor-switch-wrap togglewrap maspik-form-switch-wrap <?php echo efas_if_plugin_is_active('elementor-pro') == 1 ? 'enabled':'disabled' ?>">
-                            <?php echo maspik_toggle_button('maspik_support_Elementor_forms', 'maspik_support_Elementor_forms', 'maspik_support_Elementor_forms', 'maspik-form-switch togglebutton', "form-toggle", efas_if_plugin_is_active('elementor-pro')); ?>
-                                <div>
-                                    <h4> <?php _e('Support Elementor forms', 'contact-forms-anti-spam'); ?> </h4>
-                                </div>  
-                        </div><!-- end of maspik-elementor-switch-wrap -->
-
-                        <div class="maspik-wp-registration-switch-wrap togglewrap maspik-form-switch-wrap <?php echo efas_if_plugin_is_active('Wordpress Registration') == 1 ? 'enabled':'disabled' ?>">
-                            <?php echo maspik_toggle_button('maspik_support_registration', 'maspik_support_registration', 'maspik_support_registration', 'maspik-form-switch togglebutton', "form-toggle", efas_if_plugin_is_active('Wordpress Registration')); ?>
-                                <div class="wp-reg">
-                                        <h4> <?php _e('Support WP Registration', 'contact-forms-anti-spam'); ?></h4>
-                                        <?php maspik_tooltip('If Anyone can register is checked <br><em>(At WP Options => General).</em>') ?>
-                                        
-                                </div>  
-                        </div><!-- end of maspik-wp-registration-switch-wrap -->
-
-
-                        <div class="maspik-wp-ninjaform-switch-wrap togglewrap maspik-form-switch-wrap <?php echo efas_if_plugin_is_active('ninjaforms') == 1 ? 'enabled':'disabled' ?>">
-                            <?php echo maspik_toggle_button('maspik_support_ninjaforms', 'maspik_support_ninjaforms', 'maspik_support_ninjaforms', 'maspik-form-switch togglebutton', "form-toggle", efas_if_plugin_is_active('ninjaforms')); ?>
-                                <div class="wp-reg">
-                                        <h4> <?php _e('Support Ninja Forms', 'contact-forms-anti-spam'); ?></h4>
-                                        
-                                </div>  
-                        </div><!-- end of maspik-wp-registration-switch-wrap -->
-
-                        <div class="pro-btn-wrapper <?php echo maspik_add_pro_class() ?>"><?php maspik_get_pro() ?></div>
-                        <div class="forms-pro-block <?php echo maspik_add_pro_class() ?>" >
-                            
-
-                            <div class="maspik-gravity-form-switch-wrap togglewrap maspik-form-switch-wrap <?php echo efas_if_plugin_is_active('gravityforms') == 1 ? 'enabled':'disabled' ?>">
-                                <?php echo maspik_toggle_button('maspik_support_gravity_forms', 'maspik_support_gravity_forms', 'maspik_support_gravity_forms', 'maspik-form-switch togglebutton', "form-toggle", 
-                                (efas_if_plugin_is_active('gravityforms') && maspik_proform_togglecheck('Gravityforms')) == 1 ); ?>
-                                    <div>
-                                        <h4> <?php _e('Support Gravity Forms', 'contact-forms-anti-spam'); ?> </h4>
-                                </div>  
-                            </div><!-- end of maspik-gravity-form-switch-wrap -->
-
-                            <div class="maspik-wpforms-switch-wrap togglewrap maspik-form-switch-wrap <?php echo efas_if_plugin_is_active('wpforms') == 1 ? 'enabled':'disabled' ?>">
-                                <?php echo maspik_toggle_button('maspik_support_Wpforms', 'maspik_support_Wpforms', 'maspik_support_Wpforms', 'maspik-form-switch togglebutton', "form-toggle", (efas_if_plugin_is_active('Wpforms') && maspik_proform_togglecheck('Wpforms')) == 1 ); 
-                                
-                                ?>
-                                    <div>
-                                        <h4> <?php _e('Support WPforms', 'contact-forms-anti-spam'); ?> </h4>
-                                </div>  
-                            </div><!-- end of maspik-wpforms-switch-wrap -->
-
-                            <div class="maspik-woo-review-switch-wrap togglewrap maspik-form-switch-wrap <?php echo efas_if_plugin_is_active('woocommerce') == 1 ? 'enabled':'disabled' ?>">
-                                <?php echo maspik_toggle_button('maspik_support_woocommerce_review', 'maspik_support_woocommerce_review', 'maspik_support_woocommerce_review', 'maspik-form-switch togglebutton', "form-toggle", 
-                                 (efas_if_plugin_is_active('woocommerce') && maspik_proform_togglecheck('Woocommerce Review')) == 1 ); 
-                                 ?>
-                                    <div>
-                                        <h4> <?php _e('Support Woocommerce Review', 'contact-forms-anti-spam'); ?> </h4>
-                                </div>  
-                            </div><!-- end of maspik-woo-review-switch-wrap -->
-
-                            <div class="maspik-woo-registration-switch-wrap togglewrap maspik-form-switch-wrap <?php echo efas_if_plugin_is_active('woocommerce') == 1 ? 'enabled':'disabled' ?>">
-                                <?php echo maspik_toggle_button('maspik_support_Woocommerce_registration', 'maspik_support_Woocommerce_registration', 'maspik_support_Woocommerce_registration', 'maspik-form-switch togglebutton', "form-toggle", 
-                                (efas_if_plugin_is_active('woocommerce') && maspik_proform_togglecheck('Woocommerce Registration')) == 1 ); ?>
-                                    <div>
-                                        <h4> <?php _e('Support Woocommerce Registration', 'contact-forms-anti-spam'); ?> </h4>
-                                </div>  
-                            </div><!-- end of maspik-woo-registration-switch-wrap -->
-
-                        </div>
-                    
-                        <?php 
-                            maspik_save_button_show() ?>
-                        
-                    </div>
-                </div>
-            </div>
-
-            <!-- Accordion Item - Other Options Field - Custom -->
-            <div class="maspik-accordion-item maspik-accordion-other-option-field" >
-                <div class="maspik-accordion-header" id="form-option-accordion">
-                    <div class="mpk-acc-header-texts">
-                        <h4 class="maspik-header maspik-accordion-header-text"><?php _e('Other Options', 'contact-forms-anti-spam'); ?></h4><!--Accordion Title-->
-                    </div>
-                    <div class = "maspik-pro-button-wrap">
-                        <span class="maspik-acc-arrow"><span class="dashicons dashicons-arrow-right"></span>
-                    </div>
-                </div>
-                    
-                <div class="maspik-accordion-content" id="maspik-form-options">
-                    <div class="maspik-accordion-content-wrap hide-form-title">
-                            
-                    
                     
                         <div class="maspik-limit-char-head togglewrap">
                             <?php          
                                 echo maspik_toggle_button('maspik_Store_log', 'maspik_Store_log', 'maspik_Store_log', 'maspik-toggle-store-log togglebutton', 'yes-no' , 1);
                                                 
-                                echo "<h4>" . __("Spam Log", "contact-forms-anti-spam"). "</h4>";
+                                echo "<h4>" . esc_html__("Spam Log", "contact-forms-anti-spam"). "</h4>";
 
                                 maspik_tooltip(esc_html("If disabled, the Log of the blocked spam will not be Saved"));
                             ?>
@@ -1459,22 +1542,23 @@ echo '<p>' . __("Important: These three new features are operational on <strong>
 
                         <div class="maspik-limit-char-box togglebox">
                             <?php 
-                                echo create_maspik_numbox("spam_log_limit", "spam_log_limit", "spam_log_limit" , "Entry limit", "2000");
+                                echo create_maspik_numbox("spam_log_limit", "spam_log_limit", "spam_log_limit" , "Entry limit", "2000", "","");
                             ?>
                         </div> <!-- end of spam log toggle box -->
-                            
-                        <div class="maspik-add-country-switch-wrap togglewrap maspik-more-options-switch-wrap">
+                             <?php 
 
-                            <?php 
-                            
+                            /* // Remove add_country_to_emails
+
+                        <!-- <div class="maspik-add-country-switch-wrap togglewrap maspik-more-options-switch-wrap">
+
+                           
                                 echo maspik_toggle_button('add_country_to_emails', 'add_country_to_emails', 'add_country_to_emails', 'maspik-more-options-switch togglebutton', 'other_options' );
                                 
-                                echo "<h4>". __("Add country name to the bottom of email content", "contact-forms-anti-spam"). "</h4>";
+                                echo "<h4>". esc_html__("Add country name to the bottom of email content", "contact-forms-anti-spam"). "</h4>";
                                     
                                 maspik_tooltip(esc_html("To identify countries that send spam, and block them"));
-                                    
-                             ?>
-                        </div><!-- end of mmaspik-add-country-switch-wrap -->
+                        </div> --> <!-- end of mmaspik-add-country-switch-wrap -->
+                             
 
                         <div class="maspik-disable-comment-switch-wrap togglewrap maspik-more-options-switch-wrap">
 
@@ -1482,24 +1566,24 @@ echo '<p>' . __("Important: These three new features are operational on <strong>
                             
                                 echo maspik_toggle_button('disable_comments', 'disable_comments', 'disable_comments', 'maspik-more-options-switch togglebutton' , 'other_options' );
                                 
-                                echo "<h4>". __(" Disable comments in WordPress", "contact-forms-anti-spam"). "</h4>";
+                                echo "<h4>". esc_html__(" Disable comments in WordPress", "contact-forms-anti-spam"). "</h4>";
                                     
-                                maspik_tooltip(__("Disable comments on *ALL* types of posts and remove/hide any existing comments from displaying, as well as hiding the comment forms.
-                                
+                                maspik_tooltip(esc_html__("Disable comments on *ALL* types of posts and remove/hide any existing comments from displaying, as well as hiding the comment forms.
                                 <br>If you toggle <strong>on</strong> comments will be disable.", "contact-forms-anti-spam") );
                                     
                              ?>
                         </div><!-- end of mmaspik-add-country-switch-wrap -->
-
-                        <div class="maspik-disable-comment-switch-wrap togglewrap maspik-more-options-switch-wrap">
+                        */   
+                        ?>
+                        <div class="maspik-shere-data-switch-wrap togglewrap maspik-more-options-switch-wrap">
 
                             <?php 
                             
                                 echo maspik_toggle_button('shere_data', 'shere_data', 'shere_data', 'maspik-more-options-switch togglebutton' , 'other_options' );
                                 
-                                echo "<h4>". __(" Allow usage tracking", "contact-forms-anti-spam"). "</h4>";
+                                echo "<h4>". esc_html__("Share anonymous data to improve spam protection", "contact-forms-anti-spam"). "</h4>";
                                     
-                                maspik_tooltip(__("By allowing us to track usage data, we can better help you by knowing which WordPress configurations, themes, and plugins to test and which options are needed.") );
+                                maspik_tooltip(esc_html__("By allowing us to track usage data, we can better help you by knowing which WordPress configurations, themes, and plugins to test and which options are needed.") );
                                     
                              ?>
                         </div><!-- end of mmaspik-add-country-switch-wrap -->
@@ -1528,36 +1612,36 @@ echo '<p>' . __("Important: These three new features are operational on <strong>
         <!--Test form here -->
             <div class="maspik-test-form form-container test-form">
                 <form name="frmContact"  id="frmContact" method="post"  enctype="multipart/form-data">
-                        <h3 class="maspik-test-form-head maspik-header"><?php _e('Playground - Test form', 'contact-forms-anti-spam'); ?></h3>    
+                        <h3 class="maspik-test-form-head maspik-header"><?php esc_html_e('Playground - Test form', 'contact-forms-anti-spam'); ?></h3>    
                         
-                        <p  class="maspik-test-form-sub"><?php _e('This form allows you to test your entries to see if they will be blocked.', 'contact-forms-anti-spam'); ?>
+                        <p  class="maspik-test-form-sub"><?php esc_html_e('This form allows you to test your entries to see if they will be blocked.', 'contact-forms-anti-spam'); ?>
                     <div class="input-row">
-                        <label><?php _e('Name (Text field)', 'contact-forms-anti-spam'); ?></label> <span
+                        <label><?php esc_html_e('Name (Text field)', 'contact-forms-anti-spam'); ?></label> <span
                             id="userName-info" class="info"></span> <input type="text"
                             class="input-field" name="userName" id="userName" />
                         <span class="note" id="note-name"></span>
                     </div>
                     <div class="input-row">
-                        <label><?php _e('Email (Email field)', 'contact-forms-anti-spam'); ?></label> <span id="userEmail-info" class="info"></span>
+                        <label><?php esc_html_e('Email (Email field)', 'contact-forms-anti-spam'); ?></label> <span id="userEmail-info" class="info"></span>
                         <input type="email" class="input-field" name="userEmail"
                             id="userEmail" />
                         <span class="note" id="note-email"></span>
                     </div>
                     <div class="input-row">
-                        <label><?php _e('Phone (Phone field)', 'contact-forms-anti-spam'); ?></label> <span id="subject-info" class="info"></span>
+                        <label><?php esc_html_e('Phone (Phone field)', 'contact-forms-anti-spam'); ?></label> <span id="subject-info" class="info"></span>
                         <input type="tel" class="input-field" name="tel" id="tel" />
                         <span class="note" id="note-tel"></span>
                     </div>
                     <div class="input-row">
-                        <label><?php _e('Message (Text area field)', 'contact-forms-anti-spam'); ?></label> <span id="userMessage-info" class="info"></span>
+                        <label><?php esc_html_e('Message (Text area field)', 'contact-forms-anti-spam'); ?></label> <span id="userMessage-info" class="info"></span>
                         <textarea name="content" id="content" class="input-field" cols="60"
                             rows="3"></textarea>
                         <span class="note" id="note-textarea"></span>
                     </div>
                     <div>
-                        <input type="submit" name="send" class="btn-submit maspik-btn" value="<?php _e('Check', 'contact-forms-anti-spam'); ?>" />
+                        <input type="submit" name="send" class="btn-submit maspik-btn" value="<?php esc_html_e('Check', 'contact-forms-anti-spam'); ?>" />
                     </div>
-                    <br><strong><?php _e('* Please save changes before checking.', 'contact-forms-anti-spam'); ?></strong>
+                    <br><strong><?php esc_html_e('* Please save changes before checking.', 'contact-forms-anti-spam'); ?></strong>
                     <br><div id="statusMessage"></div>
                 </form>
 
@@ -1569,40 +1653,42 @@ echo '<p>' . __("Important: These three new features are operational on <strong>
     </div>
       
     <div class=forms-warp>
-    <div id="popup-background"></div>
+        <div id="popup-background"></div>        
+    </div><!-- end forms warp -->
 
+    <div id="pop-up-example" class="maspik-popup-wrap">
+        <h3 class="maspik-popup-title-wrap"><?php esc_html_e('Example for', 'contact-forms-anti-spam'); ?> <span class="maspik-popup-title"><?php esc_html_e('Text field', 'contact-forms-anti-spam'); ?></span></h3>
+        <p class="pop-up-subtext"><?php esc_html_e('Here you can see an example options for the', 'contact-forms-anti-spam'); ?>  <span class="maspik-popup-title"><?php esc_html_e('text field', 'contact-forms-anti-spam'); ?></span></p>
+        <button class="close-popup"><span class="dashicons dashicons-no-alt"></span></button>
+            <div class="data-array-wrap"><div class="data-array-here maspik-custom-scroll">
+                <ul>
+                <!-- Example words will be dynamically inserted here -->
+                </ul>
+            </div>
+        </div>
+        <div class="maspik-copy-btn-wrap">
+            <button class="copy maspik-btn"><?php esc_html_e('Copy list', 'contact-forms-anti-spam'); ?></button>
+        </div>
+        <div id="copy-message" style="display: none;"><?php esc_html_e('List copied!', 'contact-forms-anti-spam'); ?></div>
 
-        
-</div><!-- end forms warp -->
-<div id="pop-up-example" class="maspik-popup-wrap">
-    <h3 class="maspik-popup-title-wrap"><?php _e('Example for', 'contact-forms-anti-spam'); ?> <span class="maspik-popup-title"><?php _e('Text field', 'contact-forms-anti-spam'); ?></span></h3>
-    <p class="pop-up-subtext"><?php _e('Here you can see an Example words for the', 'contact-forms-anti-spam'); ?>  <span class="maspik-popup-title"><?php _e('text field', 'contact-forms-anti-spam'); ?></span> <?php _e('blocklist', 'contact-forms-anti-spam'); ?></p>
-    <button class="close-popup"><span class="dashicons dashicons-no-alt"></span></button>
-        <div class="data-array-wrap"><div class="data-array-here maspik-custom-scroll">
-            <ul>
-            <!-- Example words will be dynamically inserted here -->
-            </ul>
+    </div>
+
+    <div id="pop-up-shortcode" class="maspik-popup-wrap">
+        <h3 class="maspik-popup-title-wrap"><span class="maspik-popup-title"><?php esc_html_e('Shortcode List', 'contact-forms-anti-spam'); ?></span></h3>
+        <p class="pop-up-subtext"><?php esc_html_e('You can also use the following shortcodes:', 'contact-forms-anti-spam'); ?></p>
+        <button class="close-popup"><span class="dashicons dashicons-no-alt"></span></button>
+            <div class="data-array-wrap"><div class="data-array-here maspik-custom-scroll">
+                <ul>
+                <!-- Example words will be dynamically inserted here -->
+                </ul>
+            </div>
         </div>
     </div>
-    <div class="maspik-copy-btn-wrap">
-        <button class="copy maspik-btn"><?php _e('Copy list', 'contact-forms-anti-spam'); ?></button>
+
+    <div id="pop-up-ip-verification" class="maspik-popup-wrap" style="width: 700px; max-width: 90%; overflow: scroll; max-height: 60vh;">
+        <button class="close-popup"><span class="dashicons dashicons-no-alt"></span></button>
+        <?php echo IP_Verification_popup_content(); ?>
     </div>
-    <div id="copy-message" style="display: none;"><?php _e('List copied!', 'contact-forms-anti-spam'); ?></div>
-
-</div>
-
-
-<div id="pop-up-shortcode" class="maspik-popup-wrap">
-    <h3 class="maspik-popup-title-wrap"><span class="maspik-popup-title"><?php _e('Shortcode List', 'contact-forms-anti-spam'); ?></span></h3>
-    <p class="pop-up-subtext"><?php _e('You can also use the following shortcodes:', 'contact-forms-anti-spam'); ?></p>
-    <button class="close-popup"><span class="dashicons dashicons-no-alt"></span></button>
-        <div class="data-array-wrap"><div class="data-array-here maspik-custom-scroll">
-            <ul>
-            <!-- Example words will be dynamically inserted here -->
-            </ul>
-        </div>
-    </div>
-</div>
 
 <?php
 wp_enqueue_style('select2-css', 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css');
@@ -1715,7 +1801,7 @@ wp_enqueue_script('select2-js', 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0
     jQuery(document).ready(function() {
         jQuery('.maspik-select').select2({
           multiple: true,
-          placeholder:"<?php _e('Select', 'contact-forms-anti-spam' ) ;?>",
+          placeholder:"<?php esc_html_e('Select', 'contact-forms-anti-spam' ) ;?>",
         });
     });
 
@@ -1844,8 +1930,8 @@ wp_enqueue_script('select2-js', 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0
 </div>
 <?php
 
-wp_enqueue_script('custom-ajax-script', plugin_dir_url(__DIR__). 'maspik-ajax-script.js', array('jquery'), '1.10', true);
-wp_localize_script('custom-ajax-script', 'ajax_object', array('ajax_url' => admin_url('admin-ajax.php')));
+    wp_enqueue_script('custom-ajax-script', plugin_dir_url(__DIR__). 'maspik-ajax-script.js', array('jquery'), MASPIK_VERSION, true);
+    wp_localize_script('custom-ajax-script', 'ajax_object', array('ajax_url' => admin_url('admin-ajax.php')));
 
 
 ?>

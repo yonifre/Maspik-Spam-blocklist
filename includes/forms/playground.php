@@ -14,10 +14,10 @@ function maspik_handle_playground_form() {
 
     //check_ajax_referer('contact_form_nonce', 'nonce');
 
-    $name = sanitize_text_field($_POST['userName']);
-    $email = sanitize_email($_POST['userEmail']);
-    $tel = sanitize_text_field($_POST['tel']);
-    $content = sanitize_textarea_field($_POST['content']);
+    $name = sanitize_text_field(wp_unslash($_POST['userName']));
+    $email = sanitize_email(wp_unslash($_POST['userEmail']));
+    $tel = sanitize_text_field(wp_unslash($_POST['tel']));
+    $content = sanitize_textarea_field(wp_unslash($_POST['content']));
 
     // Example: Save form data to database or send an email
     $success = 1;
@@ -43,9 +43,9 @@ function maspik_handle_playground_form() {
     $ip = efas_getRealIpAddr();
     $reason = false;
     // Country IP Check 
-    $CountryCheck = CountryCheck($ip,$spam,$reason);
-    $spam = isset($CountryCheck['spam']) ? $CountryCheck['spam'] : 0;
-    $Country_reason = $CountryCheck['reason'] ? "<b>SPAM - ".$CountryCheck['reason']."</b><br>" : "";  
+    $GeneralCheck = GeneralCheck($ip,$spam,$reason,false,false);
+    $spam = isset($GeneralCheck['spam']) ? $GeneralCheck['spam'] : 0;
+    $Country_reason = $GeneralCheck['reason'] ? "<b>SPAM - ".$GeneralCheck['reason']."</b><br>" : "";  
     if($name){
         $validateTextField = validateTextField($name);
         $name_spam = isset($validateTextField['spam']) ? $validateTextField['spam'] : 0;

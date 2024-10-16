@@ -13,26 +13,26 @@ if (!defined('ABSPATH')) exit;
 /**
 * Genegal block
 **/
-
 function maspik_make_extra_spam_check($post) {
 
     // Honeypot check
     if (maspik_get_settings('maspikHoneypot') && isset($post['full-name-maspik-hp']) && !empty($post['full-name-maspik-hp'])) {
         return [
             'spam' => true,
-            'reason' => "Honeypot Triggered",
-            'message' => cfas_get_error_text()
+            'reason' => "Honeypot field is not empty",
+            'message' => "maspikHoneypot"
         ];
     }
 
     // Year check
-    if (maspik_get_settings('maspikYearCheck') && isset($post['Maspik-currentYear'])) {
+    if (maspik_get_settings('maspikYearCheck')) {
         $serverYear = intval(date('Y'));
+        $submittedYear = sanitize_text_field($post['Maspik-currentYear']);
         if ($post['Maspik-currentYear'] != $serverYear) {
             return [
                 'spam' => true,
-                'reason' => "Maspik Spam Trap - Server year and local year did not match",
-                'message' => cfas_get_error_text()
+                'reason' => "JavaScript check failed - The year submitted by JavaScript($submittedYear) does not match the current server year($serverYear)",
+                'message' => "maspikYearCheck"
             ];
         }
     }
@@ -47,7 +47,7 @@ function maspik_make_extra_spam_check($post) {
             return [
                 'spam' => true,
                 'reason' => "Maspik Spam Trap - Submitted too fast, Only $timeDifference seconds (" . $currentTime . " - $inputTime)",
-                'message' => cfas_get_error_text()
+                'message' => "maspikTimeCheck"
             ];
         }
     }
@@ -56,12 +56,12 @@ function maspik_make_extra_spam_check($post) {
     return [
         'spam' => false,
         'reason' => false,
-        'message' => cfas_get_error_text()
+        'message' => false
     ];
 }
 
 function maspik_submit_buffer(){
-    return 5;
+    return 4;
 }
 
 
@@ -69,19 +69,22 @@ function maspik_HP_name(){
     return "full-name-maspik-hp";
 }
 
-function CountryCheck($ip, &$spam, &$reason, $post = "") {
+
+function GeneralCheck($ip, &$spam, &$reason, $post = "",$form = false) {
     
     $to_do_extra_spam_check = maspik_get_settings('maspikHoneypot') || maspik_get_settings('maspikTimeCheck') || maspik_get_settings('maspikYearCheck');
-    if( is_array($post) && $to_do_extra_spam_check ){
+    if( is_array($post) && $to_do_extra_spam_check ){ 
         $extra_spam_check =  maspik_make_extra_spam_check($post) ;
         $is_spam = isset($extra_spam_check['spam']) ? $extra_spam_check['spam'] : $spam ;
         if($is_spam){
             $reason = isset($extra_spam_check['reason']) ? $extra_spam_check['reason'] : $reason ;
             $message = $extra_spam_check['message'] ? $extra_spam_check['message'] : 0 ;
-            return array('spam' => true, 'reason' => $reason, 'message' => $message);
+            return array('spam' => true, 'reason' => $reason, 'message' => $message, 'value' => 1);
         }
     }
-        
+    
+    
+      
     $message = 0;
     $opt_value = maspik_get_dbvalue();
     $ip_blacklist = maspik_get_settings('ip_blacklist') ? efas_makeArray(maspik_get_settings('ip_blacklist')) : array();
@@ -113,22 +116,37 @@ function CountryCheck($ip, &$spam, &$reason, $post = "") {
 
     // Check country blacklist only if is pro user
     if( cfes_is_supporting() && !empty($country_blacklist) ){ 
-    $xml_data = @file_get_contents("http://www.geoplugin.net/xml.gp?ip=" . $ip);
+        $xml_data = @file_get_contents("http://www.geoplugin.net/xml.gp?ip=" . $ip);
         if ($xml_data) {
             $xml = simplexml_load_string($xml_data);
             $countryCode = $xml && $xml->geoplugin_countryCode && $xml->geoplugin_countryCode != "" ? (string) $xml->geoplugin_countryCode : "Unknown";
-
-            if ($countryCode && in_array($countryCode, $country_blacklist) && $AllowedOrBlockCountries === 'block' ) {
-                $spam = true;
-                $message = "country_blacklist";
-                $reason = "Country code $countryCode is blacklisted ($AllowedOrBlockCountries)";
-                return array('spam' => $spam, 'reason' => $reason, 'message' => $message);
+            $continentCode = $xml && $xml->geoplugin_continentCode && $xml->geoplugin_continentCode != "" ? (string) $xml->geoplugin_continentCode : "Unknown";
+            
+            $selected_country_codes = array();
+            $selected_continent_codes = array();
+        
+            foreach ($country_blacklist as $item) {
+                if (strpos($item, 'Continent:') === 0) {
+                    $selected_continent_codes[] = substr($item, strlen('Continent:'));
+                } else {
+                    $selected_country_codes[] = $item;
+                }
             }
-            if ($AllowedOrBlockCountries === 'allow' && !in_array($countryCode, $country_blacklist) ) {
-                $spam = true;
-                $message = "country_blacklist";
-                $reason = "Country $countryCode is not in the whitelist ($AllowedOrBlockCountries)";
-                return array('spam' => $spam, 'reason' => $reason, 'message' => $message);
+        
+            if ($AllowedOrBlockCountries === 'block') {
+                if (in_array($countryCode, $selected_country_codes) || in_array($continentCode, $selected_continent_codes)) {
+                    $spam = true;
+                    $message = "country_blacklist";
+                    $reason = "Country code $countryCode or continent $continentCode is blacklisted (block)";
+                    return array('spam' => $spam, 'reason' => $reason, 'message' => $message, 'value' => $countryCode);
+                }
+            } elseif ($AllowedOrBlockCountries === 'allow') {
+                if (!in_array($countryCode, $selected_country_codes) && !in_array($continentCode, $selected_continent_codes)) {
+                    $spam = true;
+                    $message = "country_blacklist";
+                    $reason = "Country code $countryCode or continent $continentCode is not in the whitelist (allow)";
+                    return array('spam' => $spam, 'reason' => $reason, 'message' => $message, 'value' => $countryCode);
+                }
             }
         }
     }
@@ -137,7 +155,7 @@ function CountryCheck($ip, &$spam, &$reason, $post = "") {
     if (in_array($ip, $ip_blacklist)) {
         $spam = true;
         $reason = "IP $ip is blacklisted";
-        return array('spam' => $spam, 'reason' => $reason, 'message' => "ip_blacklist");
+        return array('spam' => $spam, 'reason' => $reason, 'message' => "ip_blacklist", 'value' => $ip);
     }
 
     // CIDR Filter
@@ -145,7 +163,7 @@ function CountryCheck($ip, &$spam, &$reason, $post = "") {
         if (ip_is_cidr($cidr) && cidr_match($ip, $cidr)) {
             $spam = true;
             $reason = "IP $ip is in CIDR: $cidr";
-            return array('spam' => $spam, 'reason' => $reason, 'message' => "ip_blacklist");
+            return array('spam' => $spam, 'reason' => $reason, 'message' => "ip_blacklist", 'value' => $ip);
         }
     }
     
@@ -165,7 +183,7 @@ function CountryCheck($ip, &$spam, &$reason, $post = "") {
         if ($abuseconfidencescore && $abuseconfidencescore >= (int)$pabuseipdb_score) {
           $spam = true;
           $reason = "AbuseIPDB Risk: $abuseconfidencescore ";
-          return array('spam' => $spam, 'reason' => $reason, 'message' => "abuseipdb_api");
+          return array('spam' => $spam, 'reason' => $reason, 'message' => "abuseipdb_api", 'value' => "");
 
         }
       }
@@ -186,11 +204,25 @@ function CountryCheck($ip, &$spam, &$reason, $post = "") {
         if ( $proxycheck_io_riskscore && $proxycheck_io_riskscore >= (int)$proxycheck_io_risk) {
           $spam = true;
           $reason = "Proxycheck.io Risk: $proxycheck_io_riskscore max is $proxycheck_io_risk";
-          return array('spam' => $spam, 'reason' => $reason, 'message' => "proxycheck_io_api");
+          return array('spam' => $spam, 'reason' => $reason, 'message' => "proxycheck_io_api", 'value' => "");
         }
       }
+    
+    //start check IP in api
+    $do_ip_api_check = maspik_get_settings('maspikDbCheck');
+    if ($do_ip_api_check && !$spam && $form) {
+        $exists = check_ip_in_api($ip,$form);
+        if($exists){
+            $reason = "Ip: $ip, exists in Maspik blacklist" ;
+            $message = "maspikDbCheck" ;
+            return array('spam' => true, 'reason' => $reason, 'message' => $message, 'value' => 1);
+        }
+    } 
+    //end check IP in api
 
-    return array('spam' => $spam, 'reason' => $reason, 'message' => $message);
+    
+
+    return array('spam' => $spam, 'reason' => $reason, 'message' => $message, 'value' => "");
 }
 
 
@@ -225,7 +257,7 @@ function validateTextField($field_value) {
                 // Check if exist in string 
                 if (maspik_is_field_value_exist_in_string($bad_string, $field_value) ) {
                     $spam =  "Forbidden input $field_value, because <u>$bad_string</u> is blocked";
-                    return array('spam' => $spam, 'message' => "text_blacklist");
+                    return array('spam' => $spam, 'message' => "text_blacklist", "option_value" => $bad_string,  'label' => "text_blacklist");
                    	break;
                 }
             }
@@ -247,12 +279,12 @@ function validateTextField($field_value) {
             $CountCharacters = mb_strlen($field_value); // Use mb_strlen for multibyte characters
             if ($CountCharacters > $MaxCharacters ) {
                 $spam = "More than $MaxCharacters characters";
-                return array('spam' => $spam, 'message' => $message);
+                return array('spam' => $spam, 'message' => $message,"option_value" =>$MaxCharacters , 'label' => "MaxCharactersInTextField");
             }
 
             if ($CountCharacters < $MinCharacters ) {
                 $spam = "Less than $MinCharacters characters";
-                return array('spam' => $spam, 'message' => $message);
+                return array('spam' => $spam, 'message' => $message,"option_value" =>$MinCharacters, 'label' => "MinCharactersInTextField");
             }
         }
     }
@@ -366,10 +398,11 @@ function checkTelForSpam($field_value) {
         if (maspik_get_settings(maspik_toggle_match('MaxCharactersInPhoneField')) == 1) {
             if ($CountCharacters > $MaxCharacters) {
                 $reason = "More than $MaxCharacters characters in Phone Number";
-                return array('valid' => false, 'reason' => $reason, 'message' => $message);
+                return array('valid' => false, 'reason' => $reason, 'message' => $message, "option_value" =>$MaxCharacters , 'label' => "MaxCharactersInPhoneField");
+                
             } elseif ($CountCharacters < $MinCharacters) {
                 $reason = "Less than $MinCharacters characters in Phone Number";
-                return array('valid' => false, 'reason' => $reason, 'message' => $message);
+                return array('valid' => false, 'reason' => $reason, 'message' => $message,"option_value" =>$MinCharacters , 'label' => "MinCharactersInPhoneField");
             }
         }
     }
@@ -409,7 +442,7 @@ function checkTelForSpam($field_value) {
         } 
     }
 
-    return array('valid' => $valid, 'reason' => $reason, 'message' => 'tel_formats');
+    return array('valid' => false, 'reason' => $reason, 'message' => 'tel_formats', 'label' => 'tel_formats');
 }
 
 
@@ -426,15 +459,8 @@ function checkTextareaForSpam($field_value) {
     }
     
     foreach ($textarea_blacklist as $bad_string) {
-        
-        if (!empty($field_value) && $bad_string[0] === "[") {
-            // Handle special cases for shortcodes
-            $search = array('[', ']');
-            $bad_string = str_replace($search, "", $bad_string);
-            $bad_string = "url" || "name" || "description" ? get_bloginfo($bad_string) : "Error - Shortcode not exist";
-        }
         if ( maspik_is_field_value_exist_in_string($bad_string, $field_value) ) {
-            return array('spam' => "field value includes <u>$bad_string</u>", 'message' => "textarea_field");
+            return array('spam' => "field value includes <u>$bad_string</u>", 'message' => "textarea_field" , 'option_value' => $field_value, 'label' => "textarea_blacklist"  );
         }
     }
 
@@ -466,7 +492,7 @@ function checkTextareaForSpam($field_value) {
 
             if ($lang_needed && empty($missing_lang)) {
                 $listofNeededlanguage = implode(", ",$lang_needed);
-                return array('spam' => "Needed language is missing ($listofNeededlanguage)", 'message' => "lang_needed");
+                return array('spam' => "Needed language is missing ($listofNeededlanguage)", 'message' => "lang_needed", 'option_value' => $listofNeededlanguage, 'label' => "lang_needed");
             }
         }
 
@@ -494,7 +520,7 @@ function checkTextareaForSpam($field_value) {
             $detected_forbidden_lang = maspik_detect_language_in_string($lang_forbidden, $field_value);
 
             if (!empty($detected_forbidden_lang)) {
-                return array('spam' => "Forbidden language '$detected_forbidden_lang' exists", 'message' => "lang_forbidden");
+                return array('spam' => "Forbidden language '$detected_forbidden_lang' exists", 'message' => "lang_forbidden", 'option_value' => $detected_forbidden_lang, 'label' => "lang_forbidden");
             }
         }
             
@@ -530,10 +556,10 @@ function checkTextareaForSpam($field_value) {
             $CountCharacters = mb_strlen($field_value); // Use mb_strlen for multibyte characters
             if ($CountCharacters > $MaxCharacters) {
                 $spam = "More than $MaxCharacters characters in Text Area field.";
-                return array('spam' => $spam, 'message' =>  $message);
+                return array('spam' => $spam, 'message' =>  $message, "option_value" => $MaxCharacters , 'label' => "MaxCharactersInTextAreaField");
             }elseif ($CountCharacters < $MinCharacters) {
                 $spam = "Less than $MinCharacters characters in Text Area field.";
-                return array('spam' => $spam, 'message' =>  $message);
+                return array('spam' => $spam, 'message' =>  $message, "option_value" => $MinCharacters , 'label' => "MinCharactersInTextAreaField");
             }
         }
     }
@@ -544,166 +570,148 @@ function checkTextareaForSpam($field_value) {
 
 
 
-// ADD HP JS to pooter
-function add_custom_js_to_footer() {
-    $maspikHoneypot = maspik_get_settings('maspikHoneypot') ;
-    $maspikTimeCheck = maspik_get_settings('maspikTimeCheck') ;
-    $maspikYearCheck = maspik_get_settings('maspikYearCheck') ;
+// Add custom JavaScript to the footer
+function Maspik_add_hp_js_to_footer() {
+    // Check if any of the settings are enabled
+    $maspikHoneypot = maspik_get_settings('maspikHoneypot');
+    $maspikTimeCheck = maspik_get_settings('maspikTimeCheck');
+    $maspikYearCheck = maspik_get_settings('maspikYearCheck');
 
+    // Only add the code if at least one of the settings is enabled
     if ($maspikHoneypot || $maspikTimeCheck || $maspikYearCheck) {
+        ?>
+        <script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", function() {
 
-    ?>
-<script type="text/javascript">
-document.addEventListener("DOMContentLoaded", function() {
-    // Check if localStorage is available
-    function localStorageAvailable() {
-        try {
-            var test = "__localStorage_test__";
-            localStorage.setItem(test, test);
-            localStorage.removeItem(test);
-            return true;
-        } catch (e) {
-            return false;
-        }
-    }
-
-    var exactTimeGlobal = null;
-    if (localStorageAvailable()) {
-        // Check if exactTime is already stored in localStorage
-        exactTimeGlobal = localStorage.getItem('exactTimeGlobal');
-    }
-
-    // Common attributes and styles
-    var honeypotAttributes = {
-        type: "text",
-        name: "<?php echo maspik_HP_name() ;?>",
-        id: "<?php echo maspik_HP_name() ;?>",
-        placeholder: "Leave this field empty",
-        'aria-hidden': "true", // Accessibility
-        tabindex: "-1", // Accessibility
-        autocomplete: "off", // Prevent browsers from auto-filling
-        class: "maspik-field"
-    };
-
-    var commonAttributes = {
-        'aria-hidden': "true", // Accessibility
-        tabindex: "-1", // Accessibility
-        autocomplete: "off", // Prevent browsers from auto-filling
-        class: "maspik-field"
-
-    };
-
-    var hiddenFieldStyles = {
-        position: "absolute",
-        class: "maspik-field",
-        left: "-99999px"
-    };
-
-    function createHiddenField(attributes, styles) {
-        var field = document.createElement("input");
-        for (var attr in attributes) {
-            field.setAttribute(attr, attributes[attr]);
-        }
-        for (var style in styles) {
-            field.style[style] = styles[style];
-        }
-        return field;
-    }
-
-    function addHiddenFields(formSelector, fieldClass) {
-        document.querySelectorAll(formSelector).forEach(function(form) {
-            if (!form.querySelector('input[name="<?php echo maspik_HP_name() ;?>"]')) {
-                var honeypot = createHiddenField(honeypotAttributes, hiddenFieldStyles);
-                honeypot.classList.add(fieldClass);
-
-                var currentYearField = createHiddenField({
-                    type: "text",
-                    name: "Maspik-currentYear",
-                    id: "Maspik-currentYear",
-                    class: fieldClass
-                }, hiddenFieldStyles);
-
-                var exactTimeField = createHiddenField({
-                    type: "text",
-                    name: "Maspik-exactTime",
-                    id: "Maspik-exactTime",
-                    class: fieldClass
-                }, hiddenFieldStyles);
-
-                form.appendChild(honeypot);
-                form.appendChild(currentYearField);
-                form.appendChild(exactTimeField);
+            // Function to check if localStorage is available
+            function localStorageAvailable() {
+                try {
+                    var test = "__localStorage_test__";
+                    localStorage.setItem(test, test);
+                    localStorage.removeItem(test);
+                    return true;
+                } catch (e) {
+                    return false;
+                }
             }
-        });
-    }
 
-    // Add hidden fields to different form types
-    addHiddenFields('form.wpcf7-form', 'wpcf7-text');
-    addHiddenFields('form.elementor-form', 'elementor-field');
-    addHiddenFields('form.wpforms-form', 'wpforms-field');
-    addHiddenFields('form.brxe-brf-pro-forms', 'brxe-brf-pro-forms-field-text');
-    addHiddenFields('form.frm-fluent-form', 'ff-el-form-control');
-    addHiddenFields('form.frm-show-form', 'wpforms-field');
-    addHiddenFields('form.forminator-custom-form', 'forminator-input');
-    addHiddenFields('.gform_wrapper form', 'gform-input');
-    addHiddenFields('.gform_wrapper form', 'gform-input');
-    addHiddenFields('form.comment-form', 'comment-form-comment');
-
-    // Add more form types here if needed in the future
-    // addHiddenFields('form.new-form-type', 'new-form-class');
-
-    // Set current year and exact time fields
-    function setDateFields() {
-        var currentYear = new Date().getFullYear();
-
-        // If exactTimeGlobal is not already set in localStorage, set it now
-        if (!exactTimeGlobal) {
-            exactTimeGlobal = Math.floor(Date.now() / 1000);
+            var exactTimeGlobal = null;
             if (localStorageAvailable()) {
-                localStorage.setItem('exactTimeGlobal', exactTimeGlobal);
+                // Check if exactTimeGlobal is already stored in localStorage
+                exactTimeGlobal = localStorage.getItem('exactTimeGlobal');
             }
-        }
 
-        //console.log('UTC Time:', exactTimeGlobal);
+            // Common attributes and styles for hidden fields
+            var commonAttributes = {
+                'aria-hidden': "true", // Accessibility
+                tabindex: "-1", // Accessibility
+                autocomplete: "off", // Prevent browser autofill
+                class: "maspik-field"
+            };
 
-        document.querySelectorAll('input[name="Maspik-currentYear"]').forEach(function(input) {
-            input.value = currentYear; 
-        });
+            var hiddenFieldStyles = {
+                position: "absolute",
+                left: "-99999px"
+            };
 
-        document.querySelectorAll('input[name="Maspik-exactTime"]').forEach(function(input) {
-            input.value = exactTimeGlobal;
-        });
-    }
-
-    // Initial call to set date fields
-    setDateFields();
-
-    // Listen for form submissions and reset hidden fields
-    document.querySelectorAll('form').forEach(function(form) {
-        form.addEventListener('submit', function(event) {
-           // setDateFields();
-        });
-    });
-
-    // MutationObserver to detect AJAX form reloads and reset hidden fields
-    var observer = new MutationObserver(function(mutations) {
-        mutations.forEach(function(mutation) {
-            if (mutation.type === 'childList' && mutation.addedNodes.length) {
-                setTimeout(function() { // Slight delay to ensure new form elements are fully loaded
-                    setDateFields();
-                }, 500);
+            // Function to create a hidden field
+            function createHiddenField(attributes, styles) {
+                var field = document.createElement("input");
+                for (var attr in attributes) {
+                    field.setAttribute(attr, attributes[attr]);
+                }
+                for (var style in styles) {
+                    field.style[style] = styles[style];
+                }
+                return field;
             }
+
+            // Function to add hidden fields to the form if they do not already exist
+            function addHiddenFields(formSelector, fieldClass) {
+                document.querySelectorAll(formSelector).forEach(function(form) {
+                    if (!form.querySelector('.maspik-field')) {
+                        if (<?php echo json_encode($maspikHoneypot); ?>) {
+                            var honeypot = createHiddenField({
+                                type: "text",
+                                name: "<?php echo maspik_HP_name(); ?>",
+                                id: "<?php echo maspik_HP_name(); ?>",
+                                class: fieldClass + " maspik-field",
+                                placeholder: "Leave this field empty"
+                            }, hiddenFieldStyles);
+                            form.appendChild(honeypot);
+                        }
+
+                        if (<?php echo json_encode($maspikYearCheck); ?>) {
+                            var currentYearField = createHiddenField({
+                                type: "text",
+                                name: "Maspik-currentYear",
+                                id: "Maspik-currentYear",
+                                class: fieldClass + " maspik-field"
+                            }, hiddenFieldStyles);
+                            form.appendChild(currentYearField);
+                        }
+
+                        if (<?php echo json_encode($maspikTimeCheck); ?>) {
+                            var exactTimeField = createHiddenField({
+                                type: "text",
+                                name: "Maspik-exactTime",
+                                id: "Maspik-exactTime",
+                                class: fieldClass + " maspik-field"
+                            }, hiddenFieldStyles);
+                            form.appendChild(exactTimeField);
+                        }
+                    }
+                });
+            }
+
+            // Add hidden fields to various form types
+            //Not suported ninja form
+            addHiddenFields('form.brxe-brf-pro-forms', 'brxe-brf-pro-forms-field-text');
+            //formidable
+            addHiddenFields('form.frm-show-form', 'frm_form_field');
+            addHiddenFields('form.elementor-form', 'elementor-field-textual');
+
+            // Function to set the current year and exact time in the appropriate fields
+            function setDateFields() {
+                var currentYear = new Date().getFullYear();
+
+                if (!exactTimeGlobal) {
+                    exactTimeGlobal = Math.floor(Date.now() / 1000);
+                    if (localStorageAvailable()) {
+                        localStorage.setItem('exactTimeGlobal', exactTimeGlobal);
+                    }
+                }
+
+                document.querySelectorAll('input[name="Maspik-currentYear"]').forEach(function(input) {
+                    input.value = currentYear;
+                });
+
+                document.querySelectorAll('input[name="Maspik-exactTime"]').forEach(function(input) {
+                    input.value = exactTimeGlobal;
+                });
+            }
+
+            // Initial call to set date fields
+            setDateFields();
+
+            // Use MutationObserver to detect AJAX form reloads and reset hidden fields
+            var observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    if (mutation.type === 'childList' && mutation.addedNodes.length) {
+                        setTimeout(function() {
+                            setDateFields();
+                        }, 500);
+                    }
+                });
+            });
+
+            observer.observe(document.body, { childList: true, subtree: true });
         });
-    });
-
-    observer.observe(document.body, { childList: true, subtree: true });
-});
-
-</script>
-<style>
-.maspik-field { display: none !important; }
-</style>
+        </script>
+        <style>
+        .maspik-field { display: none !important; }
+        </style>
         <?php
     }
 }
-add_action('wp_footer', 'add_custom_js_to_footer');
+add_action('wp_footer', 'Maspik_add_hp_js_to_footer');

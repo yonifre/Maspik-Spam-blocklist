@@ -1,14 +1,15 @@
 === Maspik - Advanced Spam Protection ===
 Contributors: yonifre
 Donate link: paypal.me/yonifre
-Tags: spam, blacklist, antispam, contact form, security
+Tags: spam, blacklist, anti spam, Honeypot, antispam 
 Tested up to: 6.6
+Requires at least: 5.0
 Requires PHP: 7.0
-Stable tag: 2.1.2
+Stable tag: 2.2.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Maspik makes unwanted messages a rarity and spam a thing of the past!
+Block spam in several ways, blacklist words/ honeypot / IP verification and more, integrate with almost any contact form plugin and comments. 
 
 == Description ==
 
@@ -40,6 +41,7 @@ Maspik allows you to specify words, email addresses, phone formats, IP addresses
   * Review blocked submissions
 * **Advance Blocking:**
   * Honeypot
+  * IP verification
   * Block submissions without source URLs (Elementor)
 * **API Integrations:**
   * Proxycheck.io
@@ -52,7 +54,9 @@ Maspik integrates seamlessly with a wide range of popular contact forms:
 * Elementor forms
 * Contact Form 7
 * NinjaForms
+* Everest Forms
 * Formidable forms
+* JetFormBuilder
 * Forminator forms
 * Fluentforms
 * Bricksbuilder forms
@@ -70,6 +74,7 @@ Maspik integrates seamlessly with a wide range of popular contact forms:
 
 The Pro version offers advanced functionality:
 
+* IP verification - Increases the monthly limit from 100 to 1,000 IP checks.
 * Integration with the Maspik Spam API
 * Create and use your own SPAM API across multiple websites
 * Import/Export Settings
@@ -100,6 +105,8 @@ Maspik currently supports:
 <li>Elementor forms</li>
 <li>Contact form 7</li>
 <li>NinjaForms</li>
+<li>Everest Forms</li>
+<li>JetFormBuilder</li>
 <li>Formidable forms</li>
 <li>Forminator forms</li>
 <li>Fluentforms</li>
@@ -138,6 +145,55 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 == Changelog ==
 
+= 2.2.6 - 15/10/2024 =
+* Improvement - update license manager library
+* Bug fix - Fix spam message validation for phone field.
+
+= 2.2.5 - 06/10/2024 =
+* Improvement - Editor can publish comments without validation check.
+* Bug fix - Fix phone number limit digit check on Elementor form.
+
+= 2.2.4 - 04/10/2024 =
+* Bug fix - Fix error in Country check for some cases.
+* Bug fix - Fix error in AbuseAPI check for some cases.
+* Remove - shortcode option in text-area field, because can be confuseding.
+
+
+= 2.2.3 - 01/10/2024 =
+* New Feature - IP verification, add IP verification usage activity to Maspik dashboard.
+* Improvement - Improve code performance in CF7 & Elementor forms, validate spam up to 50% faster
+* Improvement - Improve option to mark "Not a Spam" on Spam log.
+* Improvement - Improve form data UI in Spam log.
+* Improvement - Change date format in Spam log to Wordpress format.
+
+= 2.2.2 - 14/09/2024 =
+* Improvement - Better caching mechanism for IP address verification
+
+= 2.2.1 - 10/09/2024 =
+* Bug Fix - Fixed an issue where settings were not being saved correctly in certain server environments
+* Improvement - Scheduled deletion of outdated IP check data twice daily for improved performance
+
+= 2.2.0 - 08/09/2024 =
+* Improvement - Improve UI/UX
+* Improvement - Make main block setting as ON by default. You can deactivate settings in the settings page.
+* Improvement - Forms are now supported by default. You can deactivate support for specific forms in the settings page.
+
+= 2.1.6 - 30/08/2024 =
+* New feature - added option to check if sender's IP address exists in Maspik blacklist database.
+* Bug fix - Fixed PHP syntax error in some environments.
+
+= 2.1.5 - 21/08/2024 =
+* Bug fix - Fixed some toggle buttons in the admin setting page that did not work properly.
+
+= 2.1.4 - 15/08/2024 =
+* Bug fix - fix "parsererror" in honeypot check on Elementor form.
+
+= 2.1.3 - 13/08/2024 =
+* New Feature - Added support for JetFormBuilder.
+* New Feature - Added support for Everest Forms.
+* New Feature - Add option to mark "Not a Spam" on Spam log.
+* Bug Fix - Fix vulnerability, thanks to @Artyom from CleanTalk inc.
+
 = 2.1.2 - 26/07/2024 =
 * Bug Fix - Fix error when Max links set on 0 
 
@@ -146,7 +202,7 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 * Bug Fix - Fix css glitch on some casese with new Honeypots
 
 = 2.1.0 - 22/07/2024 =
-* New Feature - Time check (If spent less then 5 secund in site - Spam)
+* New Feature - Time check (If spent less then 2 secund in site - Spam)
 * New Feature - Honeypot field (If not ampty- Spam )
 * New Feature - Advance Honeypot field (If Js Year is diffrent from server year - Spam)
 

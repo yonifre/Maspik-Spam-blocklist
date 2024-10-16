@@ -35,10 +35,11 @@ function my_ninja_forms_submit_data( $form_data ) {
     $ip =  efas_getRealIpAddr();
 
     // Country IP Check 
-    $CountryCheck = CountryCheck($ip,$spam,$reason,$_POST);
-    $spam = isset($CountryCheck['spam']) ? $CountryCheck['spam'] : false ;
-    $reason = isset($CountryCheck['reason']) ? $CountryCheck['reason'] : false ;
-    $message = isset($CountryCheck['message']) ? $CountryCheck['message'] : false ;
+    $GeneralCheck = GeneralCheck($ip,$spam,$reason,false,"ninjaforms");
+    $spam = isset($GeneralCheck['spam']) ? $GeneralCheck['spam'] : false ;
+    $reason = isset($GeneralCheck['reason']) ? $GeneralCheck['reason'] : false ;
+    $message = isset($GeneralCheck['message']) ? $GeneralCheck['message'] : false ;
+    $spam_val = $GeneralCheck['value'] ? $GeneralCheck['value'] : false ;
 
 
     // Iterate through the first key ID
@@ -46,7 +47,7 @@ function my_ninja_forms_submit_data( $form_data ) {
     $first_key = array_keys($fields)[0] ? array_keys($fields)[0] : $form_data['fields'][1];
 
     if ( $spam) {
-        efas_add_to_log($type = "Country/IP",$reason , $fields, "Ninja Forms" );
+        efas_add_to_log($type = "Country/IP",$reason , $fields, "Ninja Forms", $message,  $spam_val );
         $form_data['errors']['fields'][$first_key] =  __('General: ', 'contact-forms-anti-spam').cfas_get_error_text($message);
         return $form_data;
     }
@@ -71,7 +72,10 @@ function my_ninja_forms_submit_data( $form_data ) {
             $spam = isset($validateTextField['spam']) ? $validateTextField['spam'] : 0;
             if($spam) {
                 $message = $validateTextField['message'];
-                efas_add_to_log($type = "text",$spam, $fields, "Ninja Forms");           
+                $spam_lbl = isset($validateTextField['label']) ? $validateTextField['label'] : 0 ;
+                $spam_val = isset($validateTextField['option_value']) ? $validateTextField['option_value'] : 0 ;
+
+                efas_add_to_log($type = "text",$spam, $fields, "Ninja Forms", $spam_lbl, $spam_val);           
                 $form_data['errors']['fields'][$field_id] = cfas_get_error_text($message);
                 return $form_data;
             }
@@ -80,8 +84,9 @@ function my_ninja_forms_submit_data( $form_data ) {
         //Email
         if ( maspik_if_contains_string_in_array($current_type, $to_check_email) ) {
             $spam = checkEmailForSpam($field_value);
+            $spam_val = $field_value;
             if($spam) {
-                efas_add_to_log($type = "email","Email $field_value is block $spam" , $fields, "Ninja Forms");
+                efas_add_to_log($type = "email","Email $field_value is block $spam" , $fields, "Ninja Forms", "emails_blacklist", $spam_val);
                 $form_data['errors']['fields'][$field_id] = cfas_get_error_text();
                 return $form_data;
             }
@@ -92,9 +97,12 @@ function my_ninja_forms_submit_data( $form_data ) {
             $reason = isset($checkTelForSpam['reason']) ? $checkTelForSpam['reason'] : 0 ;      
             $valid = isset($checkTelForSpam['valid']) ? $checkTelForSpam['valid'] : "yes" ;   
             $message = isset($checkTelForSpam['message']) ? $checkTelForSpam['message'] : 0 ;  
+            $spam_lbl = isset($checkTelForSpam['label']) ? $checkTelForSpam['label'] : 0 ;
+            $spam_val = isset($checkTelForSpam['option_value']) ? $checkTelForSpam['option_value'] : 0 ;
+
             if(!$valid) {
                 $message = $checkTelForSpam['message'];
-                efas_add_to_log($type = "tel","Phone number <b>$field_value</b> not feet the given format ($reason)", $fields, "Ninja Forms");
+                efas_add_to_log($type = "tel","Phone number <b>$field_value</b> not feet the given format ($reason)", $fields, "Ninja Forms", $spam_lbl, $spam_val);
                 $form_data['errors']['fields'][$field_id] = cfas_get_error_text($message);
                 return $form_data;
             }
@@ -106,7 +114,10 @@ function my_ninja_forms_submit_data( $form_data ) {
             $spam = isset($checkTextareaForSpam['spam']) ? $checkTextareaForSpam['spam'] : 0;
             if($spam) {
                 $message = isset($checkTextareaForSpam['message']) ? $checkTextareaForSpam['message'] : 0;
-                efas_add_to_log($type = "textarea",$spam, $fields, "Ninja Forms");
+                $spam_lbl = isset($checkTextareaForSpam['label']) ? $checkTextareaForSpam['label'] : 0 ;
+                $spam_val = isset($checkTextareaForSpam['option_value']) ? $checkTextareaForSpam['option_value'] : 0 ;
+
+                efas_add_to_log($type = "textarea",$spam, $fields, "Ninja Forms", $spam_lbl, $spam_val);
                 $form_data['errors']['fields'][$field_id] = cfas_get_error_text($message);
                 return $form_data;
             }

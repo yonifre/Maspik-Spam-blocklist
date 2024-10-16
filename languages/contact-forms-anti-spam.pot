@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Maspik - Spam blacklist\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-22 15:46+0000\n"
+"POT-Creation-Date: 2024-10-01 21:19+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -16,256 +16,252 @@ msgstr ""
 "X-Loco-Version: 2.5.3; wp-5.6.4\n"
 "X-Domain: contact-forms-anti-spam"
 
-#: admin/partials/maspik-admin-display.php:1500
-msgid " Allow usage tracking"
+#: admin/partials/maspik-admin-display.php:1703
+msgid " "
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:1485
-msgid " Disable comments in WordPress"
+#: admin/partials/maspik-admin-display.php:1170
+msgid " You can get more information"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:828
-msgid " You can get more ideas"
+#: includes/functions.php:2421
+msgid "(Reached Limit)"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:699
+#: admin/partials/maspik-admin-display.php:1038
 msgid "(Usually Message/Long text)"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:579
+#: admin/partials/maspik-admin-display.php:916
 msgid "(Usually Name/Subject)"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:1560
+#: admin/partials/maspik-admin-display.php:1658
 msgid "* Please save changes before checking."
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:493
-msgid ""
-"<h3>We have improved our plugin! Before continuing, please update the "
-"database.</h3>"
+#: admin/partials/maspik-admin-display.php:1169
+msgid "* represents any sequence of digits."
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:865
-msgid "<h4> Character limit custom validation error message </h4>"
+#: admin/partials/maspik-admin-display.php:613
+msgid ", thanks to your Pro subscription."
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:839
-msgid "<h4> Limit Characters </h4>"
+#: admin/partials/maspik-admin-display.php:1168
+msgid "? represents any single digit."
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:495
-msgid "<span> ( We recommend backing up your data first.)</span>"
-msgstr ""
-
-#: admin/partials/maspik-admin-display.php:1260
+#: admin/partials/maspik-admin-display.php:1335
 msgid "AbuseIPDB"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:1243
+#: admin/partials/maspik-admin-display.php:1318
 msgid "AbuseIPDB API"
 msgstr ""
 
-#: admin/class-maspik-admin.php:141
+#: admin/class-maspik-admin.php:140
 msgid "Active from Dashboard"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:1472
-msgid "Add country name to the bottom of email content"
-msgstr ""
-
-#: admin/class-maspik-admin.php:595
+#: admin/class-maspik-admin.php:599
 msgid "Add country name to the bottom of email content."
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:1167
-msgid "Add honeypot field"
+#: admin/partials/maspik-admin-display.php:623
+msgid ""
+"Adds an invisible field to your form. Humans can't see it, but bots often "
+"fill it. If this hidden field has data, the submission is blocked as spam. "
+"This traps bots without affecting real users."
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:510
+#: admin/partials/maspik-admin-display.php:525
 msgid "Affected forms:"
 msgstr ""
 
-#: includes/functions.php:1468
-msgid "Allow"
-msgstr ""
-
-#: admin/partials/maspik-log.php:68
+#: admin/partials/maspik-log.php:188
 msgid "and since installing"
 msgstr ""
 
-#: includes/functions.php:716 includes/functions.php:755
+#: includes/functions.php:2396 includes/functions.php:2439
+msgid "API Calls Made"
+msgstr ""
+
+#: includes/functions.php:975 includes/functions.php:1014
 msgid "Arabic"
 msgstr ""
 
-#: includes/functions.php:717 includes/functions.php:756
+#: includes/functions.php:976 includes/functions.php:1015
 msgid "Armenian"
 msgstr ""
 
-#: includes/functions.php:1353
+#: includes/functions.php:1623
 msgid ""
 "Ask questions, share spam examples, get ideas on how to block them, share "
 "feedback, and suggest new features. Join us at "
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:1091
+#: admin/partials/maspik-admin-display.php:840
 msgid "Auto-populate spam phrases"
 msgstr ""
 
-#: includes/functions.php:718 includes/functions.php:757
+#: includes/functions.php:977 includes/functions.php:1016
 msgid "Bengali"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:935
-msgid ""
-"Beware:</span> Requiring Latin languages as an individual (Like: Dutch, "
-"French), the check is in the language punctuation letters and letters A to Z "
-"(So including English) because sometimes the punctuation letters as not used,"
-" Its to prevent false positive."
+#: admin/partials/maspik-admin-display.php:522
+msgid "Block spam options"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:540
-msgid "Blacklist Options"
-msgstr ""
-
-#: admin/partials/maspik-admin-display.php:1579
-msgid "blocklist"
-msgstr ""
-
-#: includes/functions.php:719 includes/functions.php:758
+#: includes/functions.php:978 includes/functions.php:1017
 msgid "Braille"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:637
-#: admin/partials/maspik-admin-display.php:780
+#: admin/partials/maspik-admin-display.php:899
+msgid "By Field Options"
+msgstr ""
+
+#: admin/partials/maspik-admin-display.php:676
+#: admin/partials/maspik-admin-display.php:721
+msgid "Caution:"
+msgstr ""
+
+#: admin/partials/maspik-admin-display.php:976
+#: admin/partials/maspik-admin-display.php:1119
+#: admin/partials/maspik-admin-display.php:1220
 msgid "Character limit custom validation error message"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:1558
+#: admin/partials/maspik-admin-display.php:1656
 msgid "Check"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:1176
-msgid "Check time from visiting the site until form submit"
+#: admin/partials/maspik-admin-display.php:588
+msgid ""
+"Check if the sender's IP address is flagged as spam in the Maspik database."
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:1186
-msgid "Comper the local and server year"
-msgstr ""
-
-#: admin/class-maspik-admin.php:619
+#: admin/class-maspik-admin.php:623
 msgid "Completely disable comments in wordPress."
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:1588
+#: admin/partials/maspik-admin-display.php:863
+msgid "Connected"
+msgstr ""
+
+#: includes/functions.php:1624
+msgid "Contact Us"
+msgstr ""
+
+#: admin/partials/maspik-admin-display.php:1684
 msgid "Copy list"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:1125
+#: admin/partials/maspik-log.php:80
+msgid "Country"
+msgstr ""
+
+#: admin/partials/maspik-admin-display.php:874
 msgid "Creat your own single Dashboard for managing multiple websites, at"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:542
+#: admin/partials/maspik-admin-display.php:901
 msgid "Create a list of words or phrases you want to block."
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:942
-#: admin/partials/maspik-admin-display.php:982
-#: admin/partials/maspik-admin-display.php:1051
+#: admin/partials/maspik-admin-display.php:685
+#: admin/partials/maspik-admin-display.php:731
+#: admin/partials/maspik-admin-display.php:800
 msgid "Custom validation error message"
 msgstr ""
 
-#: includes/functions.php:781
+#: includes/functions.php:1040
 msgid "Czech (A-Za-zÁáČčĎďÉéÍíĹĺĽľŇňÓóŔŕŠšŤťÚúÝýŽž)"
 msgstr ""
 
-#: includes/functions.php:742
+#: includes/functions.php:1001
 msgid "Czech (ÁáČčĎďÉéÍíĹĺĽľŇňÓóŔŕŠšŤťÚúÝýŽž)"
 msgstr ""
 
-#: includes/functions.php:746
+#: includes/functions.php:1005
 msgid "Danish (ÆæØøÅå)"
 msgstr ""
 
-#: includes/functions.php:785
+#: includes/functions.php:1044
 msgid "Danish )A-Za-zÆæØøÅå)"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:1223
+#: admin/partials/maspik-log.php:78
+msgid "Data & Reason"
+msgstr ""
+
+#: admin/partials/maspik-log.php:82
+msgid "Date"
+msgstr ""
+
+#: admin/partials/maspik-admin-display.php:1528
 msgid "Default validation error message"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:1487
-msgid ""
-"Disable comments on *ALL* types of posts and remove/hide any existing "
-"comments from displaying, as well as hiding the comment forms.\n"
-"                                \n"
-"                                <br>If you toggle <strong>on</strong> "
-"comments will be disable."
+#: includes/functions.php:1620
+msgid "Did We Block Spam?"
 msgstr ""
 
-#: admin/class-maspik-admin.php:608
+#: admin/class-maspik-admin.php:612
 msgid ""
 "Disable comments on *ALL* types of posts and remove/hide any existing "
 "comments from displaying, as well as hiding the comment forms.<br>\n"
 "            If you check this box comments will be disable."
 msgstr ""
 
-#: includes/functions.php:1350
-msgid "DO YOU LIKE MASPIK?"
-msgstr ""
-
-#: includes/functions.php:777
+#: includes/functions.php:1036
 msgid "Dutch (A-Za-zÀ-ÖØ-öø-ÿ)"
 msgstr ""
 
-#: includes/functions.php:738
+#: includes/functions.php:997
 msgid "Dutch (À-ÖØ-öø-ÿ)"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:543
+#: admin/partials/maspik-admin-display.php:902
 msgid "Each term should be on a separate line."
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:1193
+#: admin/partials/maspik-admin-display.php:631
 msgid "Elementor Bot detector"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:1541
+#: admin/partials/maspik-admin-display.php:1639
 msgid "Email (Email field)"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:659
+#: admin/partials/maspik-admin-display.php:998
 msgid "Email Fields"
 msgstr ""
 
-#: includes/functions.php:734 includes/functions.php:773
+#: includes/functions.php:993 includes/functions.php:1032
 msgid "English (A-Za-z)"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:629
-#: admin/partials/maspik-admin-display.php:773
-#: admin/partials/maspik-admin-display.php:857
+#: admin/partials/maspik-admin-display.php:1112
+#: admin/partials/maspik-admin-display.php:1213
 msgid ""
 "Entries with less than <strong>Min</strong> or more than <strong>Max</strong>"
 " characters will be blocked"
 msgstr ""
 
-#: includes/functions.php:720 includes/functions.php:759
+#: admin/partials/maspik-admin-display.php:967
+msgid "Entries with less than Min or more than Max characters will be blocked"
+msgstr ""
+
+#: includes/functions.php:979 includes/functions.php:1018
 msgid "Ethiopic"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:975
-msgid ""
-"Even one character in the text field from any of these languages will be "
-"caught by MASPIK, tagged as spam, and blocked. "
-msgstr ""
-
-#: admin/partials/maspik-admin-display.php:1578
+#: admin/partials/maspik-admin-display.php:1674
 msgid "Example for"
 msgstr ""
 
-#: admin/partials/maspik-log.php:62
+#: admin/partials/maspik-log.php:182
 msgid "Expand all"
 msgstr ""
 
@@ -274,80 +270,76 @@ msgstr ""
 msgid "Export Settings"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:1259
-#: admin/partials/maspik-admin-display.php:1280
+#: admin/partials/maspik-admin-display.php:1334
+#: admin/partials/maspik-admin-display.php:1355
 msgid "For more infromation"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:1308
-msgid "Forms Options"
-msgstr ""
-
-#: includes/functions.php:770
+#: includes/functions.php:1029
 msgid "French (A-Za-zÀ-ÿ)"
 msgstr ""
 
-#: includes/functions.php:731
+#: includes/functions.php:990
 msgid "French (À-ÿ)"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:1149
-msgid "General"
-msgstr ""
-
-#: includes/forms/ninjaforms.php:50
+#: includes/forms/ninjaforms.php:51
 msgid "General: "
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:1003
+#: admin/partials/maspik-admin-display.php:752
 msgid "Geolocation restrictions"
 msgstr ""
 
-#: includes/functions.php:721 includes/functions.php:760
+#: includes/functions.php:980 includes/functions.php:1019
 msgid "Georgian"
 msgstr ""
 
-#: includes/functions.php:771
+#: includes/functions.php:1030
 msgid "German ([A-Za-zÄäÖöÜüß])"
 msgstr ""
 
-#: includes/functions.php:732
+#: includes/functions.php:991
 msgid "German ([ÄäÖöÜüß])"
 msgstr ""
 
-#: contact-forms-anti-spam.php:78 includes/functions.php:1351
+#: contact-forms-anti-spam.php:79
 msgid "Give us 5 stars"
 msgstr ""
 
-#: includes/functions.php:722 includes/functions.php:761
+#: includes/functions.php:2335
+msgid "Go to Settings"
+msgstr ""
+
+#: includes/functions.php:981 includes/functions.php:1020
 msgid "Greek"
 msgstr ""
 
-#: includes/functions.php:723 includes/functions.php:762
+#: includes/functions.php:982 includes/functions.php:1021
 msgid "Han (Chinese)"
 msgstr ""
 
-#: includes/functions.php:726 includes/functions.php:765
+#: includes/functions.php:985 includes/functions.php:1024
 msgid "Hebrew"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:830
+#: admin/partials/maspik-admin-display.php:1172
 msgid "HERE"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:546
+#: admin/partials/maspik-admin-display.php:905
 msgid "here"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:1579
-msgid "Here you can see an Example words for the"
+#: admin/partials/maspik-admin-display.php:1675
+msgid "Here you can see an example options for the"
 msgstr ""
 
-#: includes/functions.php:725 includes/functions.php:764
+#: includes/functions.php:984 includes/functions.php:1023
 msgid "Hiragana"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:1164
+#: admin/partials/maspik-admin-display.php:621
 msgid "Honeypot Trap"
 msgstr ""
 
@@ -356,19 +348,25 @@ msgid "https://wpmaspik.com/"
 msgstr ""
 
 #. Author URI of the plugin
-msgid "https://wpmaspik.com/blog/"
+msgid "https://wpmaspik.com/?wp"
 msgstr ""
 
-#: includes/functions.php:783
+#: includes/functions.php:1042
 msgid "Hungarian (A-Za-zÁáÉéÍíÓóÚúÜüŐőŰ)"
 msgstr ""
 
-#: includes/functions.php:744
+#: includes/functions.php:1003
 msgid "Hungarian (ÁáÉéÍíÓóÚúÜüŐőŰ)"
 msgstr ""
 
-#: admin/class-maspik-admin.php:558
+#: admin/class-maspik-admin.php:562
 msgid "If disabled, the Log of the blocked spam will not be saved."
+msgstr ""
+
+#: admin/partials/maspik-admin-display.php:718
+msgid ""
+"If there is even one character from one of these languages in the text "
+"fields, it will be marked as spam and blocked."
 msgstr ""
 
 #: admin/partials/maspik-import-export.php:53
@@ -382,77 +380,129 @@ msgid ""
 "undo the imported settings."
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:1194
+#: admin/partials/maspik-admin-display.php:632
 msgid ""
 "In this option we block bots from sending spam automatically, its mostly "
 "succeed to catch about 30% of the spam"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:1199
-msgid "IP Blocking"
+#: admin/partials/maspik-log.php:79
+msgid "IP"
 msgstr ""
 
-#: includes/functions.php:774
+#: admin/partials/maspik-admin-display.php:1288
+msgid "IP Blacklist and 3rd Party APIs"
+msgstr ""
+
+#: includes/functions.php:2395 includes/functions.php:2438
+msgid "IP Checks Attempted"
+msgstr ""
+
+#: admin/partials/maspik-admin-display.php:585
+msgid "IP Verification"
+msgstr ""
+
+#: includes/functions.php:2388
+msgid ""
+"IP Verification checks if the sender's IP address is flagged as spam in the "
+"Maspik database."
+msgstr ""
+
+#: includes/functions.php:2397 includes/functions.php:2440
+msgid "IPs Blocked"
+msgstr ""
+
+#: includes/functions.php:1033
 msgid "Italian (A-Za-zÀàÉéÈèÌìÍíÒòÓóÙùÚú)"
 msgstr ""
 
-#: includes/functions.php:735
+#: includes/functions.php:994
 msgid "Italian (ÀàÉéÈèÌìÍíÒòÓóÙùÚú)"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:1182
-msgid "JavaScript Trap"
+#: admin/partials/maspik-admin-display.php:1271
+msgid "JavaScript check"
 msgstr ""
 
-#: includes/functions.php:1352
+#: admin/partials/maspik-admin-display.php:1273
+msgid ""
+"JavaScript check - This feature adds a hidden field that is automatically "
+"filled with the current year using JavaScript. If the submitted year does "
+"not match the server's current year, it likely means JavaScript is disabled "
+"or the form was submitted by a bot. In either case, the submission will be "
+"blocked as a security measure."
+msgstr ""
+
+#: includes/functions.php:1622
 msgid "Join Our Facebook Community!"
 msgstr ""
 
-#: includes/functions.php:724 includes/functions.php:763
+#: includes/functions.php:983 includes/functions.php:1022
 msgid "Katakana"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:960
+#: admin/partials/maspik-admin-display.php:703
 msgid "Language Forbidden"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:920
+#: admin/partials/maspik-admin-display.php:660
 msgid "Language Required"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:908
+#: admin/partials/maspik-admin-display.php:648
 msgid "Language restrictions"
 msgstr ""
 
-#: includes/functions.php:728 includes/functions.php:767
+#: includes/functions.php:987 includes/functions.php:1026
 msgid "Latin"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:546
+#: admin/partials/maspik-admin-display.php:905
 msgid "Learn more about those option in our documentation"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:1261
+#: admin/partials/maspik-admin-display.php:1336
 msgid "Leave blank to disable"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:1283
+#: admin/partials/maspik-admin-display.php:1358
 msgid "Leave blank to disable."
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:1590
+#: admin/partials/maspik-admin-display.php:1152
+msgid "leave empty to disable this option."
+msgstr ""
+
+#: includes/functions.php:1621
+msgid "leave us a 5-star review"
+msgstr ""
+
+#: admin/partials/maspik-admin-display.php:948
+#: admin/partials/maspik-admin-display.php:1195
+msgid "Limit Characters"
+msgstr ""
+
+#: admin/partials/maspik-admin-display.php:1686
 msgid "List copied!"
+msgstr ""
+
+#: admin/partials/maspik-admin-display.php:1299
+msgid "List of block IPs"
+msgstr ""
+
+#: admin/partials/maspik-admin-display.php:580
+msgid "Main Options"
 msgstr ""
 
 #. Name of the plugin
 msgid "Maspik - Advanced Spam Protection"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:1071
+#: admin/partials/maspik-admin-display.php:820
 msgid "MASPIK Dashboard"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:1105
+#: admin/partials/maspik-admin-display.php:854
 msgid "Maspik Dashboard ID"
 msgstr ""
 
@@ -460,57 +510,97 @@ msgstr ""
 msgid "Maspik Import/Export Settings"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:1093
+#: includes/functions.php:2334
+msgid ""
+"Maspik offers a wide range of options to protect your website from getting "
+"spam. In the settings page, you'll find easy-to-use tools for setting the "
+"desired level of protection."
+msgstr ""
+
+#: admin/partials/maspik-admin-display.php:842
 msgid "Maspik spam blacklist"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:1552
+#: includes/functions.php:1738
+msgid ""
+"Maspik: Help us improve spam blocking! Please allow us to collect non-"
+"sensitive information."
+msgstr ""
+
+#: admin/partials/maspik-admin-display.php:1650
 msgid "Message (Text area field)"
 msgstr ""
 
-#: includes/functions.php:729 includes/functions.php:768
+#: includes/functions.php:988 includes/functions.php:1027
 msgid "Mongolian"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:1298
+#: includes/functions.php:2394
+msgid "Month"
+msgstr ""
+
+#: admin/partials/maspik-admin-display.php:1243
 msgid "More Options"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:1535
+#: admin/partials/maspik-admin-display.php:1633
 msgid "Name (Text field)"
 msgstr ""
 
-#: includes/functions.php:1354
+#: includes/functions.php:2445
+msgid "Need More API Requests?"
+msgstr ""
+
+#: includes/functions.php:1625
 msgid "Need support? Do you have ideas on how to improve MASPIK?"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:1165
-#: admin/partials/maspik-admin-display.php:1174
-#: admin/partials/maspik-admin-display.php:1183
-msgid "New"
+#: includes/functions.php:2404
+msgid "No data available. Please wait for some submissions."
 msgstr ""
 
-#: includes/functions.php:786
+#: includes/functions.php:1045
 msgid "Norwegian (A-Za-zÆæØøÅå)"
 msgstr ""
 
-#: includes/functions.php:747
+#: includes/functions.php:1006
 msgid "Norwegian (ÆæØøÅå)"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:974
-msgid ""
-"Note that when blocking Latin languages in an individual (such as: Dutch, "
-"French), the chack is in the punctuation letters (But they are not always in "
-"use). Its to prevent false positive."
+#: admin/partials/maspik-admin-display.php:865
+msgid "Not Connected"
 msgstr ""
 
-#: admin/class-maspik-admin.php:805
+#: includes/functions.php:2442
+msgid ""
+"Note: The number of IPs Blocked can be higher than API Calls Made because "
+"Maspik caches the results of the last 10 IP verifications. If an IP was "
+"recently checked and is in the cache, it doesn't count against your API "
+"limit but still helps in blocking spam."
+msgstr ""
+
+#: includes/functions.php:1739
+msgid "of course!"
+msgstr ""
+
+#: admin/partials/maspik-admin-display.php:1251
+msgid "Ongoing Experiments"
+msgstr ""
+
+#: admin/partials/maspik-admin-display.php:1151
+msgid "Only the following phone formats will be allowed."
+msgstr ""
+
+#: admin/class-maspik-admin.php:809
 msgid "Options already added automatically from the API"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:1438
-msgid "Other Options"
+#: admin/partials/maspik-admin-display.php:581
+msgid ""
+"Our recommendation: Take a few moments to browse through the settings, see "
+"what works best for your site, and customize your spam protection "
+"accordingly. Most features work automatically, but you can maximize "
+"protection by setting custom keywords."
 msgstr ""
 
 #. Description of the plugin
@@ -519,19 +609,15 @@ msgid ""
 "forms and more..."
 msgstr ""
 
-#: includes/functions.php:1528
+#: includes/functions.php:1799
 msgid "Permission error"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:1547
+#: admin/partials/maspik-admin-display.php:1645
 msgid "Phone (Phone field)"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:802
-msgid "Phone Fields"
-msgstr ""
-
-#: admin/partials/maspik-admin-display.php:1531
+#: admin/partials/maspik-admin-display.php:1629
 msgid "Playground - Test form"
 msgstr ""
 
@@ -541,259 +627,352 @@ msgid ""
 "configuration."
 msgstr ""
 
-#: includes/functions.php:1351
-msgid "Please, "
-msgstr ""
-
-#: includes/functions.php:779
+#: includes/functions.php:1038
 msgid "Polish (A-Za-zĄąĆćĘęŁłŃńÓóŚśŹźŻż)"
 msgstr ""
 
-#: includes/functions.php:740
+#: includes/functions.php:999
 msgid "Polish (ĄąĆćĘęŁłŃńÓóŚśŹźŻż)"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:1092
+#: admin/partials/maspik-admin-display.php:841
 msgid "Popular spam words from"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:1281
+#: admin/partials/maspik-admin-display.php:1356
 msgid "ProxyCheck"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:1264
+#: admin/partials/maspik-admin-display.php:1339
 msgid "Proxycheck.io API"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:685
+#: admin/partials/maspik-admin-display.php:1024
 msgid "Regex must start and end with a slash /"
 msgstr ""
 
-#: admin/partials/maspik-log.php:58
+#: admin/partials/maspik-log.php:178
 msgid "Reset Log"
 msgstr ""
 
-#: includes/functions.php:780
+#: admin/partials/maspik-admin-display.php:523
+msgid "Review the settings and adjust options as needed."
+msgstr ""
+
+#: includes/functions.php:1039
 msgid "Romanian (A-Za-zĂăÂâÎîȘșȚț)"
 msgstr ""
 
-#: includes/functions.php:741
+#: includes/functions.php:1000
 msgid "Romanian (ĂăÂâÎîȘșȚț)"
 msgstr ""
 
-#: includes/functions.php:736 includes/functions.php:775
+#: includes/functions.php:995 includes/functions.php:1034
 msgid "Russian (А-Яа-яЁ)"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:1718
+#: admin/partials/maspik-admin-display.php:1819
 msgid "Select"
 msgstr ""
 
-#: includes/functions.php:788
+#: includes/functions.php:1047
 msgid "Serbian (A-Za-zА-Яа-яЋћĆć)"
 msgstr ""
 
-#: includes/functions.php:749
+#: includes/functions.php:1008
 msgid "Serbian (А-Яа-яЋћĆć)"
 msgstr ""
 
-#: contact-forms-anti-spam.php:79
+#: contact-forms-anti-spam.php:80
 msgid "Setting page"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:1596
+#: admin/partials/maspik-admin-display.php:1598
+msgid "Share anonymous data to improve spam protection"
+msgstr ""
+
+#: admin/partials/maspik-admin-display.php:1691
 msgid "Shortcode List"
 msgstr ""
 
-#: includes/functions.php:787
+#: includes/functions.php:1046
 msgid "Slovak (A-Za-zÁáÄäČčĎďÉéÍíĹĺĽľŇňÓóÔôŔŕŠšŤťÚúÝýŽž)"
 msgstr ""
 
-#: includes/functions.php:748
+#: includes/functions.php:1007
 msgid "Slovak (ÁáÄäČčĎďÉéÍíĹĺĽľŇňÓóÔôŔŕŠšŤťÚúÝýŽž)"
 msgstr ""
 
-#: admin/class-maspik-admin.php:572
-#: admin/partials/maspik-admin-display.php:1454
-#: admin/partials/maspik-log.php:50
+#: admin/partials/maspik-log.php:83
+msgid "Source"
+msgstr ""
+
+#: admin/class-maspik-admin.php:576
+#: admin/partials/maspik-admin-display.php:1551
+#: admin/partials/maspik-log.php:170
 msgid "Spam Log"
 msgstr ""
 
-#: admin/partials/maspik-log.php:65
+#: admin/partials/maspik-admin-display.php:1517
+msgid "Spam Log and Validation message"
+msgstr ""
+
+#: admin/partials/maspik-log.php:185
 msgid "Spams blocked by MASPIK since the last reset"
 msgstr ""
 
-#: includes/functions.php:772
+#: includes/functions.php:1031
 msgid "Spanish (A-Za-zÁÉÍÓÚáéíóúüÜñÑ)"
 msgstr ""
 
-#: includes/functions.php:733
+#: includes/functions.php:992
 msgid "Spanish (ÁÉÍÓÚáéíóúüÜñÑ)"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:1358
+#: admin/partials/maspik-admin-display.php:860
+msgid "Status"
+msgstr ""
+
+#: admin/partials/maspik-admin-display.php:1422
 msgid "Support Bricks forms"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:1323
+#: admin/partials/maspik-admin-display.php:1387
 msgid "Support Contact from 7"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:1365
+#: admin/partials/maspik-admin-display.php:1438
 msgid "Support Elementor forms"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:1351
+#: admin/partials/maspik-admin-display.php:1461
+msgid "Support Everest Forms"
+msgstr ""
+
+#: admin/partials/maspik-admin-display.php:1415
 msgid "Support Fluentforms"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:1337
+#: admin/partials/maspik-admin-display.php:1401
 msgid "Support Formidable"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:1344
+#: admin/partials/maspik-admin-display.php:1408
 msgid "Support Forminator"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:1395
+#: admin/partials/maspik-admin-display.php:1474
 msgid "Support Gravity Forms"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:1382
+#: admin/partials/maspik-admin-display.php:1453
+msgid "Support Jet Form"
+msgstr ""
+
+#: admin/partials/maspik-admin-display.php:1445
 msgid "Support Ninja Forms"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:1421
+#: admin/partials/maspik-admin-display.php:1500
 msgid "Support Woocommerce Registration"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:1413
+#: admin/partials/maspik-admin-display.php:1492
 msgid "Support Woocommerce Review"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:1330
+#: admin/partials/maspik-admin-display.php:1394
 msgid "Support wp comment"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:1372
+#: admin/partials/maspik-admin-display.php:1429
 msgid "Support WP Registration"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:1404
+#: admin/partials/maspik-admin-display.php:1483
 msgid "Support WPforms"
 msgstr ""
 
-#: includes/functions.php:784
+#: admin/partials/maspik-admin-display.php:1372
+msgid "Supported forms"
+msgstr ""
+
+#: includes/functions.php:1043
 msgid "Swedish (A-Za-zÄäÅåÖö)"
 msgstr ""
 
-#: includes/functions.php:745
+#: includes/functions.php:1004
 msgid "Swedish (ÄäÅåÖö)"
 msgstr ""
 
-#: includes/functions.php:727 includes/functions.php:766
+#: includes/functions.php:986 includes/functions.php:1025
 msgid "Syriac"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:1578
+#: admin/partials/maspik-admin-display.php:1674
 msgid "Text field"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:1579
+#: admin/partials/maspik-admin-display.php:1675
 msgid "text field"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:577
+#: admin/partials/maspik-admin-display.php:914
 msgid "Text Fields"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:698
+#: admin/partials/maspik-admin-display.php:1037
 msgid "Textarea Fields"
 msgstr ""
 
-#: includes/functions.php:730 includes/functions.php:769
+#: includes/functions.php:989 includes/functions.php:1028
 msgid "Thai"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:544
+#: includes/functions.php:2440
+msgid "The number of IP addresses identified and blocked as spam."
+msgstr ""
+
+#: includes/functions.php:2439
+msgid ""
+"The number of IP checks sent to Maspik's servers (counts toward your monthly "
+"limit)."
+msgstr ""
+
+#: admin/partials/maspik-admin-display.php:903
 msgid "The system is not case-sensitive"
 msgstr ""
 
-#: admin/class-maspik-admin.php:457
+#: includes/functions.php:2438
+msgid "The total number of times your site tried to verify an IP address."
+msgstr ""
+
+#: admin/class-maspik-admin.php:461
 msgid ""
 "There was an error adding this setting. Please try again. If this persists, "
 "shoot us an email."
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:1533
+#: admin/partials/maspik-admin-display.php:1265
+msgid ""
+"This feature checks the time elapsed between a user first visiting the site "
+"and submitting the form. If the submission happens too quickly (within 4 "
+"seconds), it's likely automated and will be blocked. This helps prevent "
+"rapid-fire spam submissions from bots."
+msgstr ""
+
+#: admin/partials/maspik-admin-display.php:1631
 msgid ""
 "This form allows you to test your entries to see if they will be blocked."
 msgstr ""
 
-#: includes/functions.php:1326 admin/class-maspik-admin.php:157
+#: includes/functions.php:1598 admin/class-maspik-admin.php:156
 msgid ""
 "This looks like spam. Try to rephrase, or contact us in an alternative way."
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:1173
+#: admin/partials/maspik-admin-display.php:1263
 msgid "Time Trap"
 msgstr ""
 
-#: admin/class-maspik-admin.php:585
+#: admin/class-maspik-admin.php:589
 msgid "To identify countries that send spam, and block them"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:730
+#: admin/partials/maspik-admin-display.php:1069
 msgid ""
 "Try to use full sentences that you typically find in spam emails, rather "
 "than single words."
 msgstr ""
 
-#: includes/functions.php:778
+#: includes/functions.php:1037
 msgid "Turkish (A-Za-zÇçĞğİıÖöŞşÜü)"
 msgstr ""
 
-#: includes/functions.php:739
+#: includes/functions.php:998
 msgid "Turkish (ÇçĞğİıÖöŞşÜü)"
 msgstr ""
 
-#: includes/functions.php:782
+#: admin/partials/maspik-log.php:77
+msgid "Type"
+msgstr ""
+
+#: includes/functions.php:1041
 msgid "Ukrainian (A-Za-zА-ЩЬЮЯЇІЄҐа-щьюяїієґЁё)"
 msgstr ""
 
-#: includes/functions.php:743
+#: includes/functions.php:1002
 msgid "Ukrainian (А-ЩЬЮЯЇІЄҐа-щьюяїієґЁё)"
 msgstr ""
 
-#: includes/functions.php:737 includes/functions.php:776
+#: includes/functions.php:2436
+msgid "Understanding the Data"
+msgstr ""
+
+#: includes/functions.php:996 includes/functions.php:1035
 msgid "Unknown language"
+msgstr ""
+
+#: includes/functions.php:2446
+msgid ""
+"Upgrade to Maspik Pro to get up to 1,000 API requests per month and improve "
+"your site's spam protection!"
+msgstr ""
+
+#: admin/partials/maspik-admin-display.php:610
+msgid "Upgrade to Pro for 1,000 checks/month"
 msgstr ""
 
 #: admin/partials/maspik-import-export.php:36
 msgid "Use this feature with caution."
 msgstr ""
 
-#: includes/functions.php:1146
+#: includes/functions.php:1424
 msgid ""
 "Use this plugin with caution and only if you understand the risk, "
 "blacklisting some words can lead to the termination of valid leads."
 msgstr ""
 
-#: includes/functions.php:1467
-msgid ""
-"We want to keep improving <b>Maspik plugin</b> - please allow us to track "
-"usage, we only collect non-sensitive information."
+#: admin/partials/maspik-log.php:81
+msgid "User Agent"
 msgstr ""
 
-#: includes/functions.php:1355
+#: includes/functions.php:1621
+msgid "We would be incredibly grateful if you could "
+msgstr ""
+
+#: includes/functions.php:1626
 msgid "We would love to hear from you at"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:1126
+#: admin/partials/maspik-admin-display.php:875
 msgid "website"
 msgstr ""
 
-#: admin/partials/maspik-log.php:52
+#: includes/functions.php:2333
+msgid "Welcome to Maspik Advanced Spam Protection"
+msgstr ""
+
+#: includes/functions.php:2386
+msgid "What is IP Verification?"
+msgstr ""
+
+#: admin/partials/maspik-admin-display.php:723
+msgid ""
+"When blocking Latin languages in an individual (such as: Dutch, French), the "
+"chack is in the punctuation letters (But they are not always in use). Its to "
+"prevent false positive."
+msgstr ""
+
+#: admin/partials/maspik-admin-display.php:678
+msgid ""
+"When specifying Latin-based languages (e.g., Dutch, French), the check "
+"includes language-specific punctuation and letters A to Z (including English)"
+". This is to avoid false positives when certain punctuation marks are not "
+"used."
+msgstr ""
+
+#: admin/partials/maspik-log.php:172
 msgid ""
 "Whenever a bot/person tries to spam your contact forms and MASPIK blocks the "
 "spam, you will see a new line below showing the details.<br>The log "
@@ -802,32 +981,51 @@ msgid ""
 "history."
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:684
-#: admin/partials/maspik-admin-display.php:827
+#: admin/partials/maspik-admin-display.php:1141
+msgid "Whitelist Phone Fields formts"
+msgstr ""
+
+#: admin/partials/maspik-admin-display.php:1023
 msgid ""
 "Wildcard patterns are accepted. asterisk * Or question mark ? symbol are "
 "necessary for the recognition of the wildcard."
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:604
+#: admin/partials/maspik-admin-display.php:941
 msgid ""
 "Wildcard patterns are accepted. asterisk * symbol is necessary for the "
 "recognition of the wildcard."
 msgstr ""
 
-#: includes/functions.php:1353
+#: includes/functions.php:1623
 msgid "WP Maspik Community - Stopping Spam Together"
 msgstr ""
 
 #. Author of the plugin
-#: admin/partials/maspik-admin-display.php:1126
+#: admin/partials/maspik-admin-display.php:875
 msgid "WpMaspik"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:1216
+#: admin/partials/maspik-admin-display.php:1311
 msgid "You can also filter entire CIDR range such as 134.209.0.0/16"
 msgstr ""
 
-#: admin/partials/maspik-admin-display.php:1597
+#: admin/partials/maspik-admin-display.php:1692
 msgid "You can also use the following shortcodes:"
+msgstr ""
+
+#: admin/partials/maspik-admin-display.php:602
+#, php-format
+msgid "You have used %1$d out of %2$d checks this month."
+msgstr ""
+
+#: includes/functions.php:1621
+msgid ""
+"Your feedback not only helps others discover our plugin but also fuels our "
+"passion to keep enhancing it. It helps us grow and continue improving. Thank "
+"you for your support!"
+msgstr ""
+
+#: includes/functions.php:2390
+msgid "Your IP Verification Activity"
 msgstr ""

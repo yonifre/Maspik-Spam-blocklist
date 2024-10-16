@@ -56,10 +56,12 @@ function maspik_custom_form_check() {
         $ip = efas_getRealIpAddr();
 
         // Country IP Check (example implementation)
-        $CountryCheck = CountryCheck($ip, $spam, $reason,$_POST);
-        if ($CountryCheck['spam']) {
-            efas_add_to_log("Country/IP", $CountryCheck['reason'], $_POST, "Custom PHP form");
-            $errors['ip_country'] = cfas_get_error_text($CountryCheck['message']);
+        $GeneralCheck = GeneralCheck($ip, $spam, $reason,$_POST,"custom");
+        if ($GeneralCheck['spam']) {
+            $spam_val = $GeneralCheck['value'] ? $GeneralCheck['value'] : false ;
+            
+            efas_add_to_log("Country/IP", $GeneralCheck['reason'], $_POST, "Custom PHP form", $GeneralCheck['message'],  $spam_val);
+            $errors['ip_country'] = cfas_get_error_text($GeneralCheck['message']);
         }
 
         // Check text fields
@@ -67,8 +69,10 @@ function maspik_custom_form_check() {
         if (isset($_POST[$text_field_key])) {
             $field_value = sanitize_text_field($_POST[$text_field_key]);
             $validateTextField = validateTextField($field_value);
+            $spam_lbl = isset($validateTextField['label']) ? $validateTextField['label'] : 0 ;
+            $spam_val = isset($validateTextField['option_value']) ? $validateTextField['option_value'] : 0 ;
             if ($validateTextField['spam']) {
-                efas_add_to_log("text", $validateTextField['reason'], $_POST, "Custom PHP form");
+                efas_add_to_log("text", $validateTextField['reason'], $_POST, "Custom PHP form", $spam_lbl, $spam_val);
                 $errors[$text_field_key] = cfas_get_error_text($validateTextField['message']);
             }
         }
@@ -78,8 +82,10 @@ function maspik_custom_form_check() {
         if (isset($_POST[$email_field_key])) {
             $field_value = sanitize_email($_POST[$email_field_key]);
             $spam = checkEmailForSpam($field_value);
+            $spam_val = $field_value;
+
             if ($spam) {
-                efas_add_to_log("email", "Email $field_value is blocked", $_POST, "Custom PHP form");
+                efas_add_to_log("email", "Email $field_value is blocked", $_POST, "Custom PHP form", "emails_blacklist", $spam_val);
                 $errors[$email_field_key] = 'Invalid email field';
             }
         }
@@ -89,8 +95,11 @@ function maspik_custom_form_check() {
         if (isset($_POST[$phone_field_key])) {
             $field_value = sanitize_text_field($_POST[$phone_field_key]);
             $checkTelForSpam = checkTelForSpam($field_value);
+            $spam_lbl = isset($checkTelForSpam['label']) ? $checkTelForSpam['label'] : 0 ;
+            $spam_val = isset($checkTelForSpam['option_value']) ? $checkTelForSpam['option_value'] : 0 ;
+
             if (!$checkTelForSpam['valid']) {
-                efas_add_to_log("tel", $checkTelForSpam['reason'], $_POST, "Custom PHP form");
+                efas_add_to_log("tel", $checkTelForSpam['reason'], $_POST, "Custom PHP form", $spam_lbl, $spam_val);
                 $errors[$phone_field_key] = cfas_get_error_text($checkTelForSpam['message']);
             }
         }
@@ -100,8 +109,11 @@ function maspik_custom_form_check() {
         if (isset($_POST[$textarea_field_key])) {
             $field_value = sanitize_textarea_field($_POST[$textarea_field_key]);
             $checkTextareaForSpam = checkTextareaForSpam($field_value);
+            $spam_lbl = isset($checkTextareaForSpam['label']) ? $checkTextareaForSpam['label'] : 0 ;
+            $spam_val = isset($checkTextareaForSpam['option_value']) ? $checkTextareaForSpam['option_value'] : 0 ;
+
             if ($checkTextareaForSpam['spam']) {
-                efas_add_to_log("textarea", $checkTextareaForSpam['reason'], $_POST, "Custom PHP form");
+                efas_add_to_log("textarea", $checkTextareaForSpam['reason'], $_POST, "Custom PHP form", $spam_lbl, $spam_val);
                 $errors[$textarea_field_key] = cfas_get_error_text($checkTextareaForSpam['message']);
             }
         }

@@ -22,15 +22,16 @@ add_filter( 'gform_field_validation', function ( $result, $value, $form, $field 
     $ip = efas_getRealIpAddr();
     
   	// Country IP Check 
-    $CountryCheck = CountryCheck($ip,$spam,$reason,$_POST);
-    $spam = isset($CountryCheck['spam']) ? $CountryCheck['spam'] : false ;
-    $reason = isset($CountryCheck['reason']) ? $CountryCheck['reason'] : false ;
-    $message = isset($CountryCheck['message']) ? $CountryCheck['message'] : false ;
+    $GeneralCheck = GeneralCheck($ip,$spam,$reason,$_POST,"gravityforms");
+    $spam = isset($GeneralCheck['spam']) ? $GeneralCheck['spam'] : false ;
+    $reason = isset($GeneralCheck['reason']) ? $GeneralCheck['reason'] : false ;
+    $message = isset($GeneralCheck['message']) ? $GeneralCheck['message'] : false ;
+    $spam_val = $GeneralCheck['value'] ? $GeneralCheck['value'] : false ;
 
       //If country or ip is in blacklist
     if ( $spam ) {
-      efas_add_to_log($type = "General",$reason, $_POST ,'gravityforms');
-      GFCommon::log_debug( __METHOD__ . '(): '.$error_message.': ' . $reason );
+      efas_add_to_log($type = "General",$reason, $_POST ,'gravityforms', $message,  $spam_val);
+      GFCommon::log_debug( __METHOD__ . '(): '.$reason.': ' . $reason );
       $result['is_valid'] = false;
       $result['message'] = cfas_get_error_text($message);
     }
@@ -53,11 +54,13 @@ add_filter( 'gform_field_validation', function ( $result, $value, $form, $field 
     $validateTextField = validateTextField($field_value);
     $spam = isset($validateTextField['spam']) ? $validateTextField['spam'] : 0;
     $message = isset($validateTextField['message']) ? $validateTextField['message'] : 0;
+    $spam_lbl = isset($validateTextField['label']) ? $validateTextField['label'] : 0 ;
+    $spam_val = isset($validateTextField['option_value']) ? $validateTextField['option_value'] : 0 ;
 
       if( $spam ) {
           $error_message = cfas_get_error_text($message);
-          efas_add_to_log($type = "text",$spam, $_POST,'gravityforms');          
-          GFCommon::log_debug( __METHOD__ . '(): '.$error_message.': ' . $field_value );
+          efas_add_to_log($type = "text",$spam, $_POST,'gravityforms', $spam_lbl, $spam_val);          
+          GFCommon::log_debug( __METHOD__ . '(): '.$spam.': ' . $field_value );
           $result['is_valid'] = false;
           $result['message']  = $error_message;
       }
@@ -74,12 +77,15 @@ add_filter( 'gform_field_validation', function ( $result, $value, $form, $field 
     if ( !$result['is_valid'] || empty( $value ) ) {
         return $result;
     }
-  	$field_value = is_array($value) ? array_values($value)[0]  : strtolower($value); 
+  
+  $field_value = is_array($value) ? array_values($value)[0]  : strtolower($value); 
 	$spam = checkEmailForSpam($field_value);
+  $spam_val = $field_value;
 
     if( $spam ) {
         $error_message = cfas_get_error_text();
-        efas_add_to_log($type = "email","Email $field_value is block $spam", $_POST, "GravityForms");
+        
+        efas_add_to_log($type = "email","Email $field_value is block $spam", $_POST, "GravityForms", "emails_blacklist", $spam_val);
         GFCommon::log_debug( __METHOD__ . '(): '.$error_message.': ' . $field_value );
         $result['is_valid'] = false;
         $result['message']  = $error_message;    
@@ -102,10 +108,12 @@ add_filter( 'gform_field_validation', function ( $result, $value, $form, $field 
         $reason = isset($checkTelForSpam['reason']) ? $checkTelForSpam['reason'] : 0 ;      
         $valid = isset($checkTelForSpam['valid']) ? $checkTelForSpam['valid'] : "yes" ;   
         $message = isset($checkTelForSpam['message']) ? $checkTelForSpam['message'] : 0 ;  
+        $spam_lbl = isset($checkTelForSpam['label']) ? $checkTelForSpam['label'] : 0 ;
+        $spam_val = isset($checkTelForSpam['option_value']) ? $checkTelForSpam['option_value'] : 0 ;
 
       if(!$valid){
         $error_message = cfas_get_error_text($message); 
-        efas_add_to_log($type = "tel", $reason, "Gravityforms");
+        efas_add_to_log($type = "tel", $reason, "Gravityforms", $spam_lbl, $spam_val);
         GFCommon::log_debug( __METHOD__ . '(): '.$error_message.': ' . $value );
         $result['is_valid'] = false;
         $result['message']  = $error_message;    
@@ -128,9 +136,12 @@ add_filter( 'gform_field_validation', function ( $result, $value, $form, $field 
     $checkTextareaForSpam = checkTextareaForSpam($field_value);
     $spam = isset($checkTextareaForSpam['spam']) ? $checkTextareaForSpam['spam'] : 0;
     $message = isset($checkTextareaForSpam['message']) ? $checkTextareaForSpam['message'] : 0;
+    $spam_lbl = isset($checkTextareaForSpam['label']) ? $checkTextareaForSpam['label'] : 0 ;
+    $spam_val = isset($checkTextareaForSpam['option_value']) ? $checkTextareaForSpam['option_value'] : 0 ;
+
     if ( $spam ) {
    	    $error_message = cfas_get_error_text($message);
-        efas_add_to_log($type = "textarea",$spam, $_POST, "Gravityforms");
+        efas_add_to_log($type = "textarea",$spam, $_POST, "Gravityforms", $spam_lbl, $spam_val);
         GFCommon::log_debug( __METHOD__ . '(): '.$error_message.': ' . $value );
         $result['is_valid'] = false;
         $result['message']  = $error_message;    
@@ -142,27 +153,36 @@ add_filter( 'gform_field_validation', function ( $result, $value, $form, $field 
 }, 10, 4 );
 
 
-//Disable because not stable yet 
-//add_filter('gform_submit_button', 'maspik_add_spampixel_to_gravity_form', 10 , 2 );
-function maspik_add_spampixel_to_gravity_form($button, $form) {
-    if (!get_option('Maspik_human_verification')) {
+
+add_filter('gform_submit_button', 'add_maspikhp_html_to_gform', 99 , 2 );
+function add_maspikhp_html_to_gform($button, $form) {
+    if ( is_admin() ){
         return $button;
     }
-    $ajax_url = admin_url('admin-ajax.php') . '?action=cfas_pixel_submit';
-    $spampixel = '<div class="maspik-captcha"></div>';
-    $spampixel .=
-        "<style>
-            .maspik-captcha {
-                width: 1px;
-                height: 1px;
-                position: absolute;
-                opacity: 0;
-            }
-            form:focus-within .maspik-captcha {
-                background-image: url('$ajax_url');
-            }
-        </style>";
+    $addhtml = "";
 
-    return $button.$spampixel;
+    if (maspik_get_settings('maspikHoneypot')) {
+        $honeypot_name = maspik_HP_name();
+        $addhtml .= '<div class="gfield gfield--type-text maspik-field">
+            <label for="' . $honeypot_name . '" class="ginput_container_text">Leave this field empty</label>
+            <input size="1" type="text" autocomplete="off" autofill="off" aria-hidden="true" tabindex="-1" name="' . $honeypot_name . '" id="' . $honeypot_name . '" class="ginput_text" placeholder="Leave this field empty">
+        </div>';
+    }
 
+    if (maspik_get_settings('maspikYearCheck')) {
+        $addhtml .= '<div class="gfield gfield--type-text maspik-field">
+            <label for="Maspik-currentYear" class="ginput_container_text">Leave this field empty</label>
+            <input size="1" type="text" autocomplete="off" autofill="off" aria-hidden="true" tabindex="-1" name="Maspik-currentYear" id="Maspik-currentYear" class="ginput_text" placeholder="">
+        </div>';
+    }
+
+    if (maspik_get_settings('maspikTimeCheck')) {
+        $addhtml .= '<div class="gfield gfield--type-text maspik-field">
+            <label for="Maspik-exactTime" class="ginput_container_text">Leave this field empty</label>
+            <input size="1" type="text" autocomplete="off" autofill="off" aria-hidden="true" tabindex="-1" name="Maspik-exactTime" id="Maspik-exactTime" class="ginput_text" placeholder="">
+        </div>';
+    }
+
+    return $addhtml . $button;
 }
+

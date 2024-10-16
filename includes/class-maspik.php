@@ -78,6 +78,20 @@ class Maspik {
       * Forms functions
       */
 
+	  // Everest-Forms
+      if( maspik_get_settings( "maspik_support_everestforms" ) != "no" ){ 
+        if ( maspik_is_plugin_active( 'everest-forms/everest-forms.php' ) ) {
+          require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/forms/everest.php';
+		}
+	}
+
+	  // Jet-Forms
+      if( maspik_get_settings( "maspik_support_jetforms" ) != "no" ){ 
+        if ( maspik_is_plugin_active( 'jetformbuilder/jet-form-builder.php' ) ) {
+          require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/forms/jetform.php';
+		}
+	}
+
 	  // Ninja-Forms
       if( maspik_get_settings( "maspik_support_ninjaforms" ) != "no" ){ 
         if ( maspik_is_plugin_active( 'ninja-forms/ninja-forms.php' ) ) {
@@ -146,16 +160,9 @@ class Maspik {
           require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/forms/bricks.php';
         }
       }
-        
-      // Disable Comments
-      if( maspik_get_settings("disable_comments", '', 'old') == "yes"  ) { 
-          require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/disable-comments.php';
-      }
-
-	  
       
       // If agree to shere Non sensitive information 
-      if( maspik_get_settings("shere_data", '', 'old') == "yes"  ) { 
+      if( maspik_get_settings("shere_data", '', 'old') == 1 ){ 
           require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/statistics-data.php';
       }
 
