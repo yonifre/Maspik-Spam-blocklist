@@ -35,6 +35,43 @@ function weekly_api_to_maspik_request_callback() {
         $data[sanitize_text_field($setting['option_name'])] = sanitize_text_field($setting['option_value']);
     }
 
+    $api_data = get_option("maspik_api_requests", array(
+        'months' => array()
+    ));
+    
+    // array to store the formatted data
+    $api_data_string = [];
+    
+    // loop through all the months in the array
+    if (isset($api_data['months']) && is_array($api_data['months'])) {
+        foreach ($api_data['months'] as $month => $month_data) {
+            // create a string in the format month|attempts|actual_calls|blocks
+            $api_data_string[] = sprintf(
+                "%s %d|%d|%d",
+                $month,
+                $month_data['attempts'],
+                $month_data['actual_calls'],
+                $month_data['blocks']
+            );
+        }
+    }
+    
+    // Retrieve the list of active plugins from WordPress options
+    $active_plugins = get_option('active_plugins', array());
+    // Array to hold plugin names
+    $plugin_names = array();
+    // Get the full list of plugins
+    $all_plugins = get_plugins();
+    // Loop through active plugins and get their details
+    foreach ($active_plugins as $plugin) {
+        if (isset($all_plugins[$plugin])) {
+            $plugin_names[] = $all_plugins[$plugin]['Name'];
+        }
+    }
+
+    // Convert the list of plugin names to a comma-separated string
+    $active_plugin = $plugin_names ? implode(', ', $plugin_names) : '0';
+
     // Add system information directly to the main $data array
     $data['wordpress_version'] = get_bloginfo('version');
     $data['plugin_version'] = MASPIK_VERSION; 
@@ -42,7 +79,9 @@ function weekly_api_to_maspik_request_callback() {
     $data['php_version'] = phpversion();
     $data['theme_name'] = wp_get_theme()->get('Name');
     $data['spamcounter'] = get_option('spamcounter');
-    $data['maspik_api_requests'] = get_option('maspik_api_requests');
+    $data['is_supporting'] = cfes_is_supporting();
+    $data['maspik_api_requests'] = $api_data_string ? implode(',', $api_data_string) : '0';
+    $data['active_plugins'] = $active_plugin;
 
     
     // URL of the REST API endpoint

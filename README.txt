@@ -1,28 +1,37 @@
 === Maspik - Advanced Spam Protection ===
 Contributors: yonifre
-Donate link: paypal.me/yonifre
+Donate link: https://paypal.me/yonifre
 Tags: spam, blacklist, anti spam, Honeypot, antispam 
-Tested up to: 6.6
+Tested up to: 6.7
 Requires at least: 5.0
 Requires PHP: 7.0
-Stable tag: 2.2.6
-License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Stable tag: 2.4.4
+License: GPLv3
+License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
-Block spam in several ways, blacklist words/ honeypot / IP verification and more, integrate with almost any contact form plugin and comments. 
+🛡️ **Intelegent Spam Protection** - Powerful Security Without CAPTCHA
+The most efficient spam protection for WordPress forms and comments.
 
 == Description ==
 
-## Say Goodbye to Spam with Maspik! ##
-Maspik uses a highly efficient "blacklist" method that surpasses traditional CAPTCHA services like Google's in both efficiency and accuracy, with a success rate of over 95%.
+## Why to block spam with Maspik?
+* 🚀 **Quick Setup**: Ready in 2 minutes
+* 🎯 **High Success Rate**: Better protection than traditional CAPTCHA
+* 🔍 **Smart Detection**: Identifies spam patterns automatically
+* 🌐 **Wide Compatibility**: Works with all major form plugins
+* 🛠️ **Fully Customizable**: Adapt to your specific needs you can block any spam you want with Blacklist system
+* 👥 **Excellent Support**: We are committed to help you to block spam, sent us any spam you receive and we will help you to block it.
 
-With Maspik, you have the power to define what is considered spam by adding phrases to your blacklist. Fast and precise blocking of spam submissions takes as little as 2 minutes to set up.
+## Key Features
+✅ Works instantly with popular form plugins and registration forms
+✅ No CAPTCHA needed
+✅ Smart blacklist system
+✅ IP & country blocking
+✅ Phone number validation
+✅ Several ways to block spam with advanced honeypot fields
+✅ Multi-language support
 
-## How It Works ##
-
-Maspik allows you to specify words, email addresses, phone formats, IP addresses, and more. If submissions contain links, originate from certain countries, or are in specified languages, Maspik flags them as spam and keeps them out of your inbox.
-
-## Features ##
+## Detailed Features: Our Advanced Spam Protection & Filtering ##
 
 * **Blacklisting by Field Type:**
   * Text fields (Name/Subject)
@@ -33,26 +42,30 @@ Maspik allows you to specify words, email addresses, phone formats, IP addresses
   * Maximum number of characters in text fields
   * Maximum number of characters in text area fields
 * **Link Limitation:**
-  * Limit the number of links allowed in text areas (ideally 1)
+  * Limit the number of links allowed in text areas (ideally 0)
 * **Blocking:**
   * Specific IP addresses
   * Spam submissions in WordPress comments and subscription forms
+  * Option to block submissions with emojis in textarea fields
 * **Spam Log:**
   * Review blocked submissions
 * **Advance Blocking:**
   * Honeypot
-  * IP verification
-  * Block submissions without source URLs (Elementor)
+  * IP verification (100 checks/month)
+  * Block submissions without source URLs (Elementor and Hello Plus)
+  * Advance key check 
 * **API Integrations:**
-  * Proxycheck.io
-  * AbuseIPDB.com
+  * Proxycheck.io (check IP address against proxy/VPN/TOR)
+  * AbuseIPDB.com (check IP address against abuse/spam/malicious/proxy/VPN/TOR)
+  * Numverify.com (validate phone number to block spam phone numbers)
 
 ## Supported Forms ##
 
-Maspik integrates seamlessly with a wide range of popular contact forms:
+Maspik integrates seamlessly with a wide range of popular contact forms and comments:
 
 * Elementor forms
 * Contact Form 7
+* Hello Plus
 * NinjaForms
 * Everest Forms
 * Formidable forms
@@ -60,50 +73,111 @@ Maspik integrates seamlessly with a wide range of popular contact forms:
 * Forminator forms
 * Fluentforms
 * Bricksbuilder forms
-* WPForms*
-* GravityForms*
+* BuddyPress
 * WordPress comments
 * WordPress registration form
+* WPForms*
+* GravityForms*
 * WooCommerce registration form*
-* WooCommerce review* 
+* WooCommerce review*
+
 (*) Pro license required
 
-## We offer also a Pro version! ##
+### We offer also a Pro version! ###
 
-### Pro Version Features ###
-
-The Pro version offers advanced functionality:
-
-* IP verification - Increases the monthly limit from 100 to 1,000 IP checks.
-* Integration with the Maspik Spam API
-* Create and use your own SPAM API across multiple websites
-* Import/Export Settings
-* Blocking based on specific languages (e.g. block Russian/Chinese/Arabic content)
-* Country-specific blocking or allowing submissions (e.g. block USA/China/Russia)
+## Pro Version Features 🌟
+⭐ Advanced IP verification (10,000 checks/month)
+⭐ Custom spam dashboard for multiple sites, manage your spam settings from one place
+⭐ Country-based filtering for advanced spam protection
+⭐ Language detection & blocking
+⭐ Settings Import/Export
+⭐ Premium support
 
 ##Important Note##
 
 Be cautious when selecting words to blacklist as each website has different needs. For example, if you're a digital marketing agency and blacklist the word "SEO," you may lose some valid leads.
+The plugin is provided "as is" and the user assumes full responsibility for configuring and using it appropriately for their specific needs.
 
 The plugin is GDPR compliant.
 
-For more information, visit our website: [WpMaspik.com](https://wpmaspik.com/?readme-file)
 
+## Support & Community
+* 🚀 [Get Started guide](https://wpmaspik.com/documentation/getting-started/?readme-file)
+* 📚 [Documentation](https://wpmaspik.com/documentation/?readme-file)
+* 💬 [Community Forum](https://www.facebook.com/groups/maspik)
+* 🐛 [Report Issues](https://wpmaspik.com/#support?readme-file)
+* 💡 [Feature Requests](https://wpmaspik.com/#support?readme-file)
+* 💰 [Recive Pro for free](https://wpmaspik.com/get-maspik-pro-for-free-share-your-expertise/?readme-file)
+* 💖 [Support us with 5 stars review](https://wordpress.org/support/plugin/contact-forms-anti-spam/reviews/#new-post)
+* 💎 [Donate to support our work](https://paypal.me/yonifre)
+* ✨ [WP Maspik](https://wpmaspik.com/?readme-file)
 
 
 == Installation ==
 
-Search for "Maspik - Spam Blacklist" in the Wordpress Plugin repository through the 'Plugins' menu in Wordpress.
-Install and activate the plugin.
-In the Wordpress dashboard menu, find the Maspik - Spam Blacklist setting page.
-Add spam words as needed.
+## Getting Started 🚀
+1. **Installation**
+   * Search for "Maspik" in WordPress plugins
+   * Click Install & Activate
+
+2. **Basic Setup**
+   * Go to Maspik Settings
+   * Enable desired protections
+   * Save changes
+
+3. **Advanced Configuration** (Optional)
+   * Add custom spam phrases
+   * Toggle relevant settings for each field type
+   * Set up phone validation
+
+4. **Playground**
+   * Test your settings with the playground form and in the live form
+   * Check the spam log to see if spam is being blocked
+
 == Frequently Asked Questions ==
+
+= What's the setup process like? =
+Installation takes just 2 minutes: search for "Maspik" in your WordPress plugins section, click install, and activate. The plugin comes with smart pre-configured protection that works immediately. You can start blocking spam right away without any technical configuration.
+But if you need more advanced settings, you can check the [documentation](https://wpmaspik.com/documentation/getting-started/?readme-file) for more information.
+
+= How effective is Maspik at blocking spam? =
+Maspik uses multiple detection methods including smart pattern recognition, honeypot fields, and blacklist systems to achieve a 95%+ success rate in blocking spam. Unlike traditional CAPTCHA solutions, it works silently without disrupting your real users.
+So, Maspik is highly effective at blocking spam.
+
+= Will Maspik affect my site's performance? =
+No. Maspik is designed for optimal performance, using mostly server-side processing. All spam checking is done efficiently without impacting your front-end page load times.
+
+= What kind of customization options are available? =
+You can customize text blacklists, email patterns, character limits, link restrictions, IP blocking rules, and country-based filtering. Each field type can have its own specific settings, letting you create the perfect balance of protection for your needs.
+
+= Does Maspik protect all types of forms? =
+Yes! Maspik protects contact forms, comments, registration forms, and more. It works with all major form plugins including Contact Form 7, Elementor Forms, Ninja Forms, and many others. Premium users also get protection for WooCommerce forms, WPForms, and Gravity Forms.
+
+= How does the spam logging system work? =
+Maspik includes a detailed spam log that shows you exactly what's being blocked and why. This helps you fine-tune your settings and understand the types of spam targeting your site. You can review blocked submissions and adjust your protection accordingly.
+
+= How to Block Spam in WordPress? =
+With Maspik, you can effectively block spam submissions, spam comments, spam bots, and spam registrations in WordPress. Our powerful anti-spam plugin provides comprehensive protection against comment spam, form spam, registration spam, and automated bot submissions.
+
+Simply go through the settings page, activate the features that fit your needs, and you're done! The plugin acts as a spam filter and spam blocker, helping you stop spam in WordPress without using CAPTCHA. It's the perfect solution for blocking unwanted spam content, spam users, and spam attacks on your WordPress site.
+
+Maspik features include:
+- Block spam comments and spam registrations
+- Stop spam bots and automated submissions 
+- Filter out spam content and spam users
+- Protect contact forms from spam
+- No CAPTCHA required
+- Easy spam prevention setup
+
+
 = Does the plugin work with all Wordpress forms? =
-Maspik currently supports:
+Maspik protects contact forms, comments, registration forms, and more.
+Currently supports the following forms:
 
 <ul>
 <li>Elementor forms</li>
 <li>Contact form 7</li>
+<li>Hello Plus</li>
 <li>NinjaForms</li>
 <li>Everest Forms</li>
 <li>JetFormBuilder</li>
@@ -111,6 +185,7 @@ Maspik currently supports:
 <li>Forminator forms</li>
 <li>Fluentforms</li>
 <li>Bricksbuilder forms</li>
+<li>BuddyPress</li>
 <li>Wpforms (Maspik Pro license required)</li>
 <li>Gravityforms (Maspik Pro license required)</li>
 <li>Wordpress comments</li>
@@ -120,30 +195,100 @@ Maspik currently supports:
 </ul>
 
 More forms will be supported in future releases.
-Looking for specific plugin support? Let us know at https://wpmaspik.com/#contact
-
-= Where do I set this up? =
-
-In the WordPress dashboard menu, look for the 'Maspik spam" item and click on it.
-
-= Will MASPIK slow down my site? =
-No.
-I developed this plugin using high-quality server-side code and avoided using CSS/JS to ensure optimal website performance as CSS/JS running in the front-end can slow down websites.
+Looking for specific plugin support? Let us know at [WpMaspik.com](https://wpmaspik.com/#contact)
 
 = How can I report security bugs? =
 You can report security bugs through the Patchstack Vulnerability Disclosure Program. The Patchstack team help validate, triage and handle any security vulnerabilities. [Report a security vulnerability.](https://patchstack.com/database/vdp/contact-forms-anti-spam)
 
+= How does Maspik compare to other anti-spam plugins? =
+While plugins like Akismet anti spam vs CleanTalk, require external API configuration and monthly subscriptions and can be complex to setup, Maspik offers a self-hosted solution that works right out of the box. runs most of the checks within WordPress, with no external dependencies or recurring fees.
+Antispam Bee is a great plugin, that support only comments and woth only limited features.
+So if you need advanced spam protection, that works with all forms and has a lot of features, Maspik is the best spam protection plugin for you.
+
 == Screenshots ==
 
-1. Setting page - Text field blacklist
-1. Setting page
-1. Setting page
-1. Setting page
-1. Setting page
-1. Setting page
+1. Setting page of block spam in wordpress
+2. How to block spam in wordpress
+3. Anti spam settings page
+4. Stop spam in wordpress comments
+5. Best spam solution in wordpress
+6. Block spam submissions in wordpress contact form
+7. spam filter settings page
 
 
 == Changelog ==
+
+= 2.4.4 - 20/03/2025 = 
+* Announcement - Advance key check is now officialy released and not anymore in ongoing exprement.
+* Improved - Enhanced security by hiding passwords in Spam log
+* Improved - Disabled autocomplete functionality in WooCommerce registration forms for better security
+
+
+= 2.4.3 - 19/02/2025 = 
+* Fixed - Fix Elementor Bot detector option not working wall (When page source url is empty).
+* Fixed - Fix detection string in Textarea field with regex/wildcard format.
+* Improve - Improve detection string in Textarea field: Now ignore ,!?. at the end of the string for better detection.
+
+= 2.4.2 - 18/02/2025 = 
+* New feature - Add option to block submissions with emojis in textarea fields.
+* New feature - Added support for Hello Plus form builder plugin.
+
+= 2.4.0 - 30/01/2025 = 
+* Announcement - In this version we made some improvements to reduce false positives. read more in the [announcement page](https://wpmaspik.com/maspik-2-4-0-smarter-spam-blocking-fewer-false-positives/?readme-file)
+* Improved - Text and textarea field blacklist's now match exact words only, preventing false positives from partial word matches (e.g., "ad" won't block "shade", but "seo" will block "Seo expert").
+* Improved - Improve email field blacklist check - Now checks both if an email exactly matches or is contained within blacklisted patterns, (e.g. "Seo" will block "seoexpert@gmail.com").
+* Improved - Made settings page text clearer and easier to understand.
+* Improved - Improve link detection in text area fields.
+* Improved - Improve text area field character limit check.
+* Fixed - Fix JS error on settings page.
+* Fixed - Fix Serbian language detection.
+
+= 2.3.0 - 18/01/2025 = 
+* Improved WP registration form support
+* Improved Comments form support
+* Improved WooCommerce registration form support
+* Improved code performance
+* Improved Elementor form support
+* Improved default settings auto activation
+* Removed update support from Maspik versions smaller than 2.0.0 to improve stability and performance
+
+
+= 2.2.14 - 05/01/2025 = 
+* New exprement! - Enhanced Advanced Key Check system - Under ongoing exprement.
+* Improved database performance
+* Optimized code execution
+
+= 2.2.13 - 19/12/2024 =
+* Fixed HTML settings save issue
+* Improved form field handling
+
+= 2.2.12 - 16/12/2024 =
+* New feature! - Add support in Numverify API for phone number validation.
+* Fixed - fix error in Formidable forms.
+* Fixed - Fixed an issue where the Dashboard ID was not displaying correctly.
+* Fixed - Fixed an issue where spam log entry limit was not working as in some cases.
+
+= 2.2.11 - 05/12/2024 =
+* Improvement - Improve text in settings page and translation
+* Bug fix - Fix UI glitch in settings page
+
+= 2.2.10 - 03/12/2024 =
+* Improvement - Compatibility with WP version 6.7
+
+= 2.2.9 - 22/11/2024 =
+* Fixed: Removed autofill attribute from honeypot fields to improve compatibility with AMP pages
+* Improvement - Spam log default save entries max number is now 1000 (was 2000)
+
+= 2.2.8 - 08/11/2024 =
+* New Feature - Add support in BuddyPress forms.
+* Improvement - Improve layout of Playground form.
+* Improvement - add page link in spam log.
+* Improvement - improve time block check to reduce false positive.
+* Improvement - Add spanish translation.
+
+
+= 2.2.7 - 16/10/2024 =
+* Bug fix - Fix error in Contact Form 7 with checkbox field in some cases.
 
 = 2.2.6 - 15/10/2024 =
 * Improvement - update license manager library
@@ -178,347 +323,6 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 * Improvement - Make main block setting as ON by default. You can deactivate settings in the settings page.
 * Improvement - Forms are now supported by default. You can deactivate support for specific forms in the settings page.
 
-= 2.1.6 - 30/08/2024 =
-* New feature - added option to check if sender's IP address exists in Maspik blacklist database.
-* Bug fix - Fixed PHP syntax error in some environments.
-
-= 2.1.5 - 21/08/2024 =
-* Bug fix - Fixed some toggle buttons in the admin setting page that did not work properly.
-
-= 2.1.4 - 15/08/2024 =
-* Bug fix - fix "parsererror" in honeypot check on Elementor form.
-
-= 2.1.3 - 13/08/2024 =
-* New Feature - Added support for JetFormBuilder.
-* New Feature - Added support for Everest Forms.
-* New Feature - Add option to mark "Not a Spam" on Spam log.
-* Bug Fix - Fix vulnerability, thanks to @Artyom from CleanTalk inc.
-
-= 2.1.2 - 26/07/2024 =
-* Bug Fix - Fix error when Max links set on 0 
-
-= 2.1.1 - 24/07/2024 =
-* Improvement - Improve Honeypot check for Elementor + CF7 + Comments + Woocommerce Review + Registration 
-* Bug Fix - Fix css glitch on some casese with new Honeypots
-
-= 2.1.0 - 22/07/2024 =
-* New Feature - Time check (If spent less then 2 secund in site - Spam)
-* New Feature - Honeypot field (If not ampty- Spam )
-* New Feature - Advance Honeypot field (If Js Year is diffrent from server year - Spam)
-
-= 2.0.6 - 19/07/2024 =
-* Improvement - Improve spam check performance 
-* Bug Fix - Fix error appearing in Country check in some environments
-
-= 2.0.5 - 16/07/2024 =
-* Bug Fix - Fix phone check
-
-= 2.0.4 - 16/07/2024 =
-* New Feature - Download Spam-log as CSV
-* Bug Fix - Fix languages check
-* Bug Fix - Fix error appearing when spam is caught in some environments
-* Improvement - Add option to insert question mark (?) in wildcard pattern in phone field
-
-
-= 2.0.3 - 12/07/2024 =
-* Improvement - Improve Dashboard(Maspik API) - add more fields in WpMaspik site for Pro users  
-* Bug fix - Fix languages chack   
-* Bug fix - Fix toggel option for some condition 
-
-= 2.0.2 - 11/07/2024 =
-* Bug fix - fixed some toggel options (Allow usage tracking, Disable comments, Add country name to emails) that weren't stable on some aviroment. 
-* Change plugin footer text
-
-= 2.0.1 - 10/07/2024 =
-* Bug fix - removed disable comments option as it is not stable on some aviroment. 
-
-= 2.0.0 - 10/07/2024 =
-* Major Update - New user experience with a fresh & clear design.
-* Code Upgrade - 80% of the plugin code has been revamped.
-* Database Enhancement - Plugin settings are now saved in a separate table.
-* New Feature - Added support for NinjaForms.
-* New Feature - Added the ability to limit the number of characters in various fields.
-* Spam Log Upgrade - Improved spam log functionality (note: previous spam log content will be deleted).
-* Enhancement - Import/Export option become a free option (Not pro).
-
-= 1.0.5 -  15/05/2024 =
-* Bug fix - Fix Woocommerce spam check
-
-= 1.0.4 -  30/04/2024 =
-* Bug fix - Fix comment spam check
-
-= 1.0.3 -  07/04/2024 =
-* Improvement - Add maximum number of characters in Text Area fields
-* Improvement - Improve Playground form
-* Improvement - Improve code performance 
-* Improvement - Improve spam check in Text Area fields
-
-= 1.0.2 -  22/03/2024 =
-* Improvement - Improve check in Proxycheck API.
-* Improvement - Add language name to spam log when required/forbidden language triggers spam.
-* Improvement - Maspik API language options integration.
-
-= 1.0.1 -  14/03/2024 =
-* Bug fix - Remove unnecessary css file in admin area
-* Bug fix - Disable cron checker log if no key is set
-
-= 1.0.0 -  12/03/2024 =
-* Enhancement - New License Manager (Please delete your current license and re-activate it if it does not work)
-* Enhancement - Block based on country/language becomes a PRO feature. see <a target="_blank" href="https://wpmaspik.com/announcement-changes-to-maspik-plugin/?1.0-inplugin-readme">article</a> for detail
-* Improvement - Improve code performance
-* New Feature - Options to create custom validation error for more options
-* Bug fix - Fix in Playground form  
-
-= 0.13.0 -  01/03/2024 =
-* Improvement - code performance improvement throughout the plugin code
-* Improvement - Minor UI/UX improvements to the settings page
-* New Feature - Options to create custom validation error for few options
-* Bug fix - Fix Brick forms compatibility  
-* Bug fix - Fix Phone field in Playground form
-
-= 0.12.4 -  24/02/2024 =
-* New Feature - Export Import (For Pro users only) 
-* Bug fix - Fixed bug in the GravityForms - confirm email field.
-
-= 0.12.3 -  18/02/2024 =
-* Improvement  -  Improve code performance Thanks to @pluginvulnerabilities.com
-
-= 0.12.2 -  09/02/2024 =
-* Improvement - Add support to Bricksbuilder forms!
-* Improvement - Add support to Fluentforms!
-
-= 0.12.1 -  04/02/2024 =
-* Bug fix - Fix error in old php versions 
-
-= 0.12.0 -  01/02/2024 =
-* New Feature - New Playground - test your entries to see if they will be blocked 
-* Improvement - Add support to Forminator forms!
-* Improvement - New style for the setting page
-* Performance - Improve code performance
-
-= 0.11.0 -  27/01/2024 =
-* Improvement - Add support to Formidable forms!
-* Performance - Improve code performance
-
-= 0.10.7 -  21/01/2024 =
-* Performance  -  Improve code performance Thanks to @pluginvulnerabilities.com
-* Disabling of Maspik human verification check - because not stable yet.
-
-= 0.10.6 -  11/01/2024 =
-* Tweak - option to add country name at the bottom of email content - to identify and block countries that send spam.
-* Improvement - better organization of the Maspik dashboard menu.
-
-= 0.10.5 -  19/12/2023 =
-* Improvement  - shering non-sensitive information for helping block more spam - under Maspik "More option" page (Most down option - please select V) 
-
-= 0.10.4 -  08/12/2023 =
-* Changed the way visitor IP is checked in IP/country blocking (for patchstack.com)
-
-= 0.10.3 -  27/11/2023 =
-* Performance  -  Improve code performance
-* Bug fix - Fix spam check in some situation
-
-
-= 0.10.2 -  26/11/2023 =
-* Performance  -  Improve code performance
-* Bug fix - Fix Textarea spam check, Thanks to @tauri77
-
-= 0.10.1 -  23/11/2023 =
-* Performance  -  Improve code performance
-* Tweek - Introduce Maspik human verification - New Bot capture - BETA 
-
-= 0.10.0 -  23/11/2023 =
-* Performance  -  Improve code performance
-* Bug fix - fix vulnerability problem
-* Tweek - Adding languages to the block/allow list
-
-= 0.9.3 -  22/11/2023 =
-* Bug fix - fix vulnerability problem, thanks to patchstack.com
-
-= 0.9.2 -  17/11/2023 =
-* Improvement - Support multisite wordpress setup 
-* Performance  -  Improve code performance.
-
-= 0.9.1 -  16/10/2023 =
-* Bug fix - Tel field incorrectly checked for spam  
-
-= 0.9.0 -  14/10/2023 =
-
-* New Feature - Wildcard pattern accepted in text-field/email-field/ Tel-field!
-* Improvement - Improve and add more in the API options (https://wpmaspik.com/).
-* Performance  -  Improve code performance.
-
-= 0.8.3 -  04/09/2023 =
-* New Feature - Automatically adding spam phrases from the MASPIK API (PRO)(BETA)	
-* Bug fix - Ip detect wrong in some servers  
-* Improvement - Improve and add more in the API options (https://wpmaspik.com/).
-
-= 0.8.2 -  29/07/2023 =
-* Improvement - Add Russian translation thanks to Andrey
-
-= 0.8.1 -  10/07/2023 =
-* Bug fix - Fix ip detect wrong in some cases  
-
-= 0.8 -  12/05/2023 =
-* New Feature - Add option to Completely Disable Comments in WordPress.
-* Performance  -  Improve code performance.
-* Improvement - Improve and add more in the API options (https://wpmaspik.com/).
-
-= 0.7.11 -  11/05/2023 =
-* Performance  -  Improve code performance
-* Improvement - Improve API options 
-
-= 0.7.10 -  07/04/2023 =
-* Adaptation to WP version 6.2
-
-= 0.7.9 -  25/02/2023 =
-* Bug fix (Please update ASAP!)
-
-= 0.7.8 -  07/10/2022 =
-* Adaptation to WP version 6.1
-
-= 0.7.7 -  07/10/2022 =
-* Bug fix - Fix Presserror problem    
-
-= 0.7.6 -  29/09/2022 =
-* Bug fix - Fix Name field check is is Array in Wpforms & GravityForms  
-
-= 0.7.5 -  12/08/2022 =
-* Bug fix - Fix Block Domain Email (Ex: xyz.com) in some servers  
-
-= 0.7.4 -  01/08/2022 =
-* New Feature - Connection to Proxycheck.io API (Thanks to josephcy95).
-* New Feature - Connection to AbuseIPDB.com API (Thanks to josephcy95).
-* Improvement - Add possibility to filter entire CIDR range such as 134.209.0.0/16 in IP blocklist field. (Thanks to josephcy95).
-* Improvement - Improve layout of Spam log.
-
-= 0.7.3 -  29/07/2022 =
-* Bug fix - Prevents letters from becoming lowercase in regex format on tel field.
-* New Offer - Want to get a free Pro license? Write an article about Maspik on your relevant blog, and get a link from the plugin page and a professional license for free. Email me for more details (Yonifre AT gmail).
-
-= 0.7.2 -  19/07/2022 =
-*  Bug fix - Error message not displaying in some servers  
-*  Bug fix - Spam log not showing in some servers
-*  Improvement - Add the ability to disable spam log in the Option page  
-
-= 0.7.1 -  12/07/2022 =
-*  Improvement - Add Option page  
-
-= 0.7.0 -  12/07/2022 =
-*  Improvement - Add support in Wordpress comments 
-*  Improvement - Add support in Wordpress registration 
-*  Improvement - Add support in Woocommerce review (pro) 
-*  Improvement - Add support in Woocommerce registration (pro)
-
-= 0.6.6 -  04/07/2022 =
-* Performance  -  Improving code performance, Error log loud only when needed (thanks to Marius) 
-
-= 0.6.5 -  03/06/2022 =
-*  Bug fix - fix Block empty source URL option
-
-= 0.6.4 -  03/06/2022 =
-*  Bug fix - Disable Spampixel 
-
-= 0.6.3 -  31/05/2022 =
-*  Bug fix - Fix lower/uppercase letter in Country field 
-*  New Url to API site 
-
-= 0.6.1 -  30/05/2022 =
-
-*  Improvement - Add Spam log counter to Spam log menu title
-*  Bug fix - Allow only specific country option in CF7
-
-= 0.6.0 -  27/05/2022 =
-*  Improvement - Smart bot capture (spampixel)
-*  Improvement - Add Gravityforms support - pro feature
-*  Improvement - Add Wpforms support - pro feature   
-
-= 0.5.8 -  27/04/2022 =
-*  Tweek - Add Editor access to Spam-log 
-
-
-= 0.5.7 -  20/04/2022 =
-*  Tweek - Improve Text field spam lockup 
-*  Bug fix - Fix Allow only specific country option
-
-= 0.5.6 -  09/04/2022 =
-* Improvement - Add option to put an end of Email in email field, like: @test.com 
-
-= 0.5.5 -  06/04/2022 =
-*  Thanks to @Fiona_Fars, Improve explanation content in the setting pages.
-
-
-= 0.5.4 -  24/01/2022 =
-* Improvement - Load API php file only if mark it or already use it
-* Improvement - Ready for Wordpress 5.9
-
-= 0.5.3 -  25/11/2021 =
-* Improvement - Limit spam log to max 100 entrees (To prevent DB overload)
-
-= 0.5.2 =
-* Add a minimum requires version for php (7)
-
-= 0.5.1 =
-* Bug fix - Language api
-
-= 0.5 =
-* Performance  -  Improving code performance
-* Tweek added  -  Change country drop down list
-* Tweek added  -  Show your API list in the main setting page
-
-= 0.4.3 =
-* Add translation   - Add Hebrew translation
-
-= 0.4.2 =
-* Bug fix  - fix Block empty source URL option 
-
-= 0.4.1 =
-* Bug fix  - fix PHP error in 0.4.0v 
-
-= 0.4.0 =
-upgrade_notice: 'You may need to activate the plugin again after the update, as the plugin name changed'
-* Tweek added  -  Connect your site to Spam API 
-* Tweek added  -  Variety of new options
-* Performance  -  Improving code performance
-
-= 0.3.0 =
-upgrade_notice: 'You may need to activate the plugin again after the update, as the plugin name changed'
-* Tweek added  -  Allow only specific country 
-* Tweek added  -  Block text-field with more than X characters 
-* Tweek added  -  Ability to block textarea-field with any Russian character 
-* Tweek added  -  Email Blacklist field support Regex 
-* Performance  -  Improving code performance
-
-= 0.2.2 =
-upgrade_notice: 'You may need to activate the plugin again after the update, as the plugin name changed'
-* Bug fix  - Fix phone filed & affect Language check only on textarea. 
-
-
-= 0.2.1 =
-* Bug fix  - Fix phone filed in CF7 always blocked. 
-
-= 0.2.0 =
-* Tweek added  - Spam log 
-* Bug fix  - Not blocking Email field. 
-
-= 0.1.0 =
-*Tweek added  - Add plugin support to- Contact form 7 
-*Tweek added  - Custom phone validation (Add your format) 
-
-= 0.0.5 =
-*Bug fix  - Fix php error. 
-
-= 0.0.4 =
-*Bug fix  - Fix bug in textarea field. 
-
-= 0.0.3 =
-*Tweek added  - Add Spam block counter
-
-= 0.0.2 =
-*Tweek added  - Block sending if not contains one character from main site language (Hebrew only for now) 
-
-= 0.0.1 =
-First release
 
 == Upgrade Notice ==
 

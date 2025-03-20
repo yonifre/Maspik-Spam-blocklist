@@ -10,7 +10,7 @@ function maspik_validate_forminator_general($submit_errors, $form_id, $field_dat
     $spam = false;
     $reason ="";
     // ip
-    $ip =  efas_getRealIpAddr();
+    $ip =  maspik_get_real_ip();
 
 
     
@@ -115,19 +115,19 @@ add_action( 'forminator_render_form_submit_markup', function( $html, $form_id, $
         if (maspik_get_settings('maspikHoneypot')) {
             $custom_html .= '<div class="forminator-row maspik-field">
                 <label for="full-name-maspik-hp" class="forminator-label">Leave this field empty</label>
-                <input size="1" type="text" autocomplete="off" autofill="off" aria-hidden="true" tabindex="-1" name="full-name-maspik-hp" id="full-name-maspik-hp" class="forminator-input" placeholder="Leave this field empty">
+                <input size="1" type="text" autocomplete="off"   aria-hidden="true" tabindex="-1" name="full-name-maspik-hp" id="full-name-maspik-hp" class="forminator-input" placeholder="Leave this field empty">
             </div>';
         }
         if (maspik_get_settings('maspikYearCheck')) {
             $custom_html .= '<div class="forminator-row maspik-field">
                 <label for="Maspik-currentYear" class="forminator-label">Leave this field empty</label>
-                <input size="1" type="text" autocomplete="off" autofill="off" aria-hidden="true" tabindex="-1" name="Maspik-currentYear" id="Maspik-currentYear" class="forminator-input" placeholder="">
+                <input size="1" type="text" autocomplete="off"   aria-hidden="true" tabindex="-1" name="Maspik-currentYear" id="Maspik-currentYear" class="forminator-input" placeholder="">
             </div>';
         }
         if (maspik_get_settings('maspikTimeCheck')) {
             $custom_html .= '<div class="forminator-row maspik-field">
                 <label for="Maspik-exactTime" class="forminator-label">Leave this field empty</label>
-                <input size="1" type="text" autocomplete="off" autofill="off" aria-hidden="true" tabindex="-1" name="Maspik-exactTime" id="Maspik-exactTime" class="forminator-input" placeholder="">
+                <input size="1" type="text" autocomplete="off"   aria-hidden="true" tabindex="-1" name="Maspik-exactTime" id="Maspik-exactTime" class="forminator-input" placeholder="">
             </div>';
         }
      return   $custom_html . $html  ;

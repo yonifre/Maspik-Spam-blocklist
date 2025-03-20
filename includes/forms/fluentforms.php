@@ -12,13 +12,14 @@ function maspik_validate_fluentform_general( $errors, $formData, $form, $fields)
   $spam = false;
   $reason ="";
   // ip
-  $ip =  efas_getRealIpAddr();
+  $ip =  maspik_get_real_ip();
 
 // For HP
 parse_str($_POST['data'], $parsed_data);
 $extracted_data = array(
     'Maspik-exactTime' => isset($parsed_data['Maspik-exactTime']) ? $parsed_data['Maspik-exactTime'] : false,
     'Maspik-currentYear' => isset($parsed_data['Maspik-currentYear']) ? $parsed_data['Maspik-currentYear'] : false,
+    'maspik_spam_key' => isset($parsed_data['maspik_spam_key']) ? $parsed_data['maspik_spam_key'] : false,
     'full-name-maspik-hp' => isset($parsed_data['full-name-maspik-hp']) ? $parsed_data['full-name-maspik-hp'] : false
 );
 
@@ -134,17 +135,6 @@ function maspik_validate_fluentforms_textarea($errorMessage, $field, $formData, 
 add_filter('fluentform/validate_input_item_textarea', 'maspik_validate_fluentforms_textarea', 10, 5);
 
 
-// maspik_add_text_to_mail_components fluentforms
-//add_filter('fluentform/email_template_footer_text', 'maspik_add_text_to_mail_fluentforms', 10, 3);
-function maspik_add_text_to_mail_fluentforms($footerText, $form, $notification) {
-  $add_country_to_emails = maspik_get_settings("add_country_to_emails", '', 'old')  == "yes";
-  if($footerText && $add_country_to_emails){
-     $countryName = maspik_add_country_to_submissions($linebreak = "");
-     $footerText = $footerText.$countryName;
-    }
- return $footerText;
-}
-
 
 // add Maspik Honeypot fields to fluentform
 add_filter('fluentform/rendering_form', function($form){
@@ -162,21 +152,21 @@ add_filter('fluentform/rendering_form', function($form){
             if (maspik_get_settings('maspikHoneypot')) {
                 $custom_html .= '<div class="ff-el-group maspik-field">
                     <label for="full-name-maspik-hp" class="ff-el-input--label">Leave this field empty</label>
-                    <input size="1" type="text" autocomplete="off" autofill="off" aria-hidden="true" tabindex="-1" name="full-name-maspik-hp" id="full-name-maspik-hp" class="ff-el-form-control" placeholder="Leave this field empty">
+                    <input size="1" type="text" autocomplete="off"   aria-hidden="true" tabindex="-1" name="full-name-maspik-hp" id="full-name-maspik-hp" class="ff-el-form-control" placeholder="Leave this field empty">
                 </div>';
             }
 
             if (maspik_get_settings('maspikYearCheck')) {
                 $custom_html .= '<div class="ff-el-group maspik-field">
                     <label for="Maspik-currentYear" class="ff-el-input--label">Leave this field empty</label>
-                    <input size="1" type="text" autocomplete="off" autofill="off" aria-hidden="true" tabindex="-1" name="Maspik-currentYear" id="Maspik-currentYear" class="ff-el-form-control" placeholder="">
+                    <input size="1" type="text" autocomplete="off"   aria-hidden="true" tabindex="-1" name="Maspik-currentYear" id="Maspik-currentYear" class="ff-el-form-control" placeholder="">
                 </div>';
             }
 
             if (maspik_get_settings('maspikTimeCheck')) {
                 $custom_html .= '<div class="ff-el-group maspik-field">
                     <label for="Maspik-exactTime" class="ff-el-input--label">Leave this field empty</label>
-                    <input size="1" type="text" autocomplete="off" autofill="off" aria-hidden="true" tabindex="-1" name="Maspik-exactTime" id="Maspik-exactTime" class="ff-el-form-control" placeholder="">
+                    <input size="1" type="text" autocomplete="off"   aria-hidden="true" tabindex="-1" name="Maspik-exactTime" id="Maspik-exactTime" class="ff-el-form-control" placeholder="">
                 </div>';
             }
          return   $html . $custom_html;

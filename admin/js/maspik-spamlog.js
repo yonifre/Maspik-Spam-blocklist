@@ -32,6 +32,7 @@ jQuery(document).ready(function($) {
                 data: {
                     action: 'delete_row',
                     row_id: rowIdToDelete,
+                    nonce: maspikAdmin.nonce
                 },
                 success: function(response) {
                     if (response.success) {
@@ -104,14 +105,14 @@ jQuery(document).ready(function($) {
                 data: {
                     action: 'delete_filter',
                     row_id: rowIdToDelete,
+                    nonce: maspikAdmin.nonce
                 },
                 success: function(response) {
                     if (response.success) {
                         alert("Filter deleted successfully!");
                         location.reload(); // Reload the page to reflect changes
                     } else {
-                        alert("This filter cannot be deleted automatically, it is either already deleted or it comes from the Maspik API Dashboard, try to delete it manually.");
-                    }
+                        alert("This filter cannot be deleted automatically, it is either already deleted or it comes from the Maspik API Dashboard, try to delete it manually.");                    }
                 },
                 error: function() {
                     alert('An error occurred.');

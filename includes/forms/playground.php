@@ -15,9 +15,9 @@ function maspik_handle_playground_form() {
     //check_ajax_referer('contact_form_nonce', 'nonce');
 
     $name = sanitize_text_field(wp_unslash($_POST['userName']));
-    $email = sanitize_email(wp_unslash($_POST['userEmail']));
+    $email = sanitize_text_field(wp_unslash($_POST['userEmail']));
     $tel = sanitize_text_field(wp_unslash($_POST['tel']));
-    $content = sanitize_textarea_field(wp_unslash($_POST['content']));
+    $content = wp_kses(wp_unslash($_POST['content']), array('a' => array('href' => array(), 'title' => array())));
 
     // Example: Save form data to database or send an email
     $success = 1;
@@ -40,7 +40,7 @@ function maspik_handle_playground_form() {
     }
     $spam = false;
     // ip
-    $ip = efas_getRealIpAddr();
+    $ip = maspik_get_real_ip();
     $reason = false;
     // Country IP Check 
     $GeneralCheck = GeneralCheck($ip,$spam,$reason,false,false);

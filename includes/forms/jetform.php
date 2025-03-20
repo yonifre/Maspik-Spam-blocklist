@@ -8,7 +8,7 @@ function validate_jet_form_for_spam($form_handler) {
     if (isset($form_handler->request_handler->_fields) && is_array($form_handler->request_handler->_fields)) {
         $form_fields = $form_handler->request_handler->_fields;
         $error_message = cfas_get_error_text();
-        $ip = efas_getRealIpAddr();
+        $ip = maspik_get_real_ip();
 
         // Country IP Check
         $spam = false;
@@ -115,21 +115,21 @@ function add_maspikhp_html_to_jet_form($content, $field_name, $attrs) {
             $honeypot_name = maspik_HP_name();
             $addhtml .= '<div class="jet-form-builder__field-wrap maspik-field">
                 <label for="' . $honeypot_name . '" class="jet-form-builder__label">Leave this field empty</label>
-                <input size="1" type="text" autocomplete="off" autofill="off" aria-hidden="true" tabindex="-1" name="' . $honeypot_name . '" id="' . $honeypot_name . '" class="jet-form-builder__field jet-form-builder__field-text" placeholder="Leave this field empty">
+                <input size="1" type="text" autocomplete="off"   aria-hidden="true" tabindex="-1" name="' . $honeypot_name . '" id="' . $honeypot_name . '" class="jet-form-builder__field jet-form-builder__field-text" placeholder="Leave this field empty">
             </div>';
         }
 
         if (maspik_get_settings('maspikYearCheck')) {
             $addhtml .= '<div class="jet-form-builder__field-wrap maspik-field">
                 <label for="Maspik-currentYear" class="jet-form-builder__label">Leave this field empty</label>
-                <input size="1" type="text" autocomplete="off" autofill="off" aria-hidden="true" tabindex="-1" name="Maspik-currentYear" id="Maspik-currentYear" class="jet-form-builder__field jet-form-builder__field-text" placeholder="">
+                <input size="1" type="text" autocomplete="off"   aria-hidden="true" tabindex="-1" name="Maspik-currentYear" id="Maspik-currentYear" class="jet-form-builder__field jet-form-builder__field-text" placeholder="">
             </div>';
         }
 
         if (maspik_get_settings('maspikTimeCheck')) {
             $addhtml .= '<div class="jet-form-builder__field-wrap maspik-field">
                 <label for="Maspik-exactTime" class="jet-form-builder__label">Leave this field empty</label>
-                <input size="1" type="text" autocomplete="off" autofill="off" aria-hidden="true" tabindex="-1" name="Maspik-exactTime" id="Maspik-exactTime" class="jet-form-builder__field jet-form-builder__field-text" placeholder="">
+                <input size="1" type="text" autocomplete="off"   aria-hidden="true" tabindex="-1" name="Maspik-exactTime" id="Maspik-exactTime" class="jet-form-builder__field jet-form-builder__field-text" placeholder="">
             </div>';
         }
 

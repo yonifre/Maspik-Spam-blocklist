@@ -11,31 +11,40 @@ if ( ! defined( 'WPINC' ) ) {
 
     define('MASPIK_API_KEY', 'KVJS5BDFFYabnZkQ3Svty6z6CIsxp3YG5ny4lrFQ');
 
-    function maspik_auto_update_db(){    
-        if ( !maspik_table_exists('text_blacklist') ) { 
-            create_maspik_log_table();
-            create_maspik_table();
-            if( get_option('text_blacklist') ){
-                maspik_run_transfer();
-            }
-            maspik_make_default_values();
-        }
-    }
-    add_action('admin_init', 'maspik_auto_update_db' , 10);
 
     // run the default values function only once if necessary
     function maspik_check_if_need_to_run_once() {
-        $maspik_run_once = get_option( 'maspik_run_once', 0 ); // default to 0 if option doesn't exist
-        if ( $maspik_run_once < 2 ) {
-            maspik_make_default_values();
-            update_option( 'maspik_run_once', $maspik_run_once + 1 ); // update to 2 to prevent reruns
+        // check if already run
+        static $already_run = false;
+        // already run, or not in admin, return
+        if ($already_run || !is_admin()) {
+            //return;
         }
+
+        $maspik_run_once = get_option('maspik_run_once');
+        
+        // if the option doesn't exist, set it to 0
+        if ($maspik_run_once === false) {
+            add_option('maspik_run_once', 0);
+            $maspik_run_once = 0;
+        }
+
+        if ($maspik_run_once < 2) {
+            if (!maspik_table_exists('text_blacklist')) { 
+                create_maspik_log_table();
+                create_maspik_table();
+            }    
+            maspik_save_default_values();
+            update_option('maspik_run_once', ++$maspik_run_once); // update to 2 to prevent reruns
+        }
+
+        $already_run = true;
     }
-    add_action( 'admin_init', 'maspik_check_if_need_to_run_once' , 20);
+    add_action( 'plugins_loaded', 'maspik_check_if_need_to_run_once' , 20);
 
      //Check for PRO -addclass- 
-        function maspik_add_pro_class(){
-            if(cfes_is_supporting()){
+        function maspik_add_pro_class($type = ""){
+            if(cfes_is_supporting($type)){
                 return "maspik-pro";
             }
             else{
@@ -175,7 +184,7 @@ function maspik_toggle_button($name, $id, $dbrow_name, $class, $type = "", $manu
 
         function create_maspik_input($name, $class = '', $mode = "text") {      
             
-            $data = maspik_get_settings($name);
+            $data = ( $mode === "number" && maspik_get_settings($name) ) ? (int)maspik_get_settings($name) : maspik_get_settings($name);
 
             $class_attr = !empty($class) ? ' class="' . esc_attr($class . " is-". $mode) . '"' : '';
             $input = "<input  name='" . esc_attr($name) . "' id='". esc_attr($name) . " '" . $class_attr . " type='" . $mode . "' value='". esc_attr($data) ."'></input>";
@@ -206,7 +215,7 @@ function maspik_toggle_button($name, $id, $dbrow_name, $class, $type = "", $manu
                 $numbox .=  esc_attr($data);
 
             }else{
-                    $numbox .= esc_attr($default);
+                $numbox .= esc_attr($default);
 
             }
 
@@ -223,7 +232,7 @@ function maspik_toggle_button($name, $id, $dbrow_name, $class, $type = "", $manu
             return $numbox;
         }
 
-        function create_maspik_select($name, $class, $array, $attr="") {      
+        function create_maspik_select($name, $class, $array, $attr="", $multiple = true) {      
             
             $the_array = $array;
             $setting_value = maspik_get_dbvalue();
@@ -237,7 +246,8 @@ function maspik_toggle_button($name, $id, $dbrow_name, $class, $type = "", $manu
                     $result_array = explode(" ", $result->$setting_value);
                 }
             }
-            $select =  '<select '. $class_attr .' multiple="multiple" '.$attr.' name="'.esc_attr($name).'[]" id="'.esc_attr($name).'"  >';
+            $multiple = $multiple ? "multiple='multiple'" : "";
+            $select =  '<select '. $class_attr .' '.$multiple.' '.$attr.' name="'.esc_attr($name).'[]" id="'.esc_attr($name).'"  >';
             foreach ($the_array as $key => $value) {
                 $select .=  ' <option value="'.esc_attr($key).'" ';
                 foreach ($result_array as $aresult) {
@@ -259,30 +269,30 @@ function maspik_toggle_button($name, $id, $dbrow_name, $class, $type = "", $manu
     // Generate Elements - END ---
 
     //Check if DB has toggle rows, if none, make them
-        function toggle_ready_check($name){
-            global $wpdb;
-                
-            $table = maspik_get_dbtable();
-            $setting_label = maspik_get_dblabel();
-            $setting_value = maspik_get_dbvalue();
+    function toggle_ready_check($name){
+        global $wpdb;
+            
+        $table = maspik_get_dbtable();
+        $setting_label = maspik_get_dblabel();
+        $setting_value = maspik_get_dbvalue();
 
-            // Check DB if data exists
-            $toggle_lim_exists = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM $table WHERE $setting_label = %s", $name ) );
+        // Check DB if data exists
+        $toggle_lim_exists = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM $table WHERE $setting_label = %s", $name ) );
 
-            if ( $toggle_lim_exists == 0 ) {
-                // If the row doesn't exist, insert a new row
-                $wpdb->insert(
-                    $table,
-                    array(
-                        $setting_label => $name, 
-                        $setting_value => 0,
-                    )
-                );
-        
-            }
-
-
+        if ( $toggle_lim_exists == 0 ) {
+            // If the row doesn't exist, insert a new row
+            $wpdb->insert(
+                $table,
+                array(
+                    $setting_label => $name, 
+                    $setting_value => 0,
+                )
+            );
+    
         }
+
+
+    }
     //Check if DB has toggle rows, if none, make them - END --
 
     //Maspik API
@@ -326,7 +336,6 @@ function maspik_toggle_button($name, $id, $dbrow_name, $class, $type = "", $manu
                 efas_get_spam_api("textarea_field") 
             ){
                 return true;
-
             }
         }
     //Maspik API status checker - END
@@ -401,6 +410,27 @@ class Maspik_Admin {
         add_submenu_page($this->plugin_name, 'Spam Log', 'Spam Log ' . $numlogspam, 'edit_pages', $this->plugin_name . '-log.php', array($this, 'displayPluginAdminSettings'));
 
         add_submenu_page($this->plugin_name, 'Import/Export Settings', 'Import/Export Settings', 'administrator', $this->plugin_name . '-import-export.php', array($this, 'Maspik_import_export_settings_page'));
+
+        if ( cfes_is_supporting()) {
+            $first_maspik_api_id = maspik_get_settings('private_file_id');
+            $dashboard_url = 'https://wpmaspik.com/?page_id=' . esc_attr($first_maspik_api_id . '&ref=plugin-menue&my-account=1');
+            $url = $first_maspik_api_id ? $dashboard_url : 'https://wpmaspik.com/my-account?ref=plugin-menue';
+            $title = 'Maspik dashboard';
+        }else{
+            $url = 'https://wpmaspik.com/?ref=upgrade-to-PRO-plugin-menue';
+            $title = 'Upgrade to PRO';
+        }
+        add_submenu_page(
+            $this->plugin_name,
+            $title,
+            $title,
+            'edit_pages',
+            $url,
+            '',
+            null
+        );
+
+
     }
 
     public function displayPluginAdminDashboard() {
@@ -442,6 +472,7 @@ class Maspik_Admin {
         }
         require_once 'partials/' . $this->plugin_name . '-import-export.php';
     }
+
 
     public function settingsPageSettingsMessages($error_message) {
         switch ($error_message) {

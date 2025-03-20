@@ -233,9 +233,15 @@ class License {
 
 		$data = $result->get_data();
 
+		
+		$user_first_api_post_id = isset($data['user_first_api_post_id']) ? sanitize_text_field($data['user_first_api_post_id']) : 0;
+		// Add optin to database with $user_first_api_post_id
+		update_option('maspik_api_id', $user_first_api_post_id);
+
 		$this->updateData([
 			'key' => $key,
 			'token' => $data['token'],
+			'user_first_api_post_id' => $user_first_api_post_id,
 			'error' => null,
 			'expires_at' => $data['license']['expires_at'],
 			'deactivated_at' => null,

@@ -93,11 +93,24 @@ function cfes_build_table() {
         $spam_value = esc_html($row['spamsrc_val']);
         $spam_type = esc_html($row['spam_type']);
         $spam_date = $row['spam_date'] ? date_i18n(get_option('date_format') . ' ' . get_option('time_format'), strtotime($row['spam_date'])) : esc_html($row['spam_date']);
-        $spam_val_intext =  esc_html(maspik_var_value_convert($row['spamsrc_label']));
+        $spam_val_intext =  esc_html(maspik_get_field_display_name($row['spamsrc_label']));
         $not_spam_tag = esc_html($row['spam_tag']) == "not spam" ? " not-a-spam" : "" ;
         $form_data_raw = $row['spam_detail'];
         $unserialize_array = @unserialize($form_data_raw);
         $form_data = "<pre>".esc_html($form_data_raw)."</pre>";
+
+        $spam_source = $row['spam_source'];
+        if (strpos($spam_source, '|||') !== false) {
+          list($source, $url) = explode('|||', $spam_source);
+
+          $url = htmlspecialchars($url);
+          $back_id = url_to_postid($url);
+          $title = $back_id > 0 ? get_the_title( $back_id ) : "Page";
+          $spam_source = esc_html($source) . ' <br> <a target="_blank" href="' . esc_url($url) . '">' . esc_html($title) . '</a>';
+          
+      } else {
+          $spam_source = esc_html($spam_source);
+      }
 
         if($row['spamsrc_label'] != ""){
           $spam_alt_text = "Entry has been blocked. Reason: " . $spam_val_intext . " = '" . $spam_value . "'";
@@ -123,7 +136,6 @@ function cfes_build_table() {
                   <td class='column-value column-entries'>
                       <div class='maspik-accordion-item'>
                           <div class='maspik-accordion-header log-accordion'><div class='spam-value-text'>".esc_html($row['spam_value']) .
-                          "<span class='span-alt-text'>" .  $spam_alt_text . "</span>" . 
                           "</div>" .
                           maspik_spam_item_option($row_id, $spam_value, $spam_val_intext)
                           ."
@@ -135,7 +147,7 @@ function cfes_build_table() {
                   <td class='column-country column-entries'>".esc_html($row['spam_country'])."</td>
                   <td class='column-agent column-entries'>".esc_html($row['spam_agent'])."</td>
                   <td class='column-date column-entries'>$spam_date</td>
-                  <td class='column-source column-entries'>".esc_html($row['spam_source'])."</td>
+                  <td class='column-source column-entries'>".$spam_source."</td>
                   <td class='maspik-log-column column-button'>
                 
                   </td>
@@ -178,7 +190,7 @@ function cfes_build_table() {
                 
   <h2 class='maspik-header maspik-spam-header'><?php _e('Spam Log', 'contact-forms-anti-spam'); ?></h2>
     <p>
-      <?php _e('Whenever a bot/person tries to spam your contact forms and MASPIK blocks the spam, you will see a new line below showing the details.<br>The log containing these details resides on your database and you can reset it at any time.<br>Resetting the log doesn’t change anything – it just removes the history.', 'contact-forms-anti-spam' ); ?>
+      <?php _e("Whenever a bot/person tries to spam your contact forms and MASPIK blocks the spam, you will see a new line below showing the details.<br>The log containing these details resides on your database and you can reset it at any time.<br>Resetting the log doesn’t change anything – it just removes the history.", 'contact-forms-anti-spam' ); ?>
     </p>
 
     <div class='spam-log-button-wrapper'>
@@ -253,6 +265,9 @@ function cfes_build_table() {
 
 <?php
   wp_enqueue_script('maspik-spamlog', plugin_dir_url(__FILE__) . '../js/maspik-spamlog.js', array('jquery'), MASPIK_VERSION, true);
+  wp_localize_script('maspik-spamlog', 'maspikAdmin', array(
+      'nonce' => wp_create_nonce('maspik_delete_action')
+  ));
 ?>
 
 //Accordion Script - START
@@ -305,6 +320,15 @@ toggleAllBtn.addEventListener("click", function() {
 });
 
 //Accordion Script -- END
+
+// Replace asterisks with proper opening and closing <u> tags
+document.querySelectorAll('.spam-value-text').forEach(element => {
+    let text = element.innerHTML;
+
+    // Replace pairs of asterisks with opening and closing <u> tags
+    text = text.replace(/\*(.*?)\*/g, '<u>$1</u>');
+    element.innerHTML = text;
+});
 
 
 </script>

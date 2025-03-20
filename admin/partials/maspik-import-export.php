@@ -21,6 +21,7 @@ if ( ! defined( 'WPINC' ) ) {
           <h1 class="maspik-title">MASPIK.</h1>
             <?php
               echo '<h3 class="maspik-protag '. maspik_add_pro_class() .'">Pro</h3>';
+              
             ?>
         </div> 
 

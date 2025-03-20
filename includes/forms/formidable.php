@@ -10,7 +10,7 @@ function maspik_validate_formidable_general($errors, $values){
     
   $spam = false;
   $reason ="";
-  $ip =  efas_getRealIpAddr();
+  $ip =  maspik_get_real_ip();
 
   // Country IP Check 
   $GeneralCheck = GeneralCheck($ip,$spam,$reason,$_POST,"formidable");
@@ -28,7 +28,7 @@ return $errors;
 
 // Add custom validation for Formidable text fields
 function maspik_validate_formidable_text($errors, $posted_field, $posted_value, $args){
-  	$field_value = strtolower($posted_value); 
+  	$field_value = is_array($posted_value) ? '' : strtolower($posted_value);
     if ( empty( $field_value ) || $posted_field->type != 'text') {
       return $errors;
     }
@@ -51,7 +51,7 @@ add_filter('frm_validate_field_entry', 'maspik_validate_formidable_text', 10, 4)
 
 // Add custom validation for Formidable email fields
 function maspik_validate_formidable_email($errors, $posted_field, $posted_value, $args){
-  	$field_value = strtolower($posted_value); 
+  	$field_value = is_array($posted_value) ? '' : strtolower($posted_value); 
     if ( empty( $field_value ) || $posted_field->type != 'email') {
       return $errors;
     }
@@ -70,7 +70,7 @@ add_filter('frm_validate_field_entry', 'maspik_validate_formidable_email', 10, 4
 
 // Add custom validation for Formidable email fields
 function maspik_validate_formidable_tel($errors, $posted_field, $posted_value, $args){
-  	$field_value = $posted_value; 
+  	$field_value = is_array($posted_value) ? '' : $posted_value; 
 
     if ( empty( $field_value ) || $posted_field->type != 'phone' ) {
       return $errors;
@@ -95,7 +95,7 @@ add_filter('frm_validate_field_entry', 'maspik_validate_formidable_tel', 10, 4);
 
 // Add custom validation for Formidable textarea fields
 function maspik_validate_formidable_textarea($errors, $posted_field, $posted_value, $args){
-  	$field_value = strtolower( $posted_value ) ; 
+  	$field_value = is_array($posted_value) ? '' : strtolower( $posted_value ) ; 
     if($field_value == "" || !$field_value || $posted_field->type != 'textarea'){
 		return $errors;
     }

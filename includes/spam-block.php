@@ -24,7 +24,35 @@ function maspik_make_extra_spam_check($post) {
         ];
     }
 
+    // Spam key check, maspikTimeCheck is the old name
+    if (maspik_get_settings('maspikTimeCheck')) {
+
+            // Check if the spam key exists in the POST data
+        if (!isset($post['maspik_spam_key']) || empty($post['maspik_spam_key'])) {
+            // Spam detected, return error or handle as necessary
+            return [
+                'spam' => true,
+                'reason' => "Spam key check failed (empty)",
+                'message' => "maspikTimeCheck"
+            ];
+        }
+
+        // Get the correct key
+        $correct_spam_key = maspik_get_spam_key();
+
+        // If the provided spam key does not match, mark as spam
+        if ($post['maspik_spam_key'] !== $correct_spam_key) {
+            return [
+                'spam' => true,
+                'reason' => "Spam key check failed (not match)",
+                'message' => "maspikTimeCheck"
+            ];
+        }
+
+    }
+
     // Year check
+
     if (maspik_get_settings('maspikYearCheck')) {
         $serverYear = intval(date('Y'));
         $submittedYear = sanitize_text_field($post['Maspik-currentYear']);
@@ -36,21 +64,38 @@ function maspik_make_extra_spam_check($post) {
             ];
         }
     }
+    
 
     // Time check
+    // TODO: remove this check, it's not needed
+    /*
     if (maspik_get_settings('maspikTimeCheck') && isset($post['Maspik-exactTime']) && is_numeric($post['Maspik-exactTime'])) {
         $inputTime = (int)$post['Maspik-exactTime'];
         $currentTime = time();
-        $timeDifference = $currentTime - $inputTime;
+        $timeDifference = abs($currentTime - $inputTime);
+
+        if ($inputTime > $currentTime) {
+            // for prevent false positive
+                return [
+                    'spam' => false,
+                    'reason' => false,
+                    'message' => false
+            
+                // 'spam' => true,
+                //'reason' => "Invalid submission time - future timestamp detected",
+                // 'message' => "maspikTimeCheck"
+            ];
+        }
 
         if ($timeDifference < maspik_submit_buffer()) {
             return [
                 'spam' => true,
-                'reason' => "Maspik Spam Trap - Submitted too fast, Only $timeDifference seconds (" . $currentTime . " - $inputTime)",
+                'reason' => "Maspik Spam Trap - Submitted too fast, Only {$timeDifference} seconds",
                 'message' => "maspikTimeCheck"
             ];
         }
     }
+    */
 
     // If we've made it this far, it's not spam
     return [
@@ -115,7 +160,7 @@ function GeneralCheck($ip, &$spam, &$reason, $post = "",$form = false) {
     
 
     // Check country blacklist only if is pro user
-    if( cfes_is_supporting() && !empty($country_blacklist) ){ 
+    if( cfes_is_supporting("country_location") && !empty($country_blacklist) ){ 
         $xml_data = @file_get_contents("http://www.geoplugin.net/xml.gp?ip=" . $ip);
         if ($xml_data) {
             $xml = simplexml_load_string($xml_data);
@@ -231,7 +276,7 @@ function GeneralCheck($ip, &$spam, &$reason, $post = "",$form = false) {
 **/
 function validateTextField($field_value) {  
     // Convert the field value to lowercase.
-    $field_value = strtolower($field_value);
+    $field_value = is_array($field_value) ? strtolower(implode(" ",$field_value)) : strtolower($field_value);
   	$text_blacklist = maspik_get_settings( 'text_blacklist' ) ? efas_makeArray(maspik_get_settings('text_blacklist') ) : array();
 	$spam = false;
   	if ( efas_get_spam_api() ){
@@ -249,14 +294,14 @@ function validateTextField($field_value) {
  			if (strpos($bad_string, '*') !== false) {
                 // Handle wildcard pattern using fnmatch
                 if (fnmatch($bad_string, $field_value, FNM_CASEFOLD)) {
-                    $spam = "Input $field_value is blocked by wildcard pattern";
+                    $spam = "Input *$field_value* is blocked by wildcard pattern";
                     return array('spam' => $spam, 'message' => "text_blacklist");
                   	break;
                 }
             } else {
                 // Check if exist in string 
                 if (maspik_is_field_value_exist_in_string($bad_string, $field_value) ) {
-                    $spam =  "Forbidden input $field_value, because <u>$bad_string</u> is blocked";
+                    $spam =  "Forbidden input *$field_value*, because *$bad_string* is blocked";
                     return array('spam' => $spam, 'message' => "text_blacklist", "option_value" => $bad_string,  'label' => "text_blacklist");
                    	break;
                 }
@@ -278,12 +323,12 @@ function validateTextField($field_value) {
         if (is_numeric($MaxCharacters) && $MaxCharacters > 3) {
             $CountCharacters = mb_strlen($field_value); // Use mb_strlen for multibyte characters
             if ($CountCharacters > $MaxCharacters ) {
-                $spam = "More than $MaxCharacters characters";
+                $spam = "More than *$MaxCharacters* characters";
                 return array('spam' => $spam, 'message' => $message,"option_value" =>$MaxCharacters , 'label' => "MaxCharactersInTextField");
             }
 
             if ($CountCharacters < $MinCharacters ) {
-                $spam = "Less than $MinCharacters characters";
+                $spam = "Less than *$MinCharacters* characters";
                 return array('spam' => $spam, 'message' => $message,"option_value" =>$MinCharacters, 'label' => "MinCharactersInTextField");
             }
         }
@@ -299,7 +344,7 @@ function validateTextField($field_value) {
 
 function checkEmailForSpam($field_value) {
     // Check if the field is empty
-    if (empty($field_value)) {
+    if (empty($field_value) || is_array($field_value)) {
         return false; // Not spam if the field is empty.
     }
 
@@ -347,25 +392,17 @@ function checkEmailForSpam($field_value) {
             }
 
             if (preg_match($bad_string_lower, $field_value_lower)) {
-                return "because regular expression pattern '$bad_string' is in the blacklist";
+                return "because regular expression pattern *'$bad_string'* is in the blacklist";
             }
         }
         // Check for wildcard pattern using fnmatch
         elseif (strpbrk($bad_string_lower, '*?') !== false) {
             if (fnmatch($bad_string_lower, $field_value_lower, FNM_CASEFOLD)) {
-                return "because wildcard pattern '$bad_string' is in the blacklist";
+                return "because wildcard pattern *'$bad_string'* is in the blacklist";
             }
-        }
-        // Check for exact match of the email domain
-        elseif ($bad_string_lower[0] === '@') {
-            if ($email_domain === substr($bad_string_lower, 1)) {
-                return "because spam email domain '$bad_string' is in the blacklist";
-            }
-        }
-        // Check for exact match
-        else {
-            if (maspik_is_field_value_equal_to_string($bad_string_lower, $field_value_lower)) {
-                return "because email '$bad_string' is in the blacklist";
+        }else {
+            if (maspik_is_field_value_exist_in_string($bad_string_lower, $field_value_lower,$make_space = 0)) {
+                return "because email *'$bad_string'* is in the blacklist";
             }
         }
     }
@@ -407,6 +444,20 @@ function checkTelForSpam($field_value) {
         }
     }
 
+    // Numverify API integration
+    $numverify_api_key = sanitize_text_field(maspik_get_settings('numverify_api')); // Fetch the API key from plugin settings
+    if (!empty($numverify_api_key)) {
+        $numverify_result = maspik_numverify_validate_number($field_value, $numverify_api_key);
+        if ($numverify_result['valid']) {
+            // Do nothing, Numverify validation passed, continue with the next check
+        } else {
+            $reason = "Numverify validation failed: " . esc_html($numverify_result['error']);
+            return array('valid' => false, 'reason' => $reason, 'message' => 'tel_formats', 'label' => 'tel_formats');
+        }
+    }
+
+        
+
     $tel_formats = empty($tel_formats) ? [] : explode("\n", str_replace("\r", "", $tel_formats));
     // Check if there are additional blacklist entries from the spam API
     if ($additional_blacklist = efas_get_spam_api('phone_format')) {
@@ -416,7 +467,7 @@ function checkTelForSpam($field_value) {
         return array('valid' => true, 'reason' => 'Empty formats', 'message' => 'Empty formats');
     }
     
-    $reason = "Phone number " . $field_value . " does not meet the given format. ";
+    $reason = "Phone number *$field_value* does not meet the given format. ";
 
     foreach ($tel_formats as $format) {
         $format = trim($format);
@@ -431,16 +482,16 @@ function checkTelForSpam($field_value) {
             }
 
             if (preg_match($format, $field_value)) {
-                return array('valid' => true, 'reason' => "Regular expression match: $format", 'message' => 'tel_formats');
+                return array('valid' => true, 'reason' => "Regular expression match: *$format*", 'message' => 'tel_formats');
             }
         } 
         // Wildcard pattern
         elseif (strpbrk($format, '*?') !== false) {
             if (fnmatch($format, $field_value, FNM_CASEFOLD)) {
-                return array('valid' => true, 'reason' => "Wildcard pattern match: $format", 'message' => 'tel_formats');
+                return array('valid' => true, 'reason' => "Wildcard pattern match: *$format*", 'message' => 'tel_formats');
             }
         } 
-    }
+    }    
 
     return array('valid' => false, 'reason' => $reason, 'message' => 'tel_formats', 'label' => 'tel_formats');
 }
@@ -450,7 +501,10 @@ function checkTelForSpam($field_value) {
 * Textarea field check 
 **/
 function checkTextareaForSpam($field_value) {
-    
+
+    $field_value = is_array($field_value) ? strtolower(implode(" ",$field_value)) : strtolower($field_value);
+
+
     // Get the blacklist from options and merge with API data if available
     $textarea_blacklist = maspik_get_settings('textarea_blacklist') ? efas_makeArray(maspik_get_settings('textarea_blacklist')) : array();
     if (efas_get_spam_api('textarea_field')) {
@@ -459,13 +513,45 @@ function checkTextareaForSpam($field_value) {
     }
     
     foreach ($textarea_blacklist as $bad_string) {
-        if ( maspik_is_field_value_exist_in_string($bad_string, $field_value) ) {
-            return array('spam' => "field value includes <u>$bad_string</u>", 'message' => "textarea_field" , 'option_value' => $field_value, 'label' => "textarea_blacklist"  );
+        if (strpbrk($bad_string, '*?') !== false) {
+            // If there are special characters, ensure wildcards on both sides
+            $pattern = trim($bad_string, '*'); // Remove existing asterisks from each side
+            $pattern = "*$pattern*";           // Add asterisks on both sides
+            
+            if (fnmatch($pattern, $field_value, FNM_CASEFOLD)) {
+                return array(
+                    'spam' => "field value matches pattern *$bad_string*", 
+                    'message' => "textarea_field",
+                    'option_value' => $bad_string,
+                    'label' => "textarea_blacklist"
+                );
+            }
+        } 
+        elseif (maspik_is_field_value_exist_in_string($bad_string, $field_value)) {
+            // Regular word check
+            return array(
+                'spam' => "field value includes *$bad_string*",
+                'message' => "textarea_field",
+                'option_value' => $bad_string,
+                'label' => "textarea_blacklist"
+            );
+        }
+    }
+
+    // Check for emojis
+    if(maspik_get_settings('emoji_check')){
+        if (maspik_is_contains_emoji($field_value)) {
+            return array(
+                'spam' => "Emoji found in the field",
+                'message' => "emoji_check",
+                'option_value' => $field_value,
+                'label' => "emoji_check"
+            );
         }
     }
 
     // only if pro user
-    if ( cfes_is_supporting() ) {
+    if ( cfes_is_supporting("country_location") ) {
         // Check for required language
         $opt_value = maspik_get_dbvalue();
         $lang_need_array = maspik_get_settings('lang_needed','select' );
@@ -528,16 +614,40 @@ function checkTextareaForSpam($field_value) {
     
     // Check for maximum number of links
     $max_linksAPI = is_numeric( efas_get_spam_api('contain_links', $type = "bool") ) ? efas_get_spam_api('contain_links', $type = "bool") : false;
-    $max_links = is_numeric( maspik_get_settings('contain_links') ) ? maspik_get_settings('contain_links') : $max_linksAPI ;
-    if (is_numeric($max_links) && maspik_get_settings('textarea_link_limit_toggle') ) {
+    $max_links = is_numeric( maspik_get_settings('contain_links') ) ? maspik_get_settings('contain_links') : $max_linksAPI;
+    
+    if (is_numeric($max_links) && maspik_get_settings('textarea_link_limit_toggle')) {
         $max_links = intval($max_links);
-        $reg_exUrl = "/(http|https)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/";
-        $num_links = preg_match_all($reg_exUrl, $field_value);
-        if ($num_links > $max_links) {
-            return array('spam' => "Contains <u>more than $max_links links</u>", 'message' => "contain_links");
+        
+        
+        // Count HTML links and http(s) links
+        $patterns = array(
+            '/<a[^>]*href[^>]*>/i',            // HTML links (<a href="...")
+            '/https?:\/\/[^\s<>"\']+/i',       // http(s):// links with any valid URL chars
+            '/www\.[a-z0-9][-a-z0-9.]+\.[a-z0-9-]+/i'  // www.domain.tld with www.
+        );
+        
+        $num_links = 0;
+        foreach ($patterns as $pattern) {
+            $matches = array();
+            $count = preg_match_all($pattern, $field_value, $matches);
+            $num_links += ($count ? $count : 0);            
+        }
+        
+        // If max_links is 0, block any links. Otherwise, block if more than max_links
+        if (($max_links === 0 && $num_links > 0) || ($max_links > 0 && $num_links > $max_links)) {
+            $message = $max_links === 0 ? 
+                "Links are not allowed" : 
+                "Contains <u>more than $max_links links</u>";
+            
+            return array(
+                'spam' => $message,
+                'message' => "contain_links",
+                'option_value' => $num_links,
+                'label' => "contain_links"
+            );
         }
     }
-
     // Get the maximum character limit from the spam API or options
     $MaxCharacters = maspik_get_settings('MaxCharactersInTextAreaField') ? maspik_get_settings('MaxCharactersInTextAreaField') : efas_get_spam_api('MaxCharactersInTextAreaField',$type = "bool");
     $MinCharacters = maspik_get_settings('MinCharactersInTextAreaField') ? maspik_get_settings('MinCharactersInTextAreaField') : efas_get_spam_api('MinCharactersInTextAreaField',$type = "bool");
@@ -552,15 +662,18 @@ function checkTextareaForSpam($field_value) {
 
     // Check if the maximum character limit is valid
     if (maspik_get_settings(maspik_toggle_match('MaxCharactersInTextAreaField')) == 1 || maspik_is_contain_api(['MaxCharactersInTextAreaField', 'MinCharactersInTextAreaField'])) {
-        if (is_numeric($MaxCharacters) && $MaxCharacters > 3) {
-            $CountCharacters = mb_strlen($field_value); // Use mb_strlen for multibyte characters
-            if ($CountCharacters > $MaxCharacters) {
-                $spam = "More than $MaxCharacters characters in Text Area field.";
-                return array('spam' => $spam, 'message' =>  $message, "option_value" => $MaxCharacters , 'label' => "MaxCharactersInTextAreaField");
-            }elseif ($CountCharacters < $MinCharacters) {
-                $spam = "Less than $MinCharacters characters in Text Area field.";
-                return array('spam' => $spam, 'message' =>  $message, "option_value" => $MinCharacters , 'label' => "MinCharactersInTextAreaField");
-            }
+        $CountCharacters = mb_strlen($field_value); // Use mb_strlen for multibyte characters
+        
+        // Check maximum characters if set, and if the character limit is greater than 2 (to)
+        if (is_numeric($MaxCharacters) && $MaxCharacters > 2 && $CountCharacters > $MaxCharacters) {
+            $spam = "More than $MaxCharacters characters in Text Area field.";
+            return array('spam' => $spam, 'message' =>  $message, "option_value" => $MaxCharacters , 'label' => "MaxCharactersInTextAreaField");
+        }
+        
+        // Check minimum characters if set
+        if (is_numeric($MinCharacters) && $MinCharacters > 0 && $CountCharacters < $MinCharacters) {
+            $spam = "Less than $MinCharacters characters in Text Area field.";
+            return array('spam' => $spam, 'message' =>  $message, "option_value" => $MinCharacters , 'label' => "MinCharactersInTextAreaField");
         }
     }
 
@@ -670,6 +783,8 @@ function Maspik_add_hp_js_to_footer() {
             //formidable
             addHiddenFields('form.frm-show-form', 'frm_form_field');
             addHiddenFields('form.elementor-form', 'elementor-field-textual');
+            //hello plus
+            addHiddenFields('form.ehp-form', 'hello-plus-field-text');
 
             // Function to set the current year and exact time in the appropriate fields
             function setDateFields() {
@@ -715,3 +830,121 @@ function Maspik_add_hp_js_to_footer() {
     }
 }
 add_action('wp_footer', 'Maspik_add_hp_js_to_footer');
+
+/**
+ * Injects the spam key field dynamically into forms with specific classes using JavaScript.
+ */
+function maspik_add_spam_key_field_js() {
+    if (!maspik_get_settings("maspikTimeCheck") ) {
+        return;
+    }
+    // Define an array of classes for the forms you want to target
+    $target_classes = array(
+       /* 'wpcf7-form', // Add the class for Contact Form 7
+        'elementor-form',  // Add the class for Elementor Forms
+        'gform_wrapper',   // Add the class for Gravity Forms
+        'wpforms-form',    // Add the class for WPForms
+        'frm_forms form', // Add the class for formidable
+        'forminator-ui', // Add the class for Forminator option 1
+        'forminator_ajax', // Add the class for Forminator option 2
+        'forminator-custom-form', // Add the class for Forminator option 3  
+        'fluentform form', // Add the class for FluentForms
+        'everest-forms', // Add the class for Everest Forms
+        'jet-form-builder', // Add the class for Jet Form Builder
+        'nf-form-layout form', // Add the class for Ninja Forms
+        'nf-form-wrap form', // Add the class for Ninja Forms
+        '.nf-after-form-content', // Add the class for Ninja Forms
+        'gravityform', // Add the class for Gravity Forms
+        'woocommerce-review', // Add the class for WooCommerce Reviews
+        'woocommerce-registration', // Add the class for WooCommerce Registration
+        'bricks-form', // Add the class for Bricks Forms
+        'buddypress', // Add the class for BuddyPress
+        'buddyforms', // Add the class for BuddyForms
+        'wp-block-form', // Add the class for Gutenberg Forms */
+        'form' // for any form
+        // Add other form classes as needed
+
+    );
+
+    $spam_key = maspik_get_spam_key(); // Get the unique spam key
+
+    // Convert the classes array to a string for JavaScript
+    $target_classes_js = implode('", "', $target_classes);
+
+    // Add a script that adds the hidden field dynamically via JavaScript when the form is submitted
+    echo '
+        <script type="text/javascript">
+        // Maspik add key to forms
+            document.addEventListener("DOMContentLoaded", function() {
+                var spamKey = "' . esc_js( $spam_key ) . '";
+                var input = document.createElement("input");
+                input.type = "hidden";
+                input.name = "maspik_spam_key";
+                input.value = spamKey;
+                input.setAttribute("autocomplete", "off");
+                
+                // Select all forms with the specified classes
+                var forms = document.querySelectorAll("form");
+                forms.forEach(function(form) {
+                    // Only add the spam key if its not already added
+                    if (!form.querySelector("input[name=maspik_spam_key]")) {
+                        form.appendChild(input.cloneNode(true));
+                    }
+                });
+            });
+        </script>';
+}
+// add to all forms
+add_action('wp_footer', 'maspik_add_spam_key_field_js' , 99); // Add to wp_footer()
+// add to user registration form on admin side
+add_action('register_form', 'maspik_add_spam_key_field_js' , 99); // Add to wp_footer()
+
+
+/**
+ * Validate phone number with Numverify API and optional country code.
+ */
+function maspik_numverify_validate_number($phone_number, $api_key) {
+    $phone_number_clean = preg_replace('/[^0-9]/', '', $phone_number); // Will keep only digits 0-9, removing everything else including +
+
+    // Check if country code is enabled in the settings
+    $country_code_kye = trim(maspik_get_settings('numverify_country')) === 'none' ? '' : sanitize_text_field(maspik_get_settings('numverify_country')); // country code from the settings
+    if ( !empty($country_code_kye) ) {
+        $country_phone_code_array = $MASPIK_COUNTRIES_LIST_FOR_PHONE;
+        $country_phone_code_from_country_code = $country_phone_code_array[$country_code_kye];
+        $country_phone_code_clean = preg_replace('/[^0-9]/', '', $country_phone_code_from_country_code);
+        if (strpos($phone_number_clean, $country_phone_code_clean) === 0) {
+            $phone_number_clean = substr($phone_number_clean, strlen($country_phone_code_clean));
+        }
+    }
+
+    // Build the API URL with optional country code
+    $url = add_query_arg(array(
+        'access_key' => $api_key,
+        'number' => $phone_number_clean,
+        'country_code' => $country_code_kye // will be added only if there is a country code
+    ), 'https://apilayer.net/api/validate');
+
+    $response = wp_remote_get($url, array('timeout' => 10, 'sslverify' => true)); // Force SSL verification
+
+    // Handle errors in API response
+    if (is_wp_error($response)) {
+        return array('valid' => true, 'error' => 'API request failed');
+    }
+
+    $body = wp_remote_retrieve_body($response);
+    $result = json_decode($body, true);
+
+    if (empty($result) || isset($result['error'])) {
+        return array(
+            //'valid' => false,//isset($result['valid']) ? $result['valid'] : true,
+            'valid' => true,
+            'error' => $result['error']['info'] ?? 'Unknown error'
+        );
+    }
+
+    // Return the actual validation result from the API
+    return array(
+        'valid' => isset($result['valid']) ? $result['valid'] : true,
+        'error' => isset($result['error']) ? $result['error'] : "invalid phone number ($phone_number)",
+    );
+}

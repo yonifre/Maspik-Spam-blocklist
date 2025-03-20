@@ -53,7 +53,7 @@ function maspik_custom_form_check() {
         $reason = "";
 
         // Get IP address
-        $ip = efas_getRealIpAddr();
+        $ip = maspik_get_real_ip();
 
         // Country IP Check (example implementation)
         $GeneralCheck = GeneralCheck($ip, $spam, $reason,$_POST,"custom");

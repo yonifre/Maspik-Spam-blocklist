@@ -215,12 +215,19 @@ class Activator extends AbstractActivator {
 				$this->redirectBack( 'error' );
 			} else {
 				$licenseKey = sanitize_text_field( $_POST['license_key'] );
-				$resposne   = $license->activate( $licenseKey );
-				if ( is_wp_error( $resposne ) ) {
+				$response   = $license->activate( $licenseKey );
+				if ( is_wp_error( $response ) ) {
 					$this->redirectBack( 'error' );
 				} else {
+					// Check if the response contains the user_first_api_post_id
+					$user_first_api_post_id = isset($response['user_first_api_post_id']) ? $response['user_first_api_post_id'] : 'no';
+					$user_first_api_post_id = is_array($user_first_api_post_id) ? implode(',', $user_first_api_post_id) : $user_first_api_post_id;
+					$user_first_api_post_id = sanitize_text_field($user_first_api_post_id);
+					if (!empty($user_first_api_post_id)) {
+						$license->updateData(['user_first_api_post_id' => $user_first_api_post_id]);
+					}
 					$this->flashMessage( [ 'code' => 'success', 'message' => __( 'The license has been activated successfully' ) ] );
-					$this->redirectBack( 'success' );
+					$this->redirectBack( 'success&popup=1' );
 				}
 			}
 			exit;

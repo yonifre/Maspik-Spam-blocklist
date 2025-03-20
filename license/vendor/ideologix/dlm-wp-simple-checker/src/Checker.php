@@ -27,6 +27,8 @@
 namespace IdeoLogix\DigitalLicenseManagerSimpleChecker;
 
 use IdeoLogix\DigitalLicenseManagerSimpleChecker\Abstracts\AbstractChecker;
+use DateTime;
+use DateTimeZone;
 
 class Checker extends AbstractChecker {
 
@@ -43,8 +45,11 @@ class Checker extends AbstractChecker {
 	 */
 	public function __construct( $configuration ) {
 		$this->configuration = $configuration;
+
+
 		add_action( 'init', [ $this, 'schedule' ] );
 		add_action( $this->getHookName(), [ $this, 'execute' ] );
+
 	}
 
 	/**
@@ -53,17 +58,14 @@ class Checker extends AbstractChecker {
 	 * @throws \Exception
 	 */
 	public function execute() {
-
-		$licenseAPI = new License( $this->configuration );
-
-		if ( ! $licenseAPI->isLicenseKeySet() ) {
+		$licenseAPI = new License($this->configuration);
+		
+		if (!$licenseAPI->isLicenseKeySet()) {
 			return;
 		}
 
 		$licenseObj = $licenseAPI->queryValidateLicenseExpiration();
 		if ( is_wp_error( $licenseObj ) ) {
-			error_log( sprintf( '%s - Cron Checker: %s (%s)', $this->configuration->name, $licenseObj->get_error_message(), $licenseObj->get_error_code() ) );
-
 			return;
 		} else {
 			$licenseData = [
@@ -76,22 +78,19 @@ class Checker extends AbstractChecker {
 		}
 
 		if ( ! $licenseAPI->isActivationTokenSet() ) {
-			error_log( sprintf( '%s - Cron Checker: %s', $this->configuration->name, __( 'Activation token not found.' ) ) );
-
 			return;
 		}
 
 		$tokenObj = $licenseAPI->queryValidateActivationToken();
 		if ( is_wp_error( $tokenObj ) ) {
-			error_log( sprintf( '%s - Cron Checker: %s (%s)', $this->configuration->name, $tokenObj->get_error_message(), $tokenObj->get_error_code() ) );
-
 			return;
 		} else {
 			$tokenData = [
 				'token'          => $tokenObj['token'],
 				'checked_at'     => gmdate( 'Y-m-d H:i:s' ),
 				'deactivated_at' => is_null( $tokenObj['deactivated_at'] ) ? null : $tokenObj['deactivated_at'],
-			];
+				'user_first_api_post_id' => is_null( $tokenObj['user_first_api_post_id'] ) ? "Cheker.php_L_94" : $tokenObj['user_first_api_post_id'],
+						];
 			$licenseAPI->updateData( $tokenData );
 			// prefix_dlm_license_check_token_data
 			do_action( sprintf( '%s_%s', $this->getHookName(), 'token_data_success' ), $tokenData );
@@ -103,11 +102,20 @@ class Checker extends AbstractChecker {
 	 * @return void
 	 */
 	public function schedule() {
-		$hook     = $this->getHookName();
-		$interval = ! empty( $this->configuration->cron['interval'] ) ? $this->configuration->cron['interval'] : 'hourly';
-		if ( ! wp_next_scheduled( $hook ) ) {
-			wp_schedule_event( time(), $interval, $hook );
+		$hook = $this->getHookName();
+		
+		// if there is a scheduled hook, we clear it
+		if (wp_next_scheduled($hook)) {
+			return;
 		}
+		
+		// if there is a scheduled hook, we clear it
+		wp_clear_scheduled_hook($hook);
+		wp_clear_scheduled_hook('maspik_cfas_dlm_license_check');
+		wp_clear_scheduled_hook('maspik_dlm_license_check');
+		
+		$interval = !empty($this->configuration->cron['interval']) ? $this->configuration->cron['interval'] : 'twicedaily';
+		wp_schedule_event(time(), $interval, $hook);
 	}
 
 

@@ -121,14 +121,14 @@ class Maspik {
       if( maspik_get_settings( "maspik_support_Wpforms" ) != "no" ){
         if (
             (  maspik_is_plugin_active( 'wpforms-lite/wpforms.php' )|| maspik_is_plugin_active( 'wpforms/wpforms.php' ))
-             && cfes_is_supporting() ) {
+             && cfes_is_supporting("plugin") ) {
           require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/forms/wpforms.php';
         }
       }
 
 	  // Gravity Forms
       if( maspik_get_settings( "maspik_support_gravity_forms" ) != "no" ){
-        if ( maspik_is_plugin_active( 'gravityforms/gravityforms.php' ) && cfes_is_supporting() ) {
+        if ( maspik_is_plugin_active( 'gravityforms/gravityforms.php' ) && cfes_is_supporting("plugin") ) {
           require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/forms/gravityforms.php';
         }
       }
@@ -160,9 +160,25 @@ class Maspik {
           require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/forms/bricks.php';
         }
       }
-      
+
+      // Buddypress
+      if( maspik_get_settings( "maspik_support_buddypress_forms" ) != "no" ){ 
+        if ( maspik_is_plugin_active( 'buddypress/bp-loader.php' ) ) {
+          require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/forms/buddypress.php';
+        }
+      }
+
+	  // Hello Plus
+      if( maspik_get_settings( "maspik_support_helloplus_forms" ) != "no" ){ 
+        if ( maspik_is_plugin_active( 'hello-plus/hello-plus.php' ) ) {
+			  require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/forms/helloplus.php';
+        }
+      }
+
+
+		
       // If agree to shere Non sensitive information 
-      if( maspik_get_settings("shere_data", '', 'old') == 1 ){ 
+      if( maspik_get_settings("shere_data", '', 'old') || maspik_get_settings("shere_data") ){ 
           require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/statistics-data.php';
       }
 

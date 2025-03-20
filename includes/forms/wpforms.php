@@ -20,7 +20,7 @@ add_action('wpforms_process_before', function( $entry, $form_data ) {
   $last = $reversed[0];
 
   // ip
-  $ip = efas_getRealIpAddr();
+  $ip = maspik_get_real_ip();
   $reason = "";
 
 
@@ -139,21 +139,21 @@ function add_maspikhp_html_to_wpforms() {
             $honeypot_name = maspik_HP_name();
             echo  '<div class="wpforms-field wpforms-field-name maspik-field">
                 <label for="' . $honeypot_name . '" class="wpforms-field-label">Leave this field empty</label>
-                <input size="1" type="text" autocomplete="off" autofill="off" aria-hidden="true" tabindex="-1" name="' . $honeypot_name . '" id="' . $honeypot_name . '" class="wpforms-field-medium" placeholder="Leave this field empty">
+                <input size="1" type="text" autocomplete="off"   aria-hidden="true" tabindex="-1" name="' . $honeypot_name . '" id="' . $honeypot_name . '" class="wpforms-field-medium" placeholder="Leave this field empty">
             </div>';
         }
 
         if (maspik_get_settings('maspikYearCheck')) {
             echo  '<div class="wpforms-field wpforms-field-name maspik-field">
                 <label for="Maspik-currentYear" class="wpforms-field-label">Leave this field empty</label>
-                <input size="1" type="text" autocomplete="off" autofill="off" aria-hidden="true" tabindex="-1" name="Maspik-currentYear" id="Maspik-currentYear" class="wpforms-field-medium" placeholder="">
+                <input size="1" type="text" autocomplete="off"  aria-hidden="true" tabindex="-1" name="Maspik-currentYear" id="Maspik-currentYear" class="wpforms-field-medium" placeholder="">
             </div>';
         }
 
         if (maspik_get_settings('maspikTimeCheck')) {
             echo  '<div class="wpforms-field wpforms-field-name maspik-field">
                 <label for="Maspik-exactTime" class="wpforms-field-label">Leave this field empty</label>
-                <input size="1" type="text" autocomplete="off" autofill="off" aria-hidden="true" tabindex="-1" name="Maspik-exactTime" id="Maspik-exactTime" class="wpforms-field-medium" placeholder="">
+                <input size="1" type="text" autocomplete="off"  aria-hidden="true" tabindex="-1" name="Maspik-exactTime" id="Maspik-exactTime" class="wpforms-field-medium" placeholder="">
             </div>';
         }
 

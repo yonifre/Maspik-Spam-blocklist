@@ -6,15 +6,7 @@ namespace Composer\Autoload;
 
 class ComposerStaticInit5971dc4cd2e0482a408417f1d0e5ef7d
 {
-    public static $files = array (
-        '941748b3c8cae4466c827dfb5ca9602a' => __DIR__ . '/..' . '/rmccue/requests/library/Deprecated.php',
-    );
-
     public static $prefixLengthsPsr4 = array (
-        'W' => 
-        array (
-            'WpOrg\\Requests\\' => 15,
-        ),
         'I' => 
         array (
             'IdeoLogix\\DigitalLicenseManagerSimpleChecker\\' => 45,
@@ -23,10 +15,6 @@ class ComposerStaticInit5971dc4cd2e0482a408417f1d0e5ef7d
     );
 
     public static $prefixDirsPsr4 = array (
-        'WpOrg\\Requests\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/rmccue/requests/src',
-        ),
         'IdeoLogix\\DigitalLicenseManagerSimpleChecker\\' => 
         array (
             0 => __DIR__ . '/..' . '/ideologix/dlm-wp-simple-checker/src',
@@ -39,7 +27,6 @@ class ComposerStaticInit5971dc4cd2e0482a408417f1d0e5ef7d
 
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
-        'Requests' => __DIR__ . '/..' . '/rmccue/requests/library/Requests.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
